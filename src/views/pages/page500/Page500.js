@@ -1,20 +1,20 @@
 import React from 'react'
-import {
-  CButton,
-  CCol,
-  CContainer,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
-  CRow,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilMagnifyingGlass } from '@coreui/icons'
+// import {
+//   CButton,
+//   CCol,
+//   CContainer,
+//   CFormInput,
+//   CInputGroup,
+//   CInputGroupText,
+//   CRow,
+// } from '@coreui/react'
+// import CIcon from '@coreui/icons-react'
+// import { cilMagnifyingGlass } from '@coreui/icons'
 
 const Page500 = () => {
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-      <CContainer>
+      {/* <CContainer>
         <CRow className="justify-content-center">
           <CCol md={6}>
             <span className="clearfix">
@@ -33,7 +33,8 @@ const Page500 = () => {
             </CInputGroup>
           </CCol>
         </CRow>
-      </CContainer>
+      </CContainer> */}
+      500
     </div>
   )
 }

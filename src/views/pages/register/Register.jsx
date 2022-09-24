@@ -1,23 +1,23 @@
 import React from 'react'
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCol,
-  CContainer,
-  CForm,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
-  CRow,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+// import {
+//   CButton,
+//   CCard,
+//   CCardBody,
+//   CCol,
+//   CContainer,
+//   CForm,
+//   CFormInput,
+//   CInputGroup,
+//   CInputGroupText,
+//   CRow,
+// } from '@coreui/react'
+// import CIcon from '@coreui/icons-react'
+// import { cilLockLocked, cilUser } from '@coreui/icons'
 
 const Register = () => {
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-      <CContainer>
+      {/* <CContainer>
         <CRow className="justify-content-center">
           <CCol md={9} lg={7} xl={6}>
             <CCard className="mx-4">
@@ -63,7 +63,8 @@ const Register = () => {
             </CCard>
           </CCol>
         </CRow>
-      </CContainer>
+      </CContainer> */}
+      Register
     </div>
   )
 }
