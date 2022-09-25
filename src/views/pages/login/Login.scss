@@ -1,0 +1,40 @@
+.login-container {
+  display: inline-flex;
+  width: 100%;
+  height: 47rem;
+
+  .login-left {
+    width: 100%;
+    height: 100%;
+    background-color: #f5fef9;
+
+    .loginpage-image {
+      margin: 250px auto 0px auto;
+    }
+  }
+
+  .login-right {
+    width: 100%;
+    height: 100%;
+    padding: 90px 60px;
+
+    .right-container {
+      .login-form {
+        margin: 20px 20px 30px 20px;
+
+        .btn-login {
+          background-color: #116835;
+          border-radius: 10px;
+          width: 100%;
+          height: 2.5rem;
+          color: #f5fef9;
+        }
+      }
+    }
+  }
+}
+
+.field-input {
+  display: inline-flex;
+  width: 65%;
+}
