@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const RecruitmentList = () => {
 
-    const [listRecruitment, setListRecruitment] = useState([{}])
+  const [listRecruitment, setListRecruitment] = useState([{}])
 
   return (
     <div className='recruitment-container'>
