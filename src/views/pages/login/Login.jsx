@@ -3,10 +3,17 @@ import './Login.scss'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 
+import { loginUser } from '../../../redux/apiRequest'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 const Login = () => {
 
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [loginObject, setLoginObject] = useState({ email: '', password: '' })
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleHideShowPassword = () => {
     setIsShowPassword(!isShowPassword)
@@ -19,8 +26,9 @@ const Login = () => {
     })    
   }
 
-  const onHandleSubmitLogin = () => {
-    console.log(loginObject);
+  const onHandleSubmitLogin = (e) => {
+    e.preventDefault();
+    loginUser(loginObject, dispatch, navigate) 
   }
 
   return (
@@ -34,6 +42,7 @@ const Login = () => {
           <div className='my-2 font-sans font-semibold leading-6 text-slate-900 text-lg'>Chào mừng bạn đến với hệ thống tuyển dụng CK HR Consulting của chúng tôi</div>
           <span className='my-2 font-sans font-light text-slate-400'>Hãy đăng nhập để có thể sử dụng những dịch vụ của chúng tôi</span>
           <div className='login-form form-group'>
+          <form onSubmit={onHandleSubmitLogin}>
             <div className='my-4'>
               <label className='text-lg'>Email</label><br />
               <div className='field-input'>
@@ -46,7 +55,7 @@ const Login = () => {
               <div className='field-input'>
                 <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px'}}></i>
                 <input type={isShowPassword ? 'text' : 'password'} className='form-control' placeholder='Nhập mật khẩu' onChange={event => { handleOnChangeInput(event, 'password') }}/>
-                <span onClick={() => { handleHideShowPassword() }}>
+                <span onClick={() => {handleHideShowPassword() }}>
                   <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                 </span>
               </div>
@@ -54,7 +63,8 @@ const Login = () => {
               <a href="#" style={{ marginLeft: '30rem' }}>Quên mật khẩu</a>
               </div>
             </div>
-            <button className='btn-login' onClick={() => onHandleSubmitLogin()}>Đăng nhập</button>
+            <button className='btn-login'>Đăng nhập</button>
+            </form>
             <div className='my-4'>
               <span>Bạn chưa có tài khoản? </span><a href='#/register' style={{ color: "#116835" }}>Đăng ký ngay</a>
             </div>
