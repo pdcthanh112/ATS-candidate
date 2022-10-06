@@ -1,11 +1,6 @@
 .login-container {
-  display: inline-flex;
-  width: 100%;
-  height: 47rem;
-
+  height: 100vh;
   .login-left {
-    width: 100%;
-    height: 100%;
     background-color: #f5fef9;
 
     .loginpage-image {
@@ -14,8 +9,6 @@
   }
 
   .login-right {
-    width: 100%;
-    height: 100%;
     padding: 90px 60px;
 
     .right-container {

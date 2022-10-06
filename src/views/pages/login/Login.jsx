@@ -3,14 +3,17 @@ import './Login.scss'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 
-import { loginUser } from '../../../redux/apiRequest'
+import { loginUser } from '../../../apis/authApi/authApi'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 const Login = () => {
 
   const [isShowPassword, setIsShowPassword] = useState(false)
-  const [loginObject, setLoginObject] = useState({ email: '', password: '' })
+  
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,20 +22,23 @@ const Login = () => {
     setIsShowPassword(!isShowPassword)
   }
 
-  const handleOnChangeInput = (event, id) => {
-    setLoginObject({
-      ...loginObject,
-      [id]: event.target.value
-    })    
-  }
-
-  const onHandleSubmitLogin = (e) => {
-    e.preventDefault();
-    loginUser(loginObject, dispatch, navigate) 
-  }
-
+  
+  const formik = useFormik({
+    initialValues: {    
+      email: "",
+      password: "",     
+    },
+    validationSchema: Yup.object({     
+      email: Yup.string().required('Please input email'),
+      password: Yup.string().required('Please input password'),     
+    }),
+    onSubmit: (values) => {
+      loginUser(values, dispatch, navigate) 
+    }
+  })
+  
   return (
-    <div className='login-container'>
+    <div className='login-container grid grid-cols-2'>
       <div className='login-left'>
         <img src={loginpageImage} alt='Logo' width={500} height={200} className='loginpage-image' />
       </div>
@@ -42,19 +48,19 @@ const Login = () => {
           <div className='my-2 font-sans font-semibold leading-6 text-slate-900 text-lg'>Chào mừng bạn đến với hệ thống tuyển dụng CK HR Consulting của chúng tôi</div>
           <span className='my-2 font-sans font-light text-slate-400'>Hãy đăng nhập để có thể sử dụng những dịch vụ của chúng tôi</span>
           <div className='login-form form-group'>
-          <form onSubmit={onHandleSubmitLogin}>
+          <form onSubmit={formik.handleSubmit}>
             <div className='my-4'>
               <label className='text-lg'>Email</label><br />
               <div className='field-input'>
                 <i className="fa-solid fa-envelope mx-2 my-auto" style={{ color: "#116835", fontSize: '22px'}}></i>
-                <input type={'text'} className='form-control' placeholder='Nhập email của bạn' onChange={event => { handleOnChangeInput(event, 'email') }} /><br />
+                <input type={'text'} className='form-control' name='email' placeholder='Nhập email của bạn' value={formik.values.email} onChange={formik.handleChange} /><br />
               </div>
             </div>
             <div className='my-4'>
               <label className='text-lg'>Password</label><br />
               <div className='field-input'>
                 <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px'}}></i>
-                <input type={isShowPassword ? 'text' : 'password'} className='form-control' placeholder='Nhập mật khẩu' onChange={event => { handleOnChangeInput(event, 'password') }}/>
+                <input type={isShowPassword ? 'text' : 'password'} className='form-control' name='password' placeholder='Nhập mật khẩu' value={formik.values.password} onChange={formik.handleChange} />
                 <span onClick={() => {handleHideShowPassword() }}>
                   <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                 </span>
@@ -63,7 +69,7 @@ const Login = () => {
               <a href="#" style={{ marginLeft: '30rem' }}>Quên mật khẩu</a>
               </div>
             </div>
-            <button className='btn-login'>Đăng nhập</button>
+            <button type='submit' className='btn-login'>Đăng nhập</button>
             </form>
             <div className='my-4'>
               <span>Bạn chưa có tài khoản? </span><a href='#/register' style={{ color: "#116835" }}>Đăng ký ngay</a>

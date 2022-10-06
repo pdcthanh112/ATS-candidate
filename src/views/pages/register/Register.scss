@@ -1,11 +1,7 @@
 .register-container {
-  display: inline-flex;
-  width: 100%;
-  height: 47rem;
+  height: 100vh;
 
   .register-left {
-    width: 100%;
-    height: 100%;
     padding: 90px 60px;
 
     .left-container {
@@ -24,8 +20,7 @@
   }
 
   .register-right {
-    width: 100%;
-    height: 100%;
+
     background-color: #f5fef9;
 
     .registerpage-image {

@@ -1,5 +1,9 @@
 import axios from 'axios';
 import queryString from 'query-string';
+import { useSelector, useDispatch } from 'react-redux'
+
+
+
 
 // Set up default config for http requests here
 const axiosClient = axios.create({
@@ -13,7 +17,8 @@ const axiosClient = axios.create({
 });
 
 axios.interceptors.request.use((config) => {
-  //config.headers.authorization = `Bearer ${localStorage.getItem("jwtToken")}`;
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
+  config.headers.authorization = currentUser.data.token;
   return config;
 }, (error) => {
     return Promise.reject(error);
