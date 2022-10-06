@@ -9,7 +9,7 @@
   }
 
   .login-right {
-    padding: 90px 60px;
+    padding: 15% 17%;
 
     .right-container {
       .login-form {
@@ -29,5 +29,24 @@
 
 .field-input {
   display: inline-flex;
-  width: 65%;
+  width: 100%;
+  border: 1px solid #eee;
 }
+
+.input-error {
+  font-size: 1.2rem;
+  color: #ec3f3f;
+  background-color: #ffe5e2;
+}
+
+.hideShowPassword {
+  margin: auto 5px;
+}
+
+input:focus {
+  // outline: none !important;
+  // border: none !important;
+  // background-color: none !important;
+}
+
+

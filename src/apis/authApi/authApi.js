@@ -3,7 +3,9 @@ import {
   loginFailed,
   loginStart,
   loginSuccess,
+  logoutFailed,
   logoutStart,
+  logoutSuccess,
   registerFailed,
   registerStart,
   registerSuccess,
@@ -13,36 +15,38 @@ export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
     const response = await axiosConfig.post("/auth/login", user);
-    dispatch(loginSuccess(response.data));
-    navigate("/#/");
+    if (response) {
+      dispatch(loginSuccess(response.data));
+      navigate("/#/");
+    }
   } catch (err) {
-    dispatch(loginFailed);
+    dispatch(loginFailed());
   }
 };
 
 export const regiserUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    const response = await axiosConfig.post("/auth/register", {     
-        email: user.email,
-        name: user.fullname,
-        password: user.password,
-        address: user.address,
-        phone: user.phone,    
+    const response = await axiosConfig.post("/auth/register", {
+      email: user.email,
+      name: user.fullname,
+      password: user.password,
+      address: user.address,
+      phone: user.phone,
     });
-    console.log("checkkkkkkkkkkkkkkkk");
     dispatch(registerSuccess(response.data));
     navigate("/#/login");
   } catch (err) {
-    dispatch(registerFailed);
+    dispatch(registerFailed());
   }
 };
 
 export const logoutUser = async (dispatch, navigate) => {
-  dispatch(logoutStart())
+  dispatch(logoutStart());
   try {
-    
+    dispatch(logoutSuccess());
+    navigate("/#/dashboard");
   } catch (error) {
-    
+    dispatch(logoutFailed());
   }
-}
+};

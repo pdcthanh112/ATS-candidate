@@ -31,7 +31,18 @@
 
 
 .field-input {
-    display: inline-flex;
-    width: 65%;
+  display: inline-flex;
+  width: 100%;
+  border: 1px solid #eee;
   }
+
+.input-error {
+  font-size: 1.2rem;
+  color: #ec3f3f;
+  background-color: #ffe5e2;
+}
+
+.hideShowPassword {
+  margin: auto 5px;
+}
   
