@@ -2,9 +2,6 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { useSelector, useDispatch } from 'react-redux'
 
-
-
-
 // Set up default config for http requests here
 const axiosClient = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
