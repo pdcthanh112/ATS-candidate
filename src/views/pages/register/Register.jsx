@@ -3,8 +3,7 @@ import './Register.scss'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { regiserUser } from '../../../apis/authApi/authApi'
 
 import { useFormik } from 'formik'
@@ -13,9 +12,8 @@ import * as Yup from 'yup'
 const Register = () => {
 
   const [isShowPassword, setIsShowPassword] = useState(false)
-
+  const registerError = useSelector((state) => state.auth.login.error)
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleHideShowPassword = () => {
     setIsShowPassword(!isShowPassword)
@@ -39,7 +37,7 @@ const Register = () => {
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid')
     }),
     onSubmit: (values) => {
-      regiserUser(values, dispatch, navigate)
+      regiserUser(values, dispatch)
     }
   })
 
@@ -49,8 +47,9 @@ const Register = () => {
         <div className='left-container'>
           <a href="#/dashboard"><img src={headerLogo} alt='Logo' width={200} height={70} className='registerpage-image' /></a>
           <div className='my-2 font-sans font-semibold leading-6 text-slate-900 text-lg'>Chào mừng bạn đến với hệ thống tuyển dụng CK HR Consulting của chúng tôi</div>
-          <span className='my-2 font-sans font-light text-slate-400'>Hãy tạo tài khoản để sử dụng những dịch vụ mà chúng tôi mang lại</span>
+          <span className='my-2 font-sans font-light text-slate-400'>Hãy tạo tài khoản để sử dụng những dịch vụ mà chúng tôi mang lại</span>      
           <div className='register-form form-group'>
+          {!registerError && <div className='register-success p-2'>Your account create successfully</div>}
             <form onSubmit={formik.handleSubmit}>
               <div className='my-3'>
                 <label className='text-lg'>Fullname</label><br />

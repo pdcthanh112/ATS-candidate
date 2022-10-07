@@ -24,7 +24,7 @@ export const loginUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const regiserUser = async (user, dispatch, navigate) => {
+export const regiserUser = async (user, dispatch) => {
   dispatch(registerStart());
   try {
     const response = await axiosConfig.post("/auth/register", {
@@ -35,7 +35,6 @@ export const regiserUser = async (user, dispatch, navigate) => {
       phone: user.phone,
     });
     dispatch(registerSuccess(response.data));
-    navigate("/#/login");
   } catch (err) {
     dispatch(registerFailed());
   }

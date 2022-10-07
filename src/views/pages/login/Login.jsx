@@ -14,7 +14,7 @@ const Login = () => {
 
   const [isShowPassword, setIsShowPassword] = useState(false)
 
-  const loginError = useSelector((state) => state.auth.login.error)
+  const loginError = useSelector((state) => state.auth.login.error);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const Login = () => {
       password: Yup.string().required('Please input password'),
     }),
     onSubmit: (values) => {
-      loginUser(values, dispatch, navigate)
+      loginUser(values, dispatch, navigate)  
     }
   })
 
@@ -49,7 +49,6 @@ const Login = () => {
           <span className='my-2 font-sans font-light text-slate-400'>Hãy đăng nhập để có thể sử dụng những dịch vụ của chúng tôi</span>
           <div className='login-form form-group'>
             <form onSubmit={formik.handleSubmit}>
-
               <div className='my-4'>
                 <label className='text-lg'>Email</label><br />
                 <div className='field-input'>

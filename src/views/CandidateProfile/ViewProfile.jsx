@@ -8,12 +8,12 @@ const ViewProfile = () => {
   const [profile, setProfile] = useState({});
 
   const currentUser = useSelector((state) => state.auth.login.currentUser)
+ 
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await getCandidateById(currentUser.data.token);
-      console.log(response);
-      setProfile(response)
+   
     };
     fetchData();
   }, []);

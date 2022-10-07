@@ -24,7 +24,7 @@ const AppHeader = () => {
       <div className='header-auth'>
         {currentUser ?
           <>   
-          <a href='/#/view-profile?id=1' >View profile</a>        
+          <a href='/#/view-profile' >View profile</a>        
             <Link to='/#/logout' onClick={handleLogout} className='mx-2 btn' style={{ backgroundColor: '#fff', color: '#116835' }}>Đăng xuất</Link>
           </> : <>
             <a href='/#/login' className='mx-2 btn' style={{ backgroundColor: '#fff', color: '#116835' }}>Đăng nhập</a>
