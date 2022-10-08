@@ -3,17 +3,17 @@ import './Register.scss'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 
-import { useDispatch, useSelector } from 'react-redux'
 import { regiserUser } from '../../../apis/authApi/authApi'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import {responseStatus} from '../../../utils/constants'
+
 const Register = () => {
 
   const [isShowPassword, setIsShowPassword] = useState(false)
-  const registerError = useSelector((state) => state.auth.login.error)
-  const dispatch = useDispatch();
+  const [registerStatus, setRegisterStatus] = useState('START')
 
   const handleHideShowPassword = () => {
     setIsShowPassword(!isShowPassword)
@@ -31,13 +31,15 @@ const Register = () => {
     validationSchema: Yup.object({
       fullname: Yup.string().required('Please input your name'),
       email: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
-      password: Yup.string().required('Please input password').min(8, "Password must be at least 8 character"),
+      password: Yup.string().required('Please input password').min(8, "Password must be 8 -20 characters").max(20, "Password must be 8 -20 characters"),
       confirm: Yup.string().required('Please input confirm password').oneOf([Yup.ref("password"), null], 'Not match'),
-      address: Yup.string().required('Please input address'),
+      address: Yup.string().required('Please input your address'),
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid')
     }),
     onSubmit: (values) => {
-      regiserUser(values, dispatch)
+      regiserUser(values).then((response) => {
+        response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
+      })
     }
   })
 
@@ -47,15 +49,15 @@ const Register = () => {
         <div className='left-container'>
           <a href="#/dashboard"><img src={headerLogo} alt='Logo' width={200} height={70} className='registerpage-image' /></a>
           <div className='my-2 font-sans font-semibold leading-6 text-slate-900 text-lg'>Chào mừng bạn đến với hệ thống tuyển dụng CK HR Consulting của chúng tôi</div>
-          <span className='my-2 font-sans font-light text-slate-400'>Hãy tạo tài khoản để sử dụng những dịch vụ mà chúng tôi mang lại</span>      
+          <span className='my-2 font-sans font-light text-slate-400'>Hãy tạo tài khoản để sử dụng những dịch vụ mà chúng tôi mang lại</span>
           <div className='register-form form-group'>
-          {!registerError && <div className='register-success p-2'>Your account create successfully</div>}
+            {registerStatus === responseStatus.SUCCESS && <div className='register-success p-2'>Your account create successfully</div>}
             <form onSubmit={formik.handleSubmit}>
               <div className='my-3'>
                 <label className='text-lg'>Fullname</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-user mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={'text'} className={`form-control  border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br />
+                  <input type={'text'} className={`form-control  border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br/>
                 </div>
                 {formik.errors.fullname && formik.touched.fullname && (
                   <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
@@ -69,6 +71,9 @@ const Register = () => {
                 </div>
                 {formik.errors.email && formik.touched.email && (
                   <div className='text-[#ec5555]'>{formik.errors.email}</div>
+                )}
+                {registerStatus === 'FAILURE' && (
+                  <div className='text-[#ec5555]'>Email is alrealy exist</div>
                 )}
               </div>
               <div className='my-3'>

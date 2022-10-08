@@ -3,7 +3,7 @@ import React from 'react'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 // const Login = React.lazy(() => import('./views/pages/login/Login'))
 // const Register = React.lazy(() => import('./views/pages/register/Register'))
-const ViewProfile = React.lazy(() => import('./views/CandidateProfile/ViewProfile'))
+const ViewProfile = React.lazy(() => import('./component/Candidate/CandidateProfile/ViewProfile'))
 const RecruitmentDetail = React.lazy(() => import('./views/pages/recruitmentDetail/RecruitmentDetail'))
 
 

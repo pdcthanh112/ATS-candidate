@@ -3,7 +3,6 @@ import RecruitmentList from '../pages/recruitmentList/RecruitmentList';
 
 const Dashboard = () => {
 
-
   return (
     <React.Fragment>
       <RecruitmentList/>

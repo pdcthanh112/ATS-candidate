@@ -1,16 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux'
 import axiosConfig from "../axiosConfig";
 import jwtDecode from 'jwt-decode';
 
 
-export const getCandidateById = (token) => {
+export const getCandidateById = async (token) => {
     const userId = jwtDecode(token).accountId
-    return axiosConfig.get(`candidate/${userId}`, {
-        headers: {token: token}
+    return await axiosConfig.get(`candidate/getCandidateById/{Id}?id=${userId}`, {
+        headers: {Authorization: `Bearer ${token}`}
     })
-    .then(response => {
-       
-        console.log(response)
-    })
+    .then(response => response.data)
     .catch(error => console.log(error))
 } 

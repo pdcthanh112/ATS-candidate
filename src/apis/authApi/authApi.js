@@ -6,9 +6,6 @@ import {
   logoutFailed,
   logoutStart,
   logoutSuccess,
-  registerFailed,
-  registerStart,
-  registerSuccess,
 } from "../../redux/authSlice";
 
 export const loginUser = async (user, dispatch, navigate) => {
@@ -19,25 +16,22 @@ export const loginUser = async (user, dispatch, navigate) => {
       dispatch(loginSuccess(response.data));
       navigate("/#/");
     }
-  } catch (err) {
+  } catch (error) {
     dispatch(loginFailed());
   }
 };
 
 export const regiserUser = async (user, dispatch) => {
-  dispatch(registerStart());
-  try {
-    const response = await axiosConfig.post("/auth/register", {
+  return await axiosConfig
+    .post("/auth/register", {
       email: user.email,
       name: user.fullname,
       password: user.password,
       address: user.address,
       phone: user.phone,
-    });
-    dispatch(registerSuccess(response.data));
-  } catch (err) {
-    dispatch(registerFailed());
-  }
+    })
+    .then((response) => response.data.status)
+    .catch((error) => error.response.data.status);
 };
 
 export const logoutUser = async (dispatch, navigate) => {
