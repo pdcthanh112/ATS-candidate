@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import RecruitmentList from '../pages/recruitmentList/RecruitmentList';
+import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
 
 const Dashboard = () => {
 
