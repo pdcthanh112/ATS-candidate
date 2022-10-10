@@ -1,4 +1,4 @@
-import axiosConfig from "../axiosConfig";
+import axiosConfig from "./axiosConfig";
 import {
   loginFailed,
   loginStart,
@@ -6,7 +6,7 @@ import {
   logoutFailed,
   logoutStart,
   logoutSuccess,
-} from "../../redux/authSlice";
+} from "../redux/authSlice";
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());

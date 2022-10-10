@@ -4,12 +4,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import headerLogo from '../../assets/image/big-logo.png'
 import defaultUser from '../../assets/image/defaultUser.png'
-import { logoutUser } from '../../apis/authApi/authApi'
+import { logoutUser } from '../../apis/authApi'
 
 const AppHeader = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser)
-  console.log(currentUser);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,8 +25,8 @@ const AppHeader = () => {
       <div className='header-menu'>
         {currentUser ?
           <React.Fragment>
-            <div class="dropdown">
-              <a class="" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div className="dropdown">
+              <a className="" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className='inline-flex bg-slate-200 rounded-3xl px-2 py-1'>
                   <img src={defaultUser} alt='default user' className='rounded-3xl' width={'25rem'} />
                   <div className='mx-2' style={{width: '12rem'}}>{currentUser.data.name}</div>
@@ -35,7 +34,7 @@ const AppHeader = () => {
                 </div>
               </a>
 
-              <ul class="dropdown-menu">
+              <ul className="dropdown-menu">
                 <a href='/#/view-profile' className='dropdown-item header-menu-item'><i className="fa-regular fa-address-card mr-2 text-[#60d860]"></i>View profile</a>
                 <a href='/#/change-password' className='dropdown-item header-menu-item'><i className="fa-sharp fa-solid fa-shield-halved mr-2 text-[#60d860]"></i>Change password</a>
                 <Link to='/#/logout' onClick={handleLogout} className='dropdown-item header-menu-item'><i className="fa-solid fa-arrow-right-from-bracket mr-2 text-[#60d860]"></i>Đăng xuất</Link>

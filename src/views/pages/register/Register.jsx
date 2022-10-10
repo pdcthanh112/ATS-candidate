@@ -3,7 +3,7 @@ import './Register.scss'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 
-import { regiserUser } from '../../../apis/authApi/authApi'
+import { regiserUser } from '../../../apis/authApi'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'

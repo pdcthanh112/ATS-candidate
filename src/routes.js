@@ -4,7 +4,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const ChangePassword = React.lazy(() => import('./views/ChangePassword/ChangePassword'))
 // const Login = React.lazy(() => import('./views/pages/login/Login'))
 // const Register = React.lazy(() => import('./views/pages/register/Register'))
-const ViewProfile = React.lazy(() => import('./views/Candidate/CandidateProfile/ViewProfile'))
+const ViewProfile = React.lazy(() => import('./views/Candidate/CandidateProfile/ViewProfile/ViewProfile'))
 const RecruitmentDetail = React.lazy(() => import('./views/Recuirment/recruitmentDetail/RecruitmentDetail'))
 
 

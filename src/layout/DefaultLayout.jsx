@@ -5,11 +5,10 @@ import AppHeader from '../component/AppHeader/AppHeader'
 
 function DefaultLayout() {
   return (
-    <div>
-      
+    <div>     
       <div className="wrapper d-flex flex-column min-vh-100 bg-light">
         <AppHeader />
-        <div className="flex-grow-1 px-3">
+        <div className="flex-grow-1 px-3 bg-neutral-300">
           <AppContent />        
         </div>
         <AppFooter />

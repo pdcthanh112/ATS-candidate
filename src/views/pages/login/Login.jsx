@@ -3,7 +3,7 @@ import './Login.scss'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 
-import { loginUser } from '../../../apis/authApi/authApi'
+import { loginUser } from '../../../apis/authApi'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 

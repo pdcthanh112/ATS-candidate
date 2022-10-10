@@ -1,4 +1,4 @@
-import axiosConfig from "../axiosConfig";
+import axiosConfig from "./axiosConfig";
 import jwtDecode from 'jwt-decode';
 
 
@@ -8,5 +8,5 @@ export const getCandidateById = async (token) => {
         headers: {Authorization: `Bearer ${token}`}
     })
     .then(response => response.data)
-    .catch(error => console.log(error))
+    .catch(error => error)
 } 

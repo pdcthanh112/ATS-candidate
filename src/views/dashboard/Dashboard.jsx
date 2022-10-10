@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
+import './Dashboard.scss'
 
 const Dashboard = () => {
 
