@@ -1,23 +1,23 @@
-.personal-information {
+.profile-container {
   background-color: #ffffff;
   width: 50%;
   margin: 1rem auto;
   border-radius: 0.4rem;
+  padding-bottom: 1rem;
 
   .edit-icon {
     position: relative;
-    left: 32rem;
+    left: 31rem;
   }
 }
 
-.input-field {
-    height: 1.5rem;
+.field-input {
+  height: 2.5rem;
+  border: 1px solid #000;
+  border-radius: 0.2rem;
 }
 
-.btn-register {
-    background-color: #116835;
-    border-radius: 10px;
-    width: 20%;
-    height: 2.5rem;
-    color: #f5fef9;
-  }
+
+  
+  
+

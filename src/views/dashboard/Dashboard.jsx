@@ -6,7 +6,7 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-      <RecruitmentList/>
+      {/* <RecruitmentList/> */}
     </React.Fragment>
   )
 }
