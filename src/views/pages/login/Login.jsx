@@ -56,7 +56,7 @@ const Login = () => {
                   <input type={'text'} className='form-control border-none' name='email' placeholder='Nhập email của bạn' value={formik.values.email} onChange={formik.handleChange} /><br />
                 </div>
                 {formik.errors.email && formik.touched.email && (
-                  <div>{formik.errors.email}</div>
+                  <div className='text-[#ec5555]'>{formik.errors.email}</div>
                 )}
               </div>
               <div className='form-group my-4'>
@@ -69,7 +69,7 @@ const Login = () => {
                   </span>
                 </div>
                 {formik.errors.password && formik.touched.password && (
-                  <div>{formik.errors.password}</div>
+                  <div className='text-[#ec5555]'>{formik.errors.password}</div>
                 )}
               </div>
               {loginError && <div className='input-error p-2 rounded'>Incorrect email or password</div>}

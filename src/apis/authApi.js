@@ -21,7 +21,7 @@ export const loginUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const regiserUser = async (user, dispatch) => {
+export const regiserUser = async (user) => {
   return await axiosConfig
     .post("/auth/register", {
       email: user.email,
@@ -30,8 +30,8 @@ export const regiserUser = async (user, dispatch) => {
       address: user.address,
       phone: user.phone,
     })
-    .then((response) => response.data.status)
-    .catch((error) => error.response.data.status);
+    .then((response) => response.data)
+    .catch((error) => error.response.data);
 };
 
 export const logoutUser = async (dispatch, navigate) => {
@@ -42,4 +42,25 @@ export const logoutUser = async (dispatch, navigate) => {
   } catch (error) {
     dispatch(logoutFailed());
   }
+};
+
+export const forgetPassword = async (email) => {
+  return axiosConfig
+    .get("auth/forgot-password", {
+      params: {
+        email: email,
+      },
+    })
+    .then((response) => response)
+    .catch((error) => error);
+};
+export const resetPassword = async ( email, newPassword, resetToken) => {
+  return axiosConfig
+    .patch("auth/reset-password", {         
+        email: email,
+        newPassword: newPassword,
+        token: resetToken,
+    })
+    .then((response) => response)
+    .catch((error) => error);
 };

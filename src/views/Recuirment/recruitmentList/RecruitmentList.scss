@@ -1,5 +1,15 @@
 .recruitment-container {
+  margin-top: 1rem;
+  background-color: #ffffff;
   .recruiment-item {
-    background-color: aquamarine;
+    padding: 1rem 1.5rem;
+    border: 1px solid #000;
+    border-radius: 0.5rem;
+
+    .recruiment-item__typeOfWork{
+      font-weight: 500;
+      font-size: large;
+      color: #009400;
+    }
   }
 }

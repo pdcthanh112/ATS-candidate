@@ -3,7 +3,7 @@ import './ChangePassword.scss'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useSelector } from 'react-redux'
-import defaultImage from "../../assets/image/defaultUser.png"
+import defaultImage from "../../../assets/image/defaultUser.png"
 
 const ChangePassword = () => {
 

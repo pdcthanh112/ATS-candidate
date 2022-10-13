@@ -12,9 +12,7 @@ const EditInformation = () => {
   const formik = useFormik({
     initialValues: {
       fullname: "",
-      email: "",
-      password: "",
-      confirm: "",
+      dateOfBirth: "",
       address: "",
       phone: "",
     },
@@ -39,7 +37,7 @@ const EditInformation = () => {
             <div className='my-3 mx-2 w-1/2'>
               <label className='text-lg'>Email</label><br />
               <div className='field-input'>
-                <input type={'text'} className={`form-control input-field border-none `} name='email' value={currentUser.email} disabled /><br />
+                <input type={'text'} className={`form-control border-none `} name='email' value={currentUser.email} disabled /><br />
               </div>
               {formik.errors.email && formik.touched.email && (
                 <div className='text-[#ec5555]'>{formik.errors.email}</div>
@@ -59,7 +57,7 @@ const EditInformation = () => {
             <div className='my-3 mx-2 w-1/2'>
               <label className='text-lg'>Ngày sinh</label><br />
               <div className='field-input'>
-                <input type={'date'} className={`form-control input-field border-none ${formik.errors.dateOfBirth && formik.touched.dateOfBirth && 'input-error'}`} name='dateOfBirth' value={formik.values.dateOfBirth} onChange={formik.handleChange}  /><br />
+                <input type={'date'} className={`form-control border-none ${formik.errors.dateOfBirth && formik.touched.dateOfBirth && 'input-error'}`} name='dateOfBirth' value={formik.values.dateOfBirth} onChange={formik.handleChange}  /><br />
               </div>
               {formik.errors.dateOfBirth && formik.touched.dateOfBirth && (
                 <div className='text-[#ec5555]'>{formik.errors.dateOfBirth}</div>
@@ -68,7 +66,7 @@ const EditInformation = () => {
             <div className='my-3 mx-2 w-1/2'>
               <label className='text-lg'>Phone</label><br />
               <div className='field-input'>
-                <input type={'text'} className={`form-control input-field border-none ${formik.errors.phone && formik.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formik.values.phone} onChange={formik.handleChange}  /><br />
+                <input type={'text'} className={`form-control border-none ${formik.errors.phone && formik.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formik.values.phone} onChange={formik.handleChange}  /><br />
               </div>
               {formik.errors.phone && formik.touched.phone && (
                 <div className='text-[#ec5555]'>{formik.errors.phone}</div>
@@ -78,7 +76,7 @@ const EditInformation = () => {
           <div className='my-3 mx-2'>
             <label className='text-lg'>Address</label><br />
             <div className='field-input'>
-              <input type={'text'} className={`form-control input-field border-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} /><br />
+              <input type={'text'} className={`form-control border-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} /><br />
             </div>
             {formik.errors.address && formik.touched.address && (
               <div className='text-[#ec5555]'>{formik.errors.address}</div>

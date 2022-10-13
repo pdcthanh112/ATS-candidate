@@ -3,10 +3,10 @@ import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
 import './Dashboard.scss'
 
 const Dashboard = () => {
-
+ 
   return (
     <React.Fragment>
-      {/* <RecruitmentList/> */}
+      <RecruitmentList/>
     </React.Fragment>
   )
 }

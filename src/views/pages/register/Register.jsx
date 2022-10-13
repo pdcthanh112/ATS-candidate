@@ -8,16 +8,12 @@ import { regiserUser } from '../../../apis/authApi'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import {responseStatus} from '../../../utils/constants'
+import { responseStatus } from '../../../utils/constants'
 
 const Register = () => {
 
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [registerStatus, setRegisterStatus] = useState('START')
-
-  const handleHideShowPassword = () => {
-    setIsShowPassword(!isShowPassword)
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -27,6 +23,7 @@ const Register = () => {
       confirm: "",
       address: "",
       phone: "",
+
     },
     validationSchema: Yup.object({
       fullname: Yup.string().required('Please input your name'),
@@ -37,8 +34,10 @@ const Register = () => {
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid')
     }),
     onSubmit: (values) => {
+      console.log(values);
       regiserUser(values).then((response) => {
-        response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
+        console.log(response);
+        //  response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(response.message)
       })
     }
   })
@@ -57,7 +56,7 @@ const Register = () => {
                 <label className='text-lg'>Fullname</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-user mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={'text'} className={`form-control  border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br/>
+                  <input type={'text'} className={`form-control  border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br />
                 </div>
                 {formik.errors.fullname && formik.touched.fullname && (
                   <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
@@ -72,7 +71,7 @@ const Register = () => {
                 {formik.errors.email && formik.touched.email && (
                   <div className='text-[#ec5555]'>{formik.errors.email}</div>
                 )}
-                {registerStatus === 'FAILURE' && (
+                {registerStatus !== responseStatus.SUCCESS && registerStatus.includes('email') && (
                   <div className='text-[#ec5555]'>Email is alrealy exist</div>
                 )}
               </div>
@@ -81,7 +80,7 @@ const Register = () => {
                 <div className='field-input'>
                   <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
                   <input type={isShowPassword ? 'text' : 'password'} className={`form-control  border-none ${formik.errors.password && formik.touched.password && 'input-error'}`} name='password' placeholder='Nhập mật khẩu' value={formik.values.password} onChange={formik.handleChange} />
-                  <span className='hideShowPassword' onClick={() => { handleHideShowPassword() }}>
+                  <span className='hideShowPassword' onClick={() => { setIsShowPassword(!isShowPassword) }}>
                     <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                   </span>
                 </div>
@@ -94,7 +93,7 @@ const Register = () => {
                 <div className='field-input'>
                   <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
                   <input type={isShowPassword ? 'text' : 'password'} className={`form-control  border-none ${formik.errors.confirm && formik.touched.confirm && 'input-error'}`} name='confirm' placeholder='Nhập lại mật khẩu' value={formik.values.confirm} onChange={formik.handleChange} />
-                  <span className='hideShowPassword' onClick={() => { handleHideShowPassword() }}>
+                  <span className='hideShowPassword' onClick={() => { setIsShowPassword(!isShowPassword) }}>
                     <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                   </span>
                 </div>
@@ -120,6 +119,9 @@ const Register = () => {
                 </div>
                 {formik.errors.phone && formik.touched.phone && (
                   <div className='text-[#ec5555]'>{formik.errors.phone}</div>
+                )}
+                {registerStatus !== responseStatus.SUCCESS && registerStatus.includes('Phone number') && (
+                  <div className='text-[#ec5555]'>Phone number is alrealy exist</div>
                 )}
               </div>
               <button type='submit' className='btn-register'>Tạo tài khoản</button>
