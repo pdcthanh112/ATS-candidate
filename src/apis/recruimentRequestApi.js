@@ -1,4 +1,4 @@
-import axiosConfig from "./axiosConfig";
+import axiosConfig from "../configs/axiosConfig";
 import jwtDecode from 'jwt-decode';
 
 

@@ -1,4 +1,4 @@
-import axiosConfig from "./axiosConfig";
+import axiosConfig from "../configs/axiosConfig";
 import {
   loginFailed,
   loginStart,
@@ -60,6 +60,16 @@ export const resetPassword = async ( email, newPassword, resetToken) => {
         email: email,
         newPassword: newPassword,
         token: resetToken,
+    })
+    .then((response) => response)
+    .catch((error) => error);
+};
+export const changePassword = async ( email, newPassword, oldPassword) => {
+  return axiosConfig
+    .patch("auth/change-password", {         
+        email: email,
+        newPassword: newPassword,
+        oldPassword: oldPassword,
     })
     .then((response) => response)
     .catch((error) => error);

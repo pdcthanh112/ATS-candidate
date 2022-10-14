@@ -8,6 +8,9 @@ import { Box, Modal } from '@mui/material';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { storage } from '../../../configs/firebaseConfig'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { v4 as uuidv4 } from 'uuid';
 
 const RecruitmentDetail = () => {
 
@@ -16,6 +19,7 @@ const RecruitmentDetail = () => {
   const [recruiment, setRecruitment] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [openModal, setOpenModal] = useState(false);
+  const [fileCV, setFileCV] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,21 +45,32 @@ const RecruitmentDetail = () => {
     boxShadow: 24,
   };
 
+  const uploadFile = () => {
+    if (fileCV == null) return;
+    const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
+    uploadBytes(cvRef, fileCV).then((snapshot) => {
+      return getDownloadURL(snapshot.ref);
+    })
+  }
+
 
   const formik = useFormik({
     initialValues: {
       fullname: "",
       email: "",
       phone: "",
+      linkCV: ""
     },
     validationSchema: Yup.object({
       fullname: Yup.string().required('Please input your name'),
       email: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
-      //fileCV: Yup.string().required('Please input your CV'),
     }),
     onSubmit: (values) => {
       console.log('RRRRRR', values);
+      uploadFile().then(downloadURL => {
+        values.linkCV = downloadURL
+      })
       // regiserUser(values).then((response) => {
       //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
       // })
@@ -144,15 +159,15 @@ const RecruitmentDetail = () => {
                     <div className='text-[#ec5555]'>{formik.errors.phone}</div>
                   )}
                 </div>
-                {/* <div className='my-3'>
+                <div className='my-3'>
                   <label className='text-lg'>Curriculum vitae</label><br />
-                  <div className='field-input'>                  
-                    <input type={'file'} className={`form-control  border-none ${formik.errors.fileCV && formik.touched.fileCV && 'input-error'}`} name='fileCV' value={formik.values.fileCV} onChange={formik.handleChange} required/><br />
+                  <div className='field-input'>
+                    <input type={'file'} className={`form-control  border-none`} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} required /><br />
                   </div>
-                  {formik.errors.fileCV && formik.touched.fileCV && (
+                  {/* {formik.errors.fileCV && formik.touched.fileCV && (
                     <div className='text-[#ec5555]'>{formik.errors.fileCV}</div>
-                  )}
-                </div> */}
+                  )} */}
+                </div>
                 <div><button type='submit' className='btn-submit'>Submit</button></div>
               </form>
             </div>
