@@ -8,7 +8,8 @@ import { logoutUser } from '../../apis/authApi'
 
 const AppHeader = () => {
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser)
+  const currentUser = useSelector((state) => state.auth.login.currentUser.data)
+  console.log('header',currentUser);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,8 +29,8 @@ const AppHeader = () => {
             <div className="dropdown">
               <a className="" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className='inline-flex bg-slate-200 rounded-3xl px-2 py-1'>
-                  <img src={currentUser.data.candidate.image || defaultUser} className='rounded-3xl' width={'25rem'} />
-                  <div className='mx-2' style={{width: '12rem'}}>{currentUser.data.candidate.name}</div>
+                  <img src={currentUser.candidate.image || defaultUser} alt="user" className='rounded-3xl' width={'25rem'} />
+                  <div className='mx-2' style={{width: '12rem'}}>{currentUser.candidate.name}</div>
                   <i className="fa-solid fa-chevron-down mt-1.5 text-xs"></i>
                 </div>
               </a>

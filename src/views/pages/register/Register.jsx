@@ -36,8 +36,7 @@ const Register = () => {
     onSubmit: (values) => {
       console.log(values);
       regiserUser(values).then((response) => {
-        console.log(response);
-        //  response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(response.message)
+        response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(response.message)
       })
     }
   })

@@ -8,13 +8,14 @@ import * as Yup from 'yup'
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser.data);
+  console.log('asdfasf',currentUser);
 
   const formik = useFormik({
     initialValues: {
-      fullname: "",
-      dateOfBirth: "",
-      address: "",
-      phone: "",
+      fullname: currentUser.candidate.name,
+      dateOfBirth: currentUser.candidate.dob,
+      address: currentUser.candidate.address,
+      phone: currentUser.candidate.phone,
     },
     validationSchema: Yup.object({
       fullname: Yup.string().required('Please input your name'),
@@ -34,7 +35,7 @@ const EditInformation = () => {
       <div className="form-group px-2 py-2">
         <form onSubmit={formik.handleSubmit}>
           <div className='inline-flex w-full'>
-            <div className='my-3 mx-2 w-1/2'>
+            <div className='my-3 mx-2 w-2/5'>
               <label className='text-lg'>Email</label><br />
               <div className='field-input'>
                 <input type={'text'} className={`form-control border-none `} name='email' value={currentUser.email} disabled /><br />
@@ -43,10 +44,19 @@ const EditInformation = () => {
                 <div className='text-[#ec5555]'>{formik.errors.email}</div>
               )}
             </div>
-            <div className='my-3 mx-2 w-1/2'>
+            <div className='my-3 mx-2 w-2/5'>
               <label className='text-lg'>Fullname: </label><br />
               <div className='field-input'>
                 <input type={'text'} className={`form-control border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br />
+              </div>
+              {formik.errors.fullname && formik.touched.fullname && (
+                <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
+              )}
+            </div>
+            <div className='my-3 mx-2 w-1/5'>
+              <img src={currentUser.candidate.image} alt="avatar" width={'3rem'}/>
+              <div className='field-input'>
+                <input type={'file'} className={`form-control border-none `} name='image' onChange={formik.handleChange} /><br />
               </div>
               {formik.errors.fullname && formik.touched.fullname && (
                 <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
