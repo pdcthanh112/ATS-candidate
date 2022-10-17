@@ -10,3 +10,7 @@ export const getCandidateById = async (token) => {
     .then(response => response.data)
     .catch(error => error)
 } 
+
+export const updateProfileCandidate = async () => {
+    
+}

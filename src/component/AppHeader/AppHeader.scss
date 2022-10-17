@@ -8,6 +8,15 @@
     position: absolute;
     right: 2rem;
 
+    .profile-image {
+      border-radius: 50%;
+    }
+
+    .linee {
+      border-bottom: 1px solid red;
+      height: 1rem;
+      width: 100%;
+    }
     a:hover {
       color: black;
     }

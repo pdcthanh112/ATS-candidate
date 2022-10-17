@@ -18,13 +18,17 @@ const PersonalInformation = () => {
         </div>
       </div>
       <div className="inline-flex w-full my-2">
-        <div className="w-1/2">
+        <div className="w-2/5">
           <span className="font-normal text-xl">Ngày sinh: </span>
           <span className="font-thin text-xl">01/12/2000</span>
         </div>
-        <div className="w-1/2">
+        <div className="w-2/5">
           <span className="font-normal text-xl">Phone: </span>
           <span className="font-thin text-xl">{currentUser.candidate.phone}</span>
+        </div>
+        <div className="w-1/5">
+          <span className="font-normal text-xl">Gender: </span>
+          <span className="font-thin text-xl">{currentUser.candidate.gender}</span>
         </div>
       </div>
       <div className="inline-flex w-full my-2">
