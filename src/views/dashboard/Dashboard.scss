@@ -1,0 +1,19 @@
+.search-container {
+  background-color: #fff;
+  display: flex;
+  padding: 1rem 2rem;
+  justify-content: center;
+
+  .search-item{
+    border: 1px solid #36CB3E;
+    margin: 0 1rem;
+    padding-top: 0.3rem;
+  }
+
+  .btn-search {
+    width: 6rem;
+    height: 2.2rem;
+    border-radius: 0.3rem;
+    margin-left: 2rem;
+  }
+}
