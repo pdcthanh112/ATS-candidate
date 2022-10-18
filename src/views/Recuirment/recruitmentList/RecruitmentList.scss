@@ -1,6 +1,13 @@
+.search-container {
+  background-color: #ffffff;
+  display: flex;
+}
+
 .recruitment-container {
   margin-top: 1rem;
   background-color: #ffffff;
+  margin: 1rem;
+  border-radius: 0.5rem;
   .recruiment-item {
     padding: 1rem 1.5rem;
     border: 1px solid #000;

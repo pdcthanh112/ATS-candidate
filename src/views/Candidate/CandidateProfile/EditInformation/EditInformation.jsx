@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './EditInformation.scss'
 import { useSelector } from "react-redux";
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { storage } from '../../../../configs/firebaseConfig'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { v4 as uuidv4 } from 'uuid';
+
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser.data);
-  console.log('asdfasf', currentUser);
+  //console.log('asdfasf', currentUser);
+  const [fileImage, setFileImage] = useState(null)
 
   const formik = useFormik({
     initialValues: {
@@ -16,17 +21,24 @@ const EditInformation = () => {
       dateOfBirth: currentUser.candidate.dob,
       address: currentUser.candidate.address,
       phone: currentUser.candidate.phone,
-      avatar: currentUser.candidate.image,
       gender: currentUser.candidate.gender,
+      image: currentUser.candidate.image,
     },
     validationSchema: Yup.object({
       fullname: Yup.string().required('Please input your name'),
       dateOfBirth: Yup.string().required('Please input your date of birth'),
       address: Yup.string().required('Please input your address'),
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
-      //gender: Yup.string().required('Please choose your gender'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      if (fileImage !== null) {
+        const imageRef = ref(storage, `candidate-avatar/${fileImage.name + uuidv4()}`)
+        await uploadBytes(imageRef, fileImage).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then(url => {
+            values.image = url
+          })
+        })
+      }
       console.log('RRRRRRR', values);
       // regiserUser(values).then((response) => {
       //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
@@ -62,12 +74,9 @@ const EditInformation = () => {
               <div className='edit-profile__image'>
                 <img src={currentUser.candidate.image} alt="avatar" />
               </div>
-              <div className=''>
-                <input type={'file'} className='form-control border-none text-sm' name='image' onChange={formik.handleChange} /><br />
+              <div>
+                <input type={'file'} className='form-control border-none text-sm' name='image' onChange={(e) => { setFileImage(e.target.files[0]) }} /><br />
               </div>
-              {formik.errors.fullname && formik.touched.fullname && (
-                <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
-              )}
             </div>
           </div>
           <div className='inline-flex w-full'>
@@ -93,7 +102,7 @@ const EditInformation = () => {
               <label className='text-lg'>Gender</label><br />
               <div className='field-input'>
                 <select name='gender' value={formik.values.gender} onChange={formik.handleChange} className='pt-1'>
-                  <option value={null}>Choose...</option>
+                  <option>Choose...</option>
                   <option value={'Male'}>Male</option>
                   <option value={'Female'}>Female</option>
                   <option value={'Other'}>Other</option>

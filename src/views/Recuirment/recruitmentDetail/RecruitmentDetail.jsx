@@ -35,7 +35,7 @@ const RecruitmentDetail = () => {
 
   const style = {
     position: 'absolute',
-    top: '30%',
+    top: '40%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 500,
@@ -43,15 +43,6 @@ const RecruitmentDetail = () => {
     border: '1px solid #0F6B14',
     boxShadow: 24,
   };
-
-  const uploadFile = () => {
-    if (fileCV == null) return;
-    const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
-    uploadBytes(cvRef, fileCV).then((snapshot) => {
-      return getDownloadURL(snapshot.ref);
-    })
-  }
-
 
   const formik = useFormik({
     initialValues: {
@@ -65,11 +56,18 @@ const RecruitmentDetail = () => {
       email: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      if (fileCV == null) {  
+        formik.errors.linkCV = "Please submit your CV";
+      } else {
+        const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
+        await uploadBytes(cvRef, fileCV).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then(url => {
+            values.linkCV = url
+          })
+        })
+      }
       console.log('RRRRRR', values);
-      uploadFile().then(downloadURL => {
-        values.linkCV = downloadURL
-      })
       // regiserUser(values).then((response) => {
       //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
       // })
@@ -161,11 +159,11 @@ const RecruitmentDetail = () => {
                 <div className='my-3'>
                   <label className='text-lg'>Curriculum vitae</label><br />
                   <div className='field-input'>
-                    <input type={'file'} className={`form-control  border-none`} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} required /><br />
+                    <input type={'file'} className={`form-control  border-none`} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
                   </div>
-                  {/* {formik.errors.fileCV && formik.touched.fileCV && (
-                    <div className='text-[#ec5555]'>{formik.errors.fileCV}</div>
-                  )} */}
+                  {formik.errors.linkCV && (
+                    <div className='text-[#ec5555]'>{formik.errors.linkCV}</div>
+                  )}
                 </div>
                 <div><button type='submit' className='btn-submit'>Submit</button></div>
               </form>
@@ -178,3 +176,4 @@ const RecruitmentDetail = () => {
 }
 
 export default RecruitmentDetail
+

@@ -7,6 +7,7 @@ const ViewProfile = React.lazy(() => import('./views/Candidate/CandidateProfile/
 const RecruitmentDetail = React.lazy(() => import('./views/Recuirment/recruitmentDetail/RecruitmentDetail'))
 const ForgetPassword = React.lazy(() => import('./views/pages/ForgetPassword/ForgetPassword')) 
 const ResetPassword = React.lazy(() => import('./views/pages/ResetPassword/ResetPassword')) 
+const SearchRecruitment = React.lazy(() => import('./views/Recuirment/SearchRecruitment/SearchRecruitment')) 
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -16,6 +17,7 @@ const routes = [
   { path: '/change-password', name: 'Change Password', element: ChangePassword },
   { path: '/forget-password', name: 'Forget Password', element: ForgetPassword },
   { path: '/reset-password/:email/:token', name: 'Reset Password', element: ResetPassword },
+  { path: '/search', name: 'Search Recruitment', element: SearchRecruitment },
 ]
 
 export default routes

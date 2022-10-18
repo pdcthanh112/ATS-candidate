@@ -8,7 +8,7 @@ function DefaultLayout() {
     <div>     
       <div className="wrapper d-flex flex-column min-vh-100 bg-light">
         <AppHeader />
-        <div className="flex-grow-1 px-3 bg-neutral-200">
+        <div className="flex-grow-1 bg-neutral-200">
           <AppContent />        
         </div>
         <AppFooter />

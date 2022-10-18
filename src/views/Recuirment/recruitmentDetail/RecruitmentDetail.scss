@@ -4,47 +4,47 @@
   .recruitment-detail__title {
     font-size: 2rem;
     font-weight: 500;
-    color: #09A912;
+    color: #09a912;
     margin: 1rem 0;
   }
 
   .recruitment-detail__summary {
     padding: 1rem 3rem;
-    border: 1px solid #0F6B14;
+    border: 1px solid #0f6b14;
     background-color: #eaefec;
   }
 
   .recruitment-detail__apply-button {
     width: 15rem;
     height: 3.5rem;
-    background-color: #0F6B14;
+    background-color: #0f6b14;
     border-radius: 0.3rem;
     color: #fff;
   }
 }
 
 .modal-container {
-
-    .modal-title {
-        font-size: 1.6rem;
-        font-weight: 600;
-        color: #0F6B14;
-    }
-    .btn-submit {
-      background-color: #116835;
-      border-radius: 5px;
-      width: 30%;
-      height: 2.5rem;
-      color: #f5fef9;
-      margin: 0 0 1rem 1rem;
-    }
+  padding: 2rem 1.2rem 0 2rem;
+  .modal-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #0f6b14;
+  }
+  .btn-submit {
+    background-color: #116835;
+    border-radius: 5px;
+    width: 30%;
+    height: 2.5rem;
+    color: #f5fef9;
+    margin: 0 0 1rem 1rem;
+  }
 }
 
 .field-input {
   display: inline-flex;
   width: 100%;
   border: 1px solid #eee;
-  }
+}
 
 .input-error {
   font-size: 1.2rem;
