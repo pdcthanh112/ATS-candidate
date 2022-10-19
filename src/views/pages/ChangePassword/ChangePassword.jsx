@@ -36,7 +36,7 @@ const ChangePassword = () => {
   return (
     <div className='change-password-container grid grid-cols-2'>
       <div className="left-container">
-        <img src={defaultImage} alt='User' width={'150rem'} className='mx-auto my-3 rounded-full' />
+        <img src={currentUser.candidate.image || defaultImage} alt='User' width={'150rem'} height={'150rem'} className='mx-auto my-3 rounded-full' />
         <div>
           <span>Name: </span>
           <span>{currentUser.candidate.name} </span>

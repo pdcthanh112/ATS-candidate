@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import './EditInformation.scss'
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -8,11 +10,12 @@ import * as Yup from 'yup'
 import { storage } from '../../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
+import { updateProfileCandidate } from '../../../../apis/candidateApi';
+import {responseStatus} from '../../../../utils/constants'
 
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser.data);
-  //console.log('asdfasf', currentUser);
   const [fileImage, setFileImage] = useState(null)
 
   const formik = useFormik({
@@ -40,15 +43,14 @@ const EditInformation = () => {
         })
       }
       console.log('RRRRRRR', values);
-      // regiserUser(values).then((response) => {
-      //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
-      // })
-
+      updateProfileCandidate(currentUser.candidate.id, currentUser.token, values).then((response) => {
+        response.status === responseStatus.SUCCESS ? toast.success('Edit profile successfully') : toast.error('Edit profile fail')
+      })
     }
   })
 
   return (
-    <div>
+    <React.Fragment>
       <div className="form-group px-2 py-2">
         <form onSubmit={formik.handleSubmit}>
           <div className='inline-flex w-full h-40'>
@@ -72,7 +74,7 @@ const EditInformation = () => {
             </div>
             <div className='my-3 mx-2 w-2/6'>
               <div className='edit-profile__image'>
-                <img src={currentUser.candidate.image} alt="avatar" />
+                <img src={currentUser.candidate.image} alt="avatar" width={'150rem'} />
               </div>
               <div>
                 <input type={'file'} className='form-control border-none text-sm' name='image' onChange={(e) => { setFileImage(e.target.files[0]) }} /><br />
@@ -125,7 +127,20 @@ const EditInformation = () => {
           <button type='submit' className='btn-save-edit'>Save</button>
         </form>
       </div>
-    </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
+    </React.Fragment>
   )
 }
 

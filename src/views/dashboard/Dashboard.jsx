@@ -3,6 +3,9 @@ import './Dashboard.scss'
 import { getAllRecruimentRequest, getSearchCategory, searchRecruimentRequest } from '../../apis/recruimentRequestApi';
 import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
 import ReactLoading from 'react-loading'
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 
 const Dashboard = () => {
 
@@ -10,18 +13,20 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [searchDataCategory, setSearchDataCategory] = useState();
   const [searchObject, setSearchObject] = useState({});
+  const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const response = await getAllRecruimentRequest(0, 12);
+      const response = await getAllRecruimentRequest(pagination.currentPage - 1, 12);
       if (response) {
-        setListRecruitment(response.data)
+        setPagination({...pagination, totalPage: response.data.totalPages})
+        setListRecruitment(response.data.responseList)
         setIsLoading(false)
       }
     }
     fetchData();
-  }, [])
+  }, [pagination.currentPage])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +54,8 @@ const Dashboard = () => {
     })
   };
 
-  if(isLoading) return <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' />
+
+  if (isLoading) return <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' />
 
   return (
     <React.Fragment>
@@ -119,11 +125,16 @@ const Dashboard = () => {
         </div>
 
         <button onClick={() => { onHandleSearch() }} className='btn-search bg-[#50d71e]'><i className="fa-solid fa-magnifying-glass mr-1"></i>Search</button>
-        <button onClick={() => {  }}className='btn-search bg-[#f3483b]'>Clear<i className="fa-solid fa-xmark ml-1"></i></button>
+        <button onClick={() => { setPagination({ ...pagination, currentPage: 1 }) }} className='btn-search bg-[#f3483b]'>Clear<i className="fa-solid fa-xmark ml-1"></i></button>
       </div>
 
+      {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
 
-      {/* {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment}/>} */}
+      <div className='pagination-container'>
+        <Stack spacing={2}>
+          <Pagination count={pagination.totalPage} onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
+        </Stack>
+      </div>
     </React.Fragment>
   )
 }
