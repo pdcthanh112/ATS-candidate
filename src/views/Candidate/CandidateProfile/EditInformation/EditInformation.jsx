@@ -12,10 +12,12 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
 import { updateProfileCandidate } from '../../../../apis/candidateApi';
 import { responseStatus } from '../../../../utils/constants'
+import { useDispatch } from "react-redux";
 
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser.data);
+  console.log(currentUser);
   const [fileImage, setFileImage] = useState(null)
 
   const formik = useFormik({

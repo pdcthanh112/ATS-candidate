@@ -13,16 +13,18 @@ export const getRecruimentRequestDetail = async (id) => {
 } 
 
 export const searchRecruimentRequest = async (searchObject) => {  
+    console.log('aapi', searchObject);
     return await axiosConfig.put('recruitmentRequest/searchRecruitmentRequest', {
         experience: searchObject.experience,
         industry: searchObject.industry,
         jobLevel: searchObject.jobLevel,
         jobTitle: searchObject.jobTitle,
+        location: searchObject.location,
         salary: searchObject.salary,
         typeOfWork: searchObject.typeOfWork
     })
-    .then(response => response.data)
-    .catch(error => error)
+    .then(response => console.log('rrrrrrrrrr',response))
+    .catch(error => console.log('eeeeeeee', error))
 } 
 
 export const getSearchCategory = async () => {  

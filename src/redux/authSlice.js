@@ -40,6 +40,7 @@ const authSlice = createSlice({
       // state.logout.isFetching = false;
       // state.logout.error = true;
     },
+
   },
 });
 

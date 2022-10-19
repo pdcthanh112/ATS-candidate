@@ -2,7 +2,6 @@ import React from 'react'
 import './RecruitmentList.scss'
 import { Link } from 'react-router-dom'
 
-
 const RecruitmentList = ({ listRecruitment }) => {
 
   return (

@@ -12,7 +12,15 @@ const Dashboard = () => {
   const [listRecruitment, setListRecruitment] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchDataCategory, setSearchDataCategory] = useState();
-  const [searchObject, setSearchObject] = useState({});
+  const [searchObject, setSearchObject] = useState({
+    experience: "",
+    industry: "",
+    jobLevel: "",
+    jobTitle: "",
+    location: "",
+    salary: "",
+    typeOfWork: ""
+  });
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   useEffect(() => {
@@ -20,7 +28,7 @@ const Dashboard = () => {
       setIsLoading(true)
       const response = await getAllRecruimentRequest(pagination.currentPage - 1, 12);
       if (response) {
-        setPagination({...pagination, totalPage: response.data.totalPages})
+        setPagination({ ...pagination, totalPage: response.data.totalPages })
         setListRecruitment(response.data.responseList)
         setIsLoading(false)
       }
@@ -49,7 +57,7 @@ const Dashboard = () => {
 
   const onHandleSearch = () => {
     searchRecruimentRequest(searchObject).then((response) => {
-      console.log(response.data);
+      console.log('search', response.data);
       setListRecruitment(response.data)
     })
   };
@@ -60,27 +68,29 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       <div className="search-container">
-        <div className='search-item' style={{ width: '9%' }}>
-          <select onChange={(e) => { handleChangeSearchObject('jobType', e) }}>
-            <option selected>Loại công việc</option>
-            <option value={'full time'}>Full time</option>
-            <option value={'part time'}>Part time</option>
-            <option value={'intern'}>Intern</option>
+        <div className='search-item' style={{ width: '11%' }}>
+          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('typeOfWork', e) }}>
+            <option>Loại công việc</option>
+            <option value={'Full Time'}>Full time</option>
+            <option value={'Part tTime'}>Part time</option>
+            <option value={'Intern'}>Intern</option>
+            <option value={'Non-Management'}>Non-Management</option>
           </select>
         </div>
 
-        <div className='search-item' style={{ width: '6%' }}>
-          <select onChange={(e) => { handleChangeSearchObject('level', e) }}>
-            <option selected>Vị trí</option>
-            <option value={'fresher'}>Fresher</option>
+        <div className='search-item' style={{ width: '8%' }}>
+          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('jobLevel', e) }}>
+            <option>Vị trí</option>
+            <option value={'Fresher'}>Fresher</option>
             <option value={'Junior'}>Junior</option>
             <option value={'Senior'}>Senior</option>
+            <option value={'Suppervisor'}>Suppervisor</option>
           </select>
         </div>
 
         <div className='search-item' style={{ width: '11%' }}>
-          <select onChange={(e) => { handleChangeSearchObject('industry', e) }}>
-            <option selected>Industry</option>
+          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('industry', e) }}>
+            <option>Industry</option>
             {searchDataCategory.industry.map((item, id) => (
               <option key={id} value={item}>{item}</option>
             ))}
@@ -88,8 +98,8 @@ const Dashboard = () => {
         </div>
 
         <div className='search-item py-auto' style={{ width: '16%' }}>
-          <select onChange={(e) => { handleChangeSearchObject('jobTitle', e) }}>
-            <option selected>Job Title</option>
+          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('jobTitle', e) }}>
+            <option>Job Title</option>
             {searchDataCategory.jobTitle.map((item, id) => (
               <option key={id} value={item}>{item}</option>
             ))}
@@ -97,8 +107,8 @@ const Dashboard = () => {
         </div>
 
         <div className='search-item' style={{ width: '8%' }}>
-          <select onChange={(e) => { handleChangeSearchObject('experience', e) }}>
-            <option selected>Kinh nghiệm</option>
+          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('experience', e) }}>
+            <option>Kinh nghiệm</option>
             <option value={'0'}>Dưới 1 năm</option>
             <option value={'1'}>1 năm</option>
             <option value={'2'}>2 năm</option>
@@ -112,15 +122,15 @@ const Dashboard = () => {
         </div>
 
         <div className='search-item' style={{ width: '12%' }}>
-          <select onChange={(e) => { handleChangeSearchObject('salary', e) }}>
-            <option selected>Mức lương</option>
+          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('salary', e) }}>
+            <option>Mức lương</option>
             <option value={'6000'}>Trên 6.000.000 VNĐ</option>
             <option value={'8000'}>Trên 8.000.000 VNĐ</option>
             <option value={'10000'}>Trên 10.000.000 VNĐ</option>
             <option value={'15000'}>Trên 15.000.000 VNĐ</option>
             <option value={'20000'}>Trên 20.000.000 VNĐ</option>
             <option value={'30000'}>Trên 30.000.000 VNĐ</option>
-            <option value={'0'}>Lương thỏa thuận</option>
+            <option value={'Negotiable'}>Lương thỏa thuận</option>
           </select>
         </div>
 

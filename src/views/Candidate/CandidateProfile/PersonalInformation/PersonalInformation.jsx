@@ -16,7 +16,6 @@ const PersonalInformation = () => {
       setIsLoading(true)
       const response = await getCandidateById(currentUser.candidate.id, currentUser.token);
       if (response) {
-        console.log(response.data);
         setData(response.data)
         setIsLoading(false)
       }

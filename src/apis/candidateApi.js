@@ -10,7 +10,7 @@ export const getCandidateById = async (id, token) => {
 };
 
 export const updateProfileCandidate = async (id, token, data) => {
-  return await axiosConfig
+    return await axiosConfig
     .put(`candidate/update/{id}?id=${id}`, {
         address: data.address,
         dob: data.dateOfBirth,
