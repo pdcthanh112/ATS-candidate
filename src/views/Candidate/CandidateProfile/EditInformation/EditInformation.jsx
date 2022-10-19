@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './EditInformation.scss'
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,7 +11,7 @@ import { storage } from '../../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
 import { updateProfileCandidate } from '../../../../apis/candidateApi';
-import {responseStatus} from '../../../../utils/constants'
+import { responseStatus } from '../../../../utils/constants'
 
 const EditInformation = () => {
 
