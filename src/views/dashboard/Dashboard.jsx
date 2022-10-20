@@ -3,24 +3,16 @@ import './Dashboard.scss'
 import { getAllRecruimentRequest, getSearchCategory, searchRecruimentRequest } from '../../apis/recruimentRequestApi';
 import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
 import ReactLoading from 'react-loading'
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-
+import { Pagination, Stack, TextField, Autocomplete } from '@mui/material';
+import { typeOfWorkData, jobLevelData, experienceData, salaryData, locationData } from '../../utils/dropdownData';
 
 const Dashboard = () => {
 
   const [listRecruitment, setListRecruitment] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchDataCategory, setSearchDataCategory] = useState();
-  const [searchObject, setSearchObject] = useState({
-    experience: "",
-    industry: "",
-    jobLevel: "",
-    jobTitle: "",
-    location: "",
-    salary: "",
-    typeOfWork: ""
-  });
+  const [searchObject, setSearchObject] = useState({ experience: "", industry: "", jobLevel: "", jobTitle: "", location: "", salary: "", typeOfWork: "" });
+  const [searchError, setSearchError] = useState(false)
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   useEffect(() => {
@@ -48,17 +40,23 @@ const Dashboard = () => {
     fetchData();
   }, [])
 
-  const handleChangeSearchObject = (id, event) => {
+  const handleChangeSearchObject = (id, value) => {
     setSearchObject(() => ({
       ...searchObject,
-      [id]: event.target.value
+      [id]: value
     }))
   }
 
   const onHandleSearch = () => {
     searchRecruimentRequest(searchObject).then((response) => {
-      console.log('search', response.data);
-      setListRecruitment(response.data)
+      console.log(response.data);
+      if (response.data.length > 0) {
+        setListRecruitment(response.data)
+        setSearchError(false)
+      } else {
+        setSearchError(true)
+        setPagination({ ...pagination, currentPage: 1 })
+      }
     })
   };
 
@@ -68,76 +66,67 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       <div className="search-container">
-        <div className='search-item' style={{ width: '11%' }}>
-          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('typeOfWork', e) }}>
-            <option>Loại công việc</option>
-            <option value={'Full Time'}>Full time</option>
-            <option value={'Part tTime'}>Part time</option>
-            <option value={'Intern'}>Intern</option>
-            <option value={'Non-Management'}>Non-Management</option>
-          </select>
-        </div>
 
-        <div className='search-item' style={{ width: '8%' }}>
-          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('jobLevel', e) }}>
-            <option>Vị trí</option>
-            <option value={'Fresher'}>Fresher</option>
-            <option value={'Junior'}>Junior</option>
-            <option value={'Senior'}>Senior</option>
-            <option value={'Suppervisor'}>Suppervisor</option>
-          </select>
-        </div>
+        <Autocomplete
+          blurOnSelect={true}
+          options={typeOfWorkData()}
+          size={'small'}
+          sx={{ width: 170, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Loại công việc" />}
+          onChange={(event, value) => { handleChangeSearchObject('typeOfWork', value.value) }} />
 
-        <div className='search-item' style={{ width: '11%' }}>
-          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('industry', e) }}>
-            <option>Industry</option>
-            {searchDataCategory.industry.map((item, id) => (
-              <option key={id} value={item}>{item}</option>
-            ))}
-          </select>
-        </div>
+        <Autocomplete
+          blurOnSelect={true}
+          options={jobLevelData()}
+          size={'small'}
+          sx={{ width: 125, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Vị trí" />}
+          onChange={(event, value) => { handleChangeSearchObject('jobLevel', value.value) }} />
 
-        <div className='search-item py-auto' style={{ width: '16%' }}>
-          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('jobTitle', e) }}>
-            <option>Job Title</option>
-            {searchDataCategory.jobTitle.map((item, id) => (
-              <option key={id} value={item}>{item}</option>
-            ))}
-          </select>
-        </div>
+        <Autocomplete
+          blurOnSelect={true}
+          options={searchDataCategory.industry}
+          size={'small'}
+          sx={{ width: 170, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Industry" />}
+          onChange={(event, value) => { handleChangeSearchObject('industry', value.value) }} />
 
-        <div className='search-item' style={{ width: '8%' }}>
-          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('experience', e) }}>
-            <option>Kinh nghiệm</option>
-            <option value={'0'}>Dưới 1 năm</option>
-            <option value={'1'}>1 năm</option>
-            <option value={'2'}>2 năm</option>
-            <option value={'3'}>3 năm</option>
-            <option value={'4'}>4 năm</option>
-            <option value={'5'}>5 năm</option>
-            <option value={'6'}>Trên 5 năm</option>
-            <option value={'7'}>Trên 7 năm</option>
-            <option value={'8'}>Trên 10 năm</option>
-          </select>
-        </div>
+        <Autocomplete
+          blurOnSelect={true}
+          options={searchDataCategory.jobTitle}
+          size={'small'}
+          sx={{ width: 200, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="jobTitle" />}
+          onChange={(event, value) => { handleChangeSearchObject('jobTitle', value.value) }} />
 
-        <div className='search-item' style={{ width: '12%' }}>
-          <select defaultValue={null} onChange={(e) => { handleChangeSearchObject('salary', e) }}>
-            <option>Mức lương</option>
-            <option value={'6000'}>Trên 6.000.000 VNĐ</option>
-            <option value={'8000'}>Trên 8.000.000 VNĐ</option>
-            <option value={'10000'}>Trên 10.000.000 VNĐ</option>
-            <option value={'15000'}>Trên 15.000.000 VNĐ</option>
-            <option value={'20000'}>Trên 20.000.000 VNĐ</option>
-            <option value={'30000'}>Trên 30.000.000 VNĐ</option>
-            <option value={'Negotiable'}>Lương thỏa thuận</option>
-          </select>
-        </div>
+        <Autocomplete
+          blurOnSelect={true}
+          options={experienceData()}
+          size={'small'}
+          sx={{ width: 145, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Kinh nghiệm" />}
+          onChange={(event, value) => { handleChangeSearchObject('experience', value.value) }} />
+
+        <Autocomplete
+          blurOnSelect={true}
+          options={salaryData()}
+          size={'small'}
+          sx={{ width: 200, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Mức lương" />}
+          onChange={(event, value) => { handleChangeSearchObject('salary', value.value) }} />
+
+        <Autocomplete
+          blurOnSelect={true}
+          options={locationData()}
+          size={'small'}
+          sx={{ width: 130, marginRight: 0 }}
+          renderInput={(params) => <TextField {...params} label="Địa điểm" />}
+          onChange={(event, value) => { handleChangeSearchObject('location', value.value) }} />
 
         <button onClick={() => { onHandleSearch() }} className='btn-search bg-[#50d71e]'><i className="fa-solid fa-magnifying-glass mr-1"></i>Search</button>
-        <button onClick={() => { setPagination({ ...pagination, currentPage: 1 }) }} className='btn-search bg-[#f3483b]'>Clear<i className="fa-solid fa-xmark ml-1"></i></button>
+        {/* <button onClick={() => { onHandleClear() }} className='btn-search bg-[#f3483b]'>Clear<i className="fa-solid fa-xmark ml-1"></i></button> */}
       </div>
-
+      {searchError && <div className='search-error'>Không tìm thấy việc làm phù hợp với yêu cầu tìm kiếm của bạn</div>}
       {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
 
       <div className='pagination-container'>

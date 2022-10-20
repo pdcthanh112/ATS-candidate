@@ -12,8 +12,8 @@ export const getRecruimentRequestDetail = async (id) => {
     .catch(error => error)
 } 
 
-export const searchRecruimentRequest = async (searchObject) => {  
-    console.log('aapi', searchObject);
+export const searchRecruimentRequest = async (searchObject) => { 
+    console.log('apii', searchObject); 
     return await axiosConfig.put('recruitmentRequest/searchRecruitmentRequest', {
         experience: searchObject.experience,
         industry: searchObject.industry,
@@ -23,8 +23,8 @@ export const searchRecruimentRequest = async (searchObject) => {
         salary: searchObject.salary,
         typeOfWork: searchObject.typeOfWork
     })
-    .then(response => console.log('rrrrrrrrrr',response))
-    .catch(error => console.log('eeeeeeee', error))
+    .then(response => response.data)
+    .catch(error => error)
 } 
 
 export const getSearchCategory = async () => {  
