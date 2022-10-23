@@ -9,7 +9,9 @@ import { logoutUser } from '../../apis/authApi'
 const AppHeader = () => {
 
    const logintUser = useSelector((state) => state.auth.login.currentUser)
+   
    const currentUser = logintUser !== null ? logintUser.data : null
+   console.log('cccccc', currentUser);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,8 +31,8 @@ const AppHeader = () => {
             <div className="dropdown">
               <a className="" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className='inline-flex bg-slate-200 rounded-3xl px-2'>
-                  <img src={currentUser.candidate.image || defaultUser} alt="user" className='profile-image py-1.5' width={'30rem'} />
-                  <div className='mx-2 py-2.5 font-medium text-lg' style={{width: '13rem'}}>{currentUser.candidate.name}</div>
+                  {/* <img src={currentUser.candidate.image || defaultUser} alt='' className='profile-image py-1.5' width={'30rem'} />
+                  <div className='mx-2 py-2.5 font-medium text-lg' style={{width: '13rem'}}>{currentUser.candidate.name}</div> */}
                   <i className="fa-solid fa-chevron-down m-1.5 py-2.5 text-xs"></i>
                 </div>
               </a>

@@ -10,9 +10,12 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import ReactLoading from 'react-loading'
+
 const Login = () => {
 
   const [isShowPassword, setIsShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const loginError = useSelector((state) => state.auth.login.error);
 
@@ -33,7 +36,8 @@ const Login = () => {
       password: Yup.string().required('Please input password'),
     }),
     onSubmit: (values) => {
-      loginUser(values, dispatch, navigate)  
+      setIsLoading(true)
+      loginUser(values, dispatch, navigate).then(() => setIsLoading(false))
     }
   })
 
@@ -76,7 +80,10 @@ const Login = () => {
               <div className='my-4'>
                 <a href="/#/forget-password" style={{ marginLeft: '20rem' }}>Quên mật khẩu</a>
               </div>
-              <button type='submit' className='btn-login'>Đăng nhập</button>
+              <div className='flex'>
+                <button type='submit' className='btn-login'>Đăng nhập</button>
+                {isLoading && <ReactLoading className='mx-2' type='spin' color='#FF4444' width={37} />}
+              </div>
             </form>
             <div className='my-4'>
               <span>Bạn chưa có tài khoản? </span><a href='#/register' style={{ color: "#116835" }}>Đăng ký ngay</a>
