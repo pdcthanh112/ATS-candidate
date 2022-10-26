@@ -1,13 +1,10 @@
 export const typeOfWorkData = () => [
-  { label: 'Loại công việc', value: '' },
   { label: 'Fulltime', value: 'Full Time' },
   { label: 'Parttime', value: 'Part Time' },
-  { label: 'Intern', value: 'Intern' },
-  { label: 'Non-Management', value: 'Non-Management' },
+  { label: 'Work from home', value: 'Work from home' },
 ];
 
 export const jobLevelData = () => [
-  { label: 'Vị trí', value: '' },
   { label: 'Fresher', value: 'Fresher' },
   { label: 'Junior', value: 'Junior' },
   { label: 'Senior', value: 'Senior' },
@@ -15,7 +12,6 @@ export const jobLevelData = () => [
 ];
 
 export const experienceData = () => [
-  { label: 'Kinh nghiệm', value: '' },
   { label: 'Dưới 1 năm', value: '0' },
   { label: '1 năm', value: '1' },
   { label: '2 năm', value: '2' },
@@ -28,7 +24,6 @@ export const experienceData = () => [
 ];
 
 export const salaryData = () => [
-  { label: 'Mức lương', value: '' },
   { label: 'Trên 6.000.000 VNĐ', value: '6000' },
   { label: 'Trên 8.000.000 VNĐ', value: '8000' },
   { label: 'Trên 10.000.000 VNĐ', value: '10000' },
@@ -39,7 +34,6 @@ export const salaryData = () => [
 ];
 
 export const locationData = () => [
-  { label: 'Địa điểm', value: '' },
   { label: 'Hồ Chí Minh', value: 'HCM' },
   { label: 'Hà Nội', value: 'HN' },
   { label: 'Đà Nẵng', value: 'DN' },

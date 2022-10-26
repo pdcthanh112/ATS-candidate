@@ -48,15 +48,18 @@ const Dashboard = () => {
   }
 
   const onHandleSearch = () => {
+    setIsLoading(true)
     searchRecruimentRequest(searchObject).then((response) => {
-      console.log(response.data);
+      console.log('res',response.data);
       if (response.data.length > 0) {
         setListRecruitment(response.data)
         setSearchError(false)
       } else {
-        setSearchError(true)
+        setSearchError(true)       
         setPagination({ ...pagination, currentPage: 1 })
       }
+      setSearchObject({ experience: "", industry: "", jobLevel: "", jobTitle: "", location: "", salary: "", typeOfWork: "" })
+      setIsLoading(false)
     })
   };
 
@@ -68,15 +71,15 @@ const Dashboard = () => {
       <div className="search-container">
 
         <Autocomplete
-          blurOnSelect={true}
+          defaultValue={''}
           options={typeOfWorkData()}
           size={'small'}
           sx={{ width: 170, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Loại công việc" />}
-          onChange={(event, value) => { handleChangeSearchObject('typeOfWork', value.value) }} />
+          onInputChange={(event, value) => { handleChangeSearchObject('typeOfWork', value.value) }} />
 
         <Autocomplete
-          blurOnSelect={true}
+          defaultValue={''}
           options={jobLevelData()}
           size={'small'}
           sx={{ width: 125, marginRight: 2 }}
@@ -84,23 +87,23 @@ const Dashboard = () => {
           onChange={(event, value) => { handleChangeSearchObject('jobLevel', value.value) }} />
 
         <Autocomplete
-          blurOnSelect={true}
+          defaultValue={''}
           options={searchDataCategory.industry}
           size={'small'}
           sx={{ width: 170, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Industry" />}
-          onChange={(event, value) => { handleChangeSearchObject('industry', value.value) }} />
+          renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
+          onChange={(event, value) => { handleChangeSearchObject('industry', value) }} />
 
         <Autocomplete
-          blurOnSelect={true}
+          defaultValue={''}
           options={searchDataCategory.jobTitle}
           size={'small'}
           sx={{ width: 200, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="jobTitle" />}
-          onChange={(event, value) => { handleChangeSearchObject('jobTitle', value.value) }} />
+          renderInput={(params) => <TextField {...params} label="Tên công việc" />}
+          onChange={(event, value) => { handleChangeSearchObject('jobTitle', value) }} />
 
         <Autocomplete
-          blurOnSelect={true}
+          defaultValue={''}
           options={experienceData()}
           size={'small'}
           sx={{ width: 145, marginRight: 2 }}
@@ -108,7 +111,7 @@ const Dashboard = () => {
           onChange={(event, value) => { handleChangeSearchObject('experience', value.value) }} />
 
         <Autocomplete
-          blurOnSelect={true}
+          defaultValue={''}
           options={salaryData()}
           size={'small'}
           sx={{ width: 200, marginRight: 2 }}
@@ -116,7 +119,7 @@ const Dashboard = () => {
           onChange={(event, value) => { handleChangeSearchObject('salary', value.value) }} />
 
         <Autocomplete
-          blurOnSelect={true}
+          defaultValue={''}
           options={locationData()}
           size={'small'}
           sx={{ width: 130, marginRight: 0 }}

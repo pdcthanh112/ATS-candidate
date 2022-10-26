@@ -31,8 +31,8 @@ const AppHeader = () => {
             <div className="dropdown">
               <a className="" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className='inline-flex bg-slate-200 rounded-3xl px-2'>
-                  {/* <img src={currentUser.candidate.image || defaultUser} alt='' className='profile-image py-1.5' width={'30rem'} />
-                  <div className='mx-2 py-2.5 font-medium text-lg' style={{width: '13rem'}}>{currentUser.candidate.name}</div> */}
+                  <img src={currentUser.candidate.image || defaultUser} alt='' className='profile-image py-1.5' width={'30rem'} />
+                  <div className='mx-2 py-2.5 font-medium text-lg' style={{width: '13rem'}}>{currentUser.candidate.name}</div>
                   <i className="fa-solid fa-chevron-down m-1.5 py-2.5 text-xs"></i>
                 </div>
               </a>
@@ -40,7 +40,7 @@ const AppHeader = () => {
                 <a href='/#/view-profile' className='dropdown-item header-menu-item'><i className="fa-regular fa-address-card mr-2 text-[#60d860]"></i>View profile</a>
                 <a href='/#/change-password' className='dropdown-item header-menu-item'><i className="fa-sharp fa-solid fa-shield-halved mr-2 text-[#60d860]"></i>Change password</a>
                 <div className='linee'></div>
-                <Link to='/#/logout' onClick={handleLogout} className='dropdown-item header-menu-item'><i className="fa-solid fa-arrow-right-from-bracket mr-2 text-[#60d860]"></i>Đăng xuất</Link>
+                <Link to='/#/logout' onClick={handleLogout} className='dropdown-item header-menu-item'><i className="fa-solid fa-arrow-right-from-bracket mr-2 text-[#ff5858] "></i>Đăng xuất</Link>
               </ul>
             </div>
           </React.Fragment> : <React.Fragment>

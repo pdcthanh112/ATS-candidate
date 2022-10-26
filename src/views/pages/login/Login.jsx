@@ -82,7 +82,7 @@ const Login = () => {
               </div>
               <div className='flex'>
                 <button type='submit' className='btn-login'>Đăng nhập</button>
-                {isLoading && <ReactLoading className='mx-2' type='spin' color='#FF4444' width={37} />}
+                {isLoading && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
               </div>
             </form>
             <div className='my-4'>
