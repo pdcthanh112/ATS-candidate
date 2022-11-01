@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { getRecruimentRequestDetail } from '../../../apis/recruimentRequestApi';
+import { getRecruimentRequestDetail, getCategory } from '../../../apis/recruimentRequestApi';
 import './RecruitmentDetail.scss'
 import { useParams } from 'react-router-dom'
 import ReactLoading from 'react-loading'
-import { Box, Modal } from '@mui/material';
+import { TextField, Autocomplete, Box, Modal } from '@mui/material';
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -17,9 +19,12 @@ const RecruitmentDetail = () => {
   const recruimentId = useParams().id
 
   const [recruiment, setRecruitment] = useState({})
+  const [dropdownData, setDropdownData] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [openModal, setOpenModal] = useState(false);
   const [fileCV, setFileCV] = useState(null)
+
+  const filter = createFilterOptions();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +33,18 @@ const RecruitmentDetail = () => {
       if (response) {
         console.log(response.data.data);
         setRecruitment(response.data.data)
+        setIsLoading(false)
+      }
+    }
+    fetchData();
+  }, [])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+      const response = await getCategory();
+      if (response) {
+        setDropdownData(response.data)
         setIsLoading(false)
       }
     }
@@ -47,18 +64,19 @@ const RecruitmentDetail = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullname: "",
-      email: "",
-      phone: "",
+      position: "",
+      experience: "",
+      skill: "",
+      location: "",
       linkCV: ""
     },
     validationSchema: Yup.object({
-      fullname: Yup.string().required('Please input your name'),
-      email: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
-      phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
+      // position: Yup.string().required('Please input your position'),
+      // experience: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
+      // location: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
     }),
     onSubmit: async (values) => {
-      if (fileCV == null) {  
+      if (fileCV == null) {
         formik.errors.linkCV = "Please submit your CV";
       } else {
         const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
@@ -128,21 +146,39 @@ const RecruitmentDetail = () => {
             <div>
               <form onSubmit={formik.handleSubmit}>
                 <div className='my-3'>
-                  <label className='text-lg'>Fullname</label><br />
-                  <div className='field-input'>
-                    <i className="fa-solid fa-user mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                    <input type={'text'} className={`form-control  border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br />
-                  </div>
+                  <Autocomplete
+                    defaultValue={''}
+                    options={dropdownData.jobTitle}
+                    size={'small'}
+                    sx={{ width: 170, marginRight: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Position" />}
+                    onInputChange={formik.handleChange} />
                   {formik.errors.fullname && formik.touched.fullname && (
                     <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
                   )}
                 </div>
                 <div className='my-3'>
-                  <label className='text-lg'>Email</label><br />
-                  <div className='field-input'>
-                    <i className="fa-solid fa-envelope mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                    <input type={'text'} className={`form-control  border-none ${formik.errors.email && formik.touched.email && 'input-error'}`} name='email' placeholder='Nhập email của bạn' value={formik.values.email} onChange={formik.handleChange} /><br />
-                  </div>
+                  <Autocomplete
+                    filterOptions={(options, params) => {
+                      const filtered = filter(options, params);
+                      // Suggest the creation of a new value
+                      if (params.inputValue !== '') {
+                        filtered.push(`Add "${params.inputValue}"`);
+                      }
+                      return filtered;
+                    }}
+                    selectOnFocus
+                    clearOnBlur
+                    handleHomeEndKeys
+                    options={dropdownData.skill}
+                    renderOption={(option) => option}
+                    style={{ width: 300 }}
+                    freeSolo
+                    renderInput={(params) => (
+                      <TextField {...params} label="Enter Something"
+                        variant="outlined" />
+                    )}
+                  />
                   {formik.errors.email && formik.touched.email && (
                     <div className='text-[#ec5555]'>{formik.errors.email}</div>
                   )}

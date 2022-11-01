@@ -27,8 +27,8 @@ export const searchRecruimentRequest = async (searchObject) => {
     .catch(error => error)
 } 
 
-export const getSearchCategory = async () => {  
-    return await axiosConfig.get('recruitmentRequest/getSearchCategory')
+export const getCategory = async () => {  
+    return await axiosConfig.get('recruitmentRequest/getCategory')
     .then(response => response.data)
     .catch(error => error)
 } 

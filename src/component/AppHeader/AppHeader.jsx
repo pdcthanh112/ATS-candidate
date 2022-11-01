@@ -11,7 +11,6 @@ const AppHeader = () => {
    const logintUser = useSelector((state) => state.auth.login.currentUser)
    
    const currentUser = logintUser !== null ? logintUser.data : null
-   console.log('cccccc', currentUser);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './Dashboard.scss'
-import { getAllRecruimentRequest, getSearchCategory, searchRecruimentRequest } from '../../apis/recruimentRequestApi';
+import { getAllRecruimentRequest, getCategory, searchRecruimentRequest } from '../../apis/recruimentRequestApi';
 import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
 import ReactLoading from 'react-loading'
 import { Pagination, Stack, TextField, Autocomplete } from '@mui/material';
@@ -31,7 +31,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const response = await getSearchCategory();
+      const response = await getCategory();
       if (response) {
         setSearchDataCategory(response.data)
         setIsLoading(false)
@@ -74,7 +74,7 @@ const Dashboard = () => {
           options={typeOfWorkData()}
           size={'small'}
           sx={{ width: 170, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Loại công việc" />}
+          renderInput={(params) => <TextField {...params} label="Hình thức làm việc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('typeOfWork', value) }} />
           
         <Autocomplete
@@ -82,7 +82,7 @@ const Dashboard = () => {
           options={jobLevelData()}
           size={'small'}
           sx={{ width: 125, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Vị trí" />}
+          renderInput={(params) => <TextField {...params} label="Cấp bậc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('jobLevel', value) }} />
           
         <Autocomplete
