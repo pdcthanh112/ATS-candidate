@@ -5,15 +5,20 @@ import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
 import ReactLoading from 'react-loading'
 import { Pagination, Stack, TextField, Autocomplete } from '@mui/material';
 import { typeOfWorkData, jobLevelData, experienceData, salaryData, locationData } from '../../utils/dropdownData';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Dashboard = () => {
 
+  const dataCategory = useSelector((state) => state.categoryData.data);
+
+  useSelector((state) => state.auth.login.currentUser);
   const [listRecruitment, setListRecruitment] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [searchDataCategory, setSearchDataCategory] = useState();
   const [searchObject, setSearchObject] = useState({ experience: "", industry: "", jobLevel: "", jobTitle: "", location: "", salary: "", typeOfWork: "" });
   const [searchError, setSearchError] = useState(false)
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,15 +34,7 @@ const Dashboard = () => {
   }, [pagination.currentPage])
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-      const response = await getCategory();
-      if (response) {
-        setSearchDataCategory(response.data)
-        setIsLoading(false)
-      }
-    }
-    fetchData();
+    getCategory(dispatch)  
   }, [])
 
   const handleChangeSearchObject = (id, value) => {
@@ -87,7 +84,7 @@ const Dashboard = () => {
           
         <Autocomplete
           defaultValue={''}
-          options={searchDataCategory.industry}
+          options={dataCategory.industry}
           size={'small'}
           sx={{ width: 170, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
@@ -95,7 +92,7 @@ const Dashboard = () => {
 
         <Autocomplete
           defaultValue={''}
-          options={searchDataCategory.jobTitle}
+          options={dataCategory.jobTitle}
           size={'small'}
           sx={{ width: 200, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Tên công việc" />}

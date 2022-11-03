@@ -4,7 +4,7 @@ import './RecruitmentDetail.scss'
 import { useParams } from 'react-router-dom'
 import ReactLoading from 'react-loading'
 import { TextField, Autocomplete, Box, Modal } from '@mui/material';
-import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 
 import { useFormik } from 'formik'
@@ -13,15 +13,20 @@ import * as Yup from 'yup'
 import { storage } from '../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
 
 const RecruitmentDetail = () => {
+
+  
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
+  const categoryData = useSelector((state) => state.categoryData.data);
 
   const recruimentId = useParams().id
 
   const [recruiment, setRecruitment] = useState({})
-  const [dropdownData, setDropdownData] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalApply, setOpenModalApply] = useState(false);
+  const [openModalLogin, setOpenModalLogin] = useState(false);
   const [fileCV, setFileCV] = useState(null)
 
   const filter = createFilterOptions();
@@ -31,25 +36,14 @@ const RecruitmentDetail = () => {
       setIsLoading(true)
       const response = await getRecruimentRequestDetail(recruimentId);
       if (response) {
-        console.log(response.data.data);
-        setRecruitment(response.data.data)
-        setIsLoading(false)
+        console.log("data:", response.data.data);
+        setIsLoading(false) 
+        setRecruitment(response.data.data)            
       }
     }
     fetchData();
   }, [])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-      const response = await getCategory();
-      if (response) {
-        setDropdownData(response.data)
-        setIsLoading(false)
-      }
-    }
-    fetchData();
-  }, [])
 
   const style = {
     position: 'absolute',
@@ -62,7 +56,7 @@ const RecruitmentDetail = () => {
     boxShadow: 24,
   };
 
-  const formik = useFormik({
+  const formikApply = useFormik({
     initialValues: {
       position: "",
       experience: "",
@@ -77,7 +71,7 @@ const RecruitmentDetail = () => {
     }),
     onSubmit: async (values) => {
       if (fileCV == null) {
-        formik.errors.linkCV = "Please submit your CV";
+        formikApply.errors.linkCV = "Please submit your CV";
       } else {
         const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
         await uploadBytes(cvRef, fileCV).then((snapshot) => {
@@ -134,27 +128,27 @@ const RecruitmentDetail = () => {
           </div>
           <div className='inline-flex mt-3'>
             <div className='w-5/6'>{recruiment.description}</div>
-            <button className='recruitment-detail__apply-button' onClick={() => setOpenModal(true)}>APPLY</button>
+            <button className='recruitment-detail__apply-button' onClick={() => {currentUser !== null ? setOpenModalApply(true) : setOpenModalLogin(true)}}>APPLY</button>
           </div>
         </div>
       }
 
-      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+      <Modal open={openModalApply} onClose={() => setOpenModalApply(false)}>
         <Box sx={style}>
           <div className='modal-container'>
             <div className='modal-title'>Apply job</div>
             <div>
-              <form onSubmit={formik.handleSubmit}>
+              <form onSubmit={formikApply.handleSubmit}>
                 <div className='my-3'>
                   <Autocomplete
                     defaultValue={''}
-                    options={dropdownData.jobTitle}
+                    options={categoryData.jobTitle}
                     size={'small'}
                     sx={{ width: 170, marginRight: 2 }}
                     renderInput={(params) => <TextField {...params} label="Position" />}
-                    onInputChange={formik.handleChange} />
-                  {formik.errors.fullname && formik.touched.fullname && (
-                    <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
+                    onInputChange={formikApply.handleChange} />
+                  {formikApply.errors.fullname && formikApply.touched.fullname && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.fullname}</div>
                   )}
                 </div>
                 <div className='my-3'>
@@ -170,7 +164,7 @@ const RecruitmentDetail = () => {
                     selectOnFocus
                     clearOnBlur
                     handleHomeEndKeys
-                    options={dropdownData.skill}
+                    options={categoryData.skill}
                     renderOption={(option) => option}
                     style={{ width: 300 }}
                     freeSolo
@@ -179,18 +173,18 @@ const RecruitmentDetail = () => {
                         variant="outlined" />
                     )}
                   />
-                  {formik.errors.email && formik.touched.email && (
-                    <div className='text-[#ec5555]'>{formik.errors.email}</div>
+                  {formikApply.errors.email && formikApply.touched.email && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.email}</div>
                   )}
                 </div>
                 <div className='my-3'>
                   <label className='text-lg'>Phone</label><br />
                   <div className='field-input'>
                     <i className="fa-solid fa-mobile-screen-button mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                    <input type={'text'} className={`form-control  border-none ${formik.errors.phone && formik.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formik.values.phone} onChange={formik.handleChange} onBlur={formik.handleBlur} /><br />
+                    <input type={'text'} className={`form-control  border-none ${formikApply.errors.phone && formikApply.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formikApply.values.phone} onChange={formikApply.handleChange} onBlur={formikApply.handleBlur} /><br />
                   </div>
-                  {formik.errors.phone && formik.touched.phone && (
-                    <div className='text-[#ec5555]'>{formik.errors.phone}</div>
+                  {formikApply.errors.phone && formikApply.touched.phone && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.phone}</div>
                   )}
                 </div>
                 <div className='my-3'>
@@ -198,10 +192,23 @@ const RecruitmentDetail = () => {
                   <div className='field-input'>
                     <input type={'file'} className={`form-control  border-none`} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
                   </div>
-                  {formik.errors.linkCV && (
-                    <div className='text-[#ec5555]'>{formik.errors.linkCV}</div>
+                  {formikApply.errors.linkCV && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.linkCV}</div>
                   )}
                 </div>
+                <div><button type='submit' className='btn-submit'>Submit</button></div>
+              </form>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+      <Modal open={openModalLogin} onClose={() => setOpenModalLogin(false)}>
+        <Box sx={style}>
+          <div className='modal-container'>
+            <div className='modal-title'>Login</div>
+            <div>
+              <form onSubmit={formikApply.handleSubmit}>
+                
                 <div><button type='submit' className='btn-submit'>Submit</button></div>
               </form>
             </div>
