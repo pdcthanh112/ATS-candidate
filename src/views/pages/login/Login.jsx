@@ -22,10 +22,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleHideShowPassword = () => {
-    setIsShowPassword(!isShowPassword)
-  }
-
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -68,7 +64,7 @@ const Login = () => {
                 <div className='field-input'>
                   <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
                   <input type={isShowPassword ? 'text' : 'password'} className='form-control border-none' name='password' placeholder='Nhập mật khẩu' value={formik.values.password} onChange={formik.handleChange} />
-                  <span className='hideShowPassword' onClick={() => { handleHideShowPassword() }}>
+                  <span className='hideShowPassword' onClick={() => { setIsShowPassword(!isShowPassword) }}>
                     <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                   </span>
                 </div>

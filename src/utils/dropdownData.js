@@ -38,3 +38,16 @@ export const locationData = () => [
   { label: 'Hà Nội', value: 'HN' },
   { label: 'Đà Nẵng', value: 'DN' },
 ];
+
+export const educationLevelData = () => [
+  { label: 'Tốt nghiệp THPT', value: 'Tốt nghiệp THPT' },
+  { label: 'Trung cấp', value: 'Trung cấp' },
+  { label: 'Cao đẳng', value: 'Cao đẳng' },
+  { label: 'Đại học', value: 'Đại học' }, 
+];
+
+export const foreignLanguageData = () => [
+  { label: 'Tiếng Anh', value: 'Tiếng Anh' },
+  { label: 'Tiếng Nhật', value: 'Tiếng Nhật' },
+];
+
