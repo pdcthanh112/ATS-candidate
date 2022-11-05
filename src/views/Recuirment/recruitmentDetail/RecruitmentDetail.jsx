@@ -9,7 +9,7 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 
 import { getRecruimentRequestDetail } from '../../../apis/recruimentRequestApi';
 import { loginUser, regiserUser } from '../../../apis/authApi';
-import {educationLevelData, foreignLanguageData} from '../../../utils/dropdownData'
+import { educationLevelData, foreignLanguageData } from '../../../utils/dropdownData'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -40,6 +40,7 @@ const RecruitmentDetail = () => {
   const navigate = useNavigate();
 
   const filter = createFilterOptions();
+  const options = ['One', 'Two', 'Three', 'Four']
 
   useEffect(() => {
     const fetchData = async () => {
@@ -240,33 +241,20 @@ const RecruitmentDetail = () => {
                     <div className='text-[#ec5555]'>{formikApply.errors.cityName}</div>
                   )}
                 </div>
+
                 <div className='my-3'>
-                  <Autocomplete
-                    filterOptions={(options, params) => {
-                      const filtered = filter(options, params);
-                      // Suggest the creation of a new value
-                      if (params.inputValue !== '') {
-                        filtered.push(`Add "${params.inputValue}"`);
-                      }
-                      return filtered;
-                    }}
-                    selectOnFocus
-                    clearOnBlur
-                    handleHomeEndKeys
-                    options={categoryData.skill}
-                    renderOption={(option) => option}
-                    style={{ width: 300 }}
-                    freeSolo
-                    renderInput={(params) => (
-                      <TextField {...params} label="Enter Something"
-                        variant="outlined" />
-                    )}
-                  />
+                <Autocomplete
+                    defaultValue={''}
+                    options={categoryData.jobTitle}
+                    size={'small'}
+                    sx={{ width: 170, marginRight: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Kỹ năng" />}
+                    onInputChange={formikApply.handleChange} />
                   {formikApply.errors.email && formikApply.touched.email && (
                     <div className='text-[#ec5555]'>{formikApply.errors.email}</div>
                   )}
                 </div>
-              
+
                 <div className='my-3'>
                   <label className='text-lg'>Curriculum vitae</label><br />
                   <div className='field-input'>
