@@ -14,7 +14,7 @@ const Dashboard = () => {
   useSelector((state) => state.auth.login.currentUser);
   const [listRecruitment, setListRecruitment] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [searchObject, setSearchObject] = useState({ experience: "", industry: "", jobLevel: "", jobTitle: "", location: "", salary: "", typeOfWork: "" });
+  const [searchObject, setSearchObject] = useState({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' });
   const [searchError, setSearchError] = useState(false)
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
@@ -34,7 +34,7 @@ const Dashboard = () => {
   }, [pagination.currentPage])
 
   useEffect(() => {
-    getCategory(dispatch)  
+    getCategory(dispatch)
   }, [])
 
   const handleChangeSearchObject = (id, value) => {
@@ -47,25 +47,24 @@ const Dashboard = () => {
   const onHandleSearch = () => {
     setIsLoading(true)
     searchRecruimentRequest(searchObject).then((response) => {
-      console.log('res', response.data);
-      if (response.data.length > 0) {
-        setListRecruitment(response.data)
-        setSearchError(false)
-      } else {
-        setSearchError(true)
-        setPagination({ ...pagination, currentPage: 1 })
-      }
-      setSearchObject({ experience: "", industry: "", jobLevel: "", jobTitle: "", location: "", salary: "", typeOfWork: "" })
+      console.log('res', response);
+      // if (response.data.length > 0) {
+      //   setListRecruitment(response.data)
+      //   setSearchError(false)
+      // } else {
+      //   setSearchError(true)
+      //   setPagination({ ...pagination, currentPage: 1 })
+      // }
+      setSearchObject({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' })
       setIsLoading(false)
     })
   };
 
-  if (isLoading) return <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' />
+  // if (isLoading) return <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' />
 
   return (
     <React.Fragment>
       <div className="search-container">
-   
         <Autocomplete
           defaultValue={''}
           options={typeOfWorkData()}
@@ -73,7 +72,7 @@ const Dashboard = () => {
           sx={{ width: 170, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Hình thức làm việc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('typeOfWork', value) }} />
-          
+
         <Autocomplete
           defaultValue={''}
           options={jobLevelData()}
@@ -81,7 +80,7 @@ const Dashboard = () => {
           sx={{ width: 125, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Cấp bậc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('jobLevel', value) }} />
-          
+
         <Autocomplete
           defaultValue={''}
           options={dataCategory.industry}
@@ -96,7 +95,7 @@ const Dashboard = () => {
           size={'small'}
           sx={{ width: 200, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Tên công việc" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('jobTitle', value) }} />
+          onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }} />
 
         <Autocomplete
           defaultValue={''}
@@ -120,7 +119,7 @@ const Dashboard = () => {
           size={'small'}
           sx={{ width: 130, marginRight: 0 }}
           renderInput={(params) => <TextField {...params} label="Địa điểm" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('location', value) }} />
+          onInputChange={(event, value) => { handleChangeSearchObject('city', value) }} />
 
         <button onClick={() => { onHandleSearch() }} className='btn-search bg-[#50d71e]'><i className="fa-solid fa-magnifying-glass mr-1"></i>Search</button>
         {/* <button onClick={() => { onHandleClear() }} className='btn-search bg-[#f3483b]'>Clear<i className="fa-solid fa-xmark ml-1"></i></button> */}

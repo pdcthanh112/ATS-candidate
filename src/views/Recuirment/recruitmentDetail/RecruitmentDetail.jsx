@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const RecruitmentDetail = () => {
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser.data);
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
   const categoryData = useSelector((state) => state.categoryData.data);
 
   const recruimentId = useParams().id
@@ -38,9 +38,6 @@ const RecruitmentDetail = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const filter = createFilterOptions();
-  const options = ['One', 'Two', 'Three', 'Four']
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +77,7 @@ const RecruitmentDetail = () => {
 
   const formikApply = useFormik({
     initialValues: {
-      candidateId: currentUser.candidate.id,
+      //candidateId: currentUser.candidate.id,
       recruitmentRequestId: recruimentId,
       cityName: '',
       educationLevel: "",

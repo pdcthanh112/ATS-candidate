@@ -19,13 +19,14 @@ export const searchRecruimentRequest = async (searchObject) => {
   console.log("apii", searchObject);
   return await axiosConfig
     .put("recruitmentRequest/searchRecruitmentRequest", {
+      city: searchObject.city,
       experience: searchObject.experience,
       industry: searchObject.industry,
       jobLevel: searchObject.jobLevel,
-      jobTitle: searchObject.jobTitle,
-      location: searchObject.location,
-      salary: searchObject.salary,
-      typeOfWork: searchObject.typeOfWork,
+      jobName: searchObject.jobName,
+      salaryFrom: searchObject.salaryFrom,
+      salaryTo: searchObject.salaryTo,
+      typeOfWork: searchObject.typeOfWork
     })
     .then((response) => response.data)
     .catch((error) => error);
