@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./PersonalInformation.scss";
 import { useSelector } from "react-redux";
-import { getCandidateById } from "../../../../apis/candidateApi";
+import { getCandidateById } from "../../../../../apis/candidateApi";
 import ReactLoading from 'react-loading'
 
 const PersonalInformation = () => {
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser.data);
+  const currentUser = useSelector((state) => state.auth.login.currentUser)
+
+  console.log('CCCCCCCCCCC', currentUser);
 
   const [data, setData] = useState({})
   const [isLoading, setIsLoading] = useState(true)

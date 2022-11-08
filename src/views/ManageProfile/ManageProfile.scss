@@ -1,0 +1,17 @@
+.manage-profile {
+  display: inline-flex;
+  width: 100%;
+  
+  .manage-profile__navigation {
+    background-color: aqua;
+    width: 20%;
+    border-radius: 0.5rem;
+    margin: 1rem 0 0 2rem;
+    padding: 1rem 2rem;
+  }
+ 
+  .manage-profile__content {
+    width: 60%;
+    margin: 0 auto;
+  }
+}

@@ -1,9 +1,8 @@
 .search-container {
   background-color: #fff;
-  display: inline-flex;
+  display: flex;
   padding: 1rem 2rem;
   justify-content: center;
-  width: 100vw;
 
   .search-item{
     border: 1px solid #36CB3E;

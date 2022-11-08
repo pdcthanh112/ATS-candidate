@@ -51,3 +51,11 @@ export const foreignLanguageData = () => [
   { label: 'Tiếng Nhật', value: 'Tiếng Nhật' },
 ];
 
+export const genderData = () => [
+  { label: 'Nam', value: 'Male' },
+  { label: 'Nữ', value: 'Female' },
+  { label: 'Khác', value: 'Other' },
+];
+
+
+

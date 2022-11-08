@@ -21,7 +21,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 const RecruitmentDetail = () => {
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser);
+  const currentUser = useSelector((state) => state.auth.login.currentUser?.candidate);
+  console.log('current: ', currentUser);
   const categoryData = useSelector((state) => state.categoryData.data);
 
   const recruimentId = useParams().id
@@ -77,11 +78,12 @@ const RecruitmentDetail = () => {
 
   const formikApply = useFormik({
     initialValues: {
-      //candidateId: currentUser.candidate.id,
+      candidateId: currentUser?.candidate?.id,
       recruitmentRequestId: recruimentId,
-      cityName: '',
+      cityName: "",
       educationLevel: "",
       foreignLanguage: "",
+      positionName: "",
       linkCV: ""
     },
     validationSchema: Yup.object({
@@ -90,16 +92,16 @@ const RecruitmentDetail = () => {
       // location: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
     }),
     onSubmit: async (values) => {
-      if (fileCV == null) {
-        formikApply.errors.linkCV = "Please submit your CV";
-      } else {
-        const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
-        await uploadBytes(cvRef, fileCV).then((snapshot) => {
-          getDownloadURL(snapshot.ref).then(url => {
-            values.linkCV = url
-          })
-        })
-      }
+      // if (fileCV == null) {
+      //   formikApply.errors.linkCV = "Please submit your CV";
+      // } else {
+      //   const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
+      //   await uploadBytes(cvRef, fileCV).then((snapshot) => {
+      //     getDownloadURL(snapshot.ref).then(url => {
+      //       values.linkCV = url
+      //     })
+      //   })
+      // }
       console.log('RRRRRR', values);
       // regiserUser(values).then((response) => {
       //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
@@ -191,7 +193,7 @@ const RecruitmentDetail = () => {
           </div>
           <div className='inline-flex mt-3'>
             <div className='w-5/6'>{recruiment.description}</div>
-            <button className='recruitment-detail__apply-button' onClick={() => { currentUser !== null ? setOpenModalApply(true) : setOpenModalLogin(true) }}>APPLY</button>
+            <button className='recruitment-detail__apply-button' onClick={() => { currentUser !== undefined ? setOpenModalApply(true) : setOpenModalLogin(true) }}>APPLY</button>
           </div>
         </div>
       }
@@ -240,15 +242,15 @@ const RecruitmentDetail = () => {
                 </div>
 
                 <div className='my-3'>
-                <Autocomplete
+                  <Autocomplete
                     defaultValue={''}
                     options={categoryData.jobTitle}
                     size={'small'}
                     sx={{ width: 170, marginRight: 2 }}
-                    renderInput={(params) => <TextField {...params} label="Kỹ năng" />}
+                    renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
                     onInputChange={formikApply.handleChange} />
-                  {formikApply.errors.email && formikApply.touched.email && (
-                    <div className='text-[#ec5555]'>{formikApply.errors.email}</div>
+                  {formikApply.errors.positionName && formikApply.touched.positionName && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.positionName}</div>
                   )}
                 </div>
 

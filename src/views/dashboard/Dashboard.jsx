@@ -3,8 +3,8 @@ import './Dashboard.scss'
 import { getAllRecruimentRequest, getCategory, searchRecruimentRequest } from '../../apis/recruimentRequestApi';
 import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
 import ReactLoading from 'react-loading'
-import { Pagination, Stack, TextField, Autocomplete } from '@mui/material';
-import { typeOfWorkData, jobLevelData, experienceData, salaryData, locationData } from '../../utils/dropdownData';
+import { Pagination, Stack, TextField, Autocomplete, InputAdornment } from '@mui/material';
+import { typeOfWorkData, jobLevelData, experienceData, locationData } from '../../utils/dropdownData';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Dashboard = () => {
@@ -25,7 +25,7 @@ const Dashboard = () => {
       setIsLoading(true)
       const response = await getAllRecruimentRequest(pagination.currentPage - 1, 12);
       if (response) {
-        setPagination({ ...pagination, totalPage: response.data.totalPages })
+        setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListRecruitment(response.data.responseList)
         setIsLoading(false)
       }
@@ -48,19 +48,21 @@ const Dashboard = () => {
     setIsLoading(true)
     searchRecruimentRequest(searchObject).then((response) => {
       console.log('res', response);
-      // if (response.data.length > 0) {
-      //   setListRecruitment(response.data)
-      //   setSearchError(false)
-      // } else {
-      //   setSearchError(true)
-      //   setPagination({ ...pagination, currentPage: 1 })
-      // }
+      if (response?.data.length > 0) {
+        setListRecruitment(response.data)
+        setSearchError(false)
+      } else {
+        setSearchError(true)
+        setPagination({ ...pagination, currentPage: 1 })
+      }
       setSearchObject({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' })
       setIsLoading(false)
+    }).catch(error => {
+      setSearchObject({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' })
+      setIsLoading(false)
+      setSearchError(true)
     })
   };
-
-  // if (isLoading) return <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' />
 
   return (
     <React.Fragment>
@@ -69,7 +71,7 @@ const Dashboard = () => {
           defaultValue={''}
           options={typeOfWorkData()}
           size={'small'}
-          sx={{ width: 170, marginRight: 2 }}
+          sx={{ width: 225, height: 10, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Hình thức làm việc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('typeOfWork', value) }} />
 
@@ -77,7 +79,7 @@ const Dashboard = () => {
           defaultValue={''}
           options={jobLevelData()}
           size={'small'}
-          sx={{ width: 125, marginRight: 2 }}
+          sx={{ width: 145, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Cấp bậc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('jobLevel', value) }} />
 
@@ -85,7 +87,7 @@ const Dashboard = () => {
           defaultValue={''}
           options={dataCategory.industry}
           size={'small'}
-          sx={{ width: 170, marginRight: 2 }}
+          sx={{ width: 180, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
           onInputChange={(event, value) => { handleChangeSearchObject('industry', value) }} />
 
@@ -93,7 +95,7 @@ const Dashboard = () => {
           defaultValue={''}
           options={dataCategory.jobTitle}
           size={'small'}
-          sx={{ width: 200, marginRight: 2 }}
+          sx={{ width: 190, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Tên công việc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }} />
 
@@ -101,29 +103,41 @@ const Dashboard = () => {
           defaultValue={''}
           options={experienceData()}
           size={'small'}
-          sx={{ width: 145, marginRight: 2 }}
+          sx={{ width: 180, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Kinh nghiệm" />}
           onInputChange={(event, value) => { handleChangeSearchObject('experience', value) }} />
 
-        <Autocomplete
-          defaultValue={''}
-          options={salaryData()}
+        <TextField
+          label="Từ"
           size={'small'}
-          sx={{ width: 200, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Mức lương" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('salary', value) }} />
+          sx={{ width: 145, marginRight: 2 }}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">triệu</InputAdornment>,
+          }}
+          onChange={(event) => { handleChangeSearchObject('salaryFrom', event.target.value) }}
+        />
+
+        <TextField
+          label="Đến"
+          size={'small'}
+          sx={{ width: 145, marginRight: 2 }}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">triệu</InputAdornment>,
+          }}
+          onChange={(event) => { handleChangeSearchObject('salaryTo', event.target.value) }}
+        />
 
         <Autocomplete
           defaultValue={''}
-          options={locationData()}
+          options={dataCategory.province}
           size={'small'}
-          sx={{ width: 130, marginRight: 0 }}
+          sx={{ width: 150, marginRight: 0 }}
           renderInput={(params) => <TextField {...params} label="Địa điểm" />}
           onInputChange={(event, value) => { handleChangeSearchObject('city', value) }} />
 
         <button onClick={() => { onHandleSearch() }} className='btn-search bg-[#50d71e]'><i className="fa-solid fa-magnifying-glass mr-1"></i>Search</button>
-        {/* <button onClick={() => { onHandleClear() }} className='btn-search bg-[#f3483b]'>Clear<i className="fa-solid fa-xmark ml-1"></i></button> */}
       </div>
+
       {searchError && <div className='search-error'>Không tìm thấy việc làm phù hợp với yêu cầu tìm kiếm của bạn</div>}
       {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
 

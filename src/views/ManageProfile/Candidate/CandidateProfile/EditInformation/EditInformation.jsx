@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './EditInformation.scss'
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,13 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { storage } from '../../../../configs/firebaseConfig'
+import { storage } from '../../../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
-import { updateProfileCandidate } from '../../../../apis/candidateApi';
-import { responseStatus } from '../../../../utils/constants'
+import { updateProfileCandidate } from '../../../../../apis/candidateApi';
+import { responseStatus } from '../../../../../utils/constants'
 import { Autocomplete, TextField } from '@mui/material';
-import { genderData } from '../../../../utils/dropdownData';
+import { genderData } from '../../../../../utils/dropdownData';
 
 const EditInformation = () => {
 

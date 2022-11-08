@@ -9,14 +9,14 @@ import { responseStatus } from '../../../utils/constants'
 
 const ChangePassword = () => {
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser.data)
+  const currentUser = useSelector((state) => state.auth.login.currentUser)
 
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [changePasswordStatus, setChangePasswordStatus] = useState('START')
 
   const formik = useFormik({
     initialValues: {
-      email: currentUser.email,
+      email: currentUser.candidate.email,
       oldPassword: "",
       newPassword: "",
       confirm: "",
