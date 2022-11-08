@@ -1,10 +1,9 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import './ManageProfile.scss'
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-import ViewProfile from './Candidate/CandidateProfile/ViewProfile/ViewProfile'
-import ChangePassword from './ChangePassword/ChangePassword'
 import ManageProfileContent from './ManageProfileContent/ManageProfileContent';
+import RecommendJob from './RecommendJob/RecommendJob';
 
 const ManageProfile = () => {
 
@@ -12,39 +11,39 @@ const ManageProfile = () => {
     {
       title: 'Thông tin cá nhân',
       path: '/manage-profile/view-profile',
-      // icon: <AiIcons.AiFillHome />,
-      // cName: 'nav-text'
+      icon: <i className="fa-regular fa-address-card mr-2"></i>,
     },
     {
       title: 'Thay đổi mật khẩu',
       path: '/manage-profile/change-password',
-      // icon: <IoIcons.IoIosPaper />,
-      // cName: 'nav-text'
+      icon: <i className="fa-sharp fa-solid fa-shield-halved mr-2"></i>,
+
     },
     {
       title: 'Việc làm của tôi',
-      path: '/products',
-      // icon: <FaIcons.FaCartPlus />,
-      // cName: 'nav-text'
+      path: '/manage-profile/my-appliedJob',
+      icon: <i className="fa-solid fa-list-check mr-2"></i>,
     },
     {
       title: 'Thông báo',
       path: '/notification',
-      // icon: <IoIcons.IoMdPeople />,
-      // cName: 'nav-text'
+      icon: <i className="fa-regular fa-bell mr-2"></i>,
     },
   ];
 
   return (
     <div className='manage-profile'>
       <div className='manage-profile__navigation'>
+        <div className='font-semibold text-xl text-center mb-3'>Quản lý thông tin</div>
         <ul>
           {SidebarData.map((item, index) => {
             return (
               <li key={index}>
                 <NavLink to={item.path}>
-                  {item.icon}
-                  <span>{item.title}</span>
+                  <div className='manage-profile__navigation-item'>
+                    {item.icon}
+                    <span>{item.title}</span>
+                  </div>
                 </NavLink>
               </li>
             );
@@ -56,8 +55,8 @@ const ManageProfile = () => {
         <ManageProfileContent />
       </div>
 
-      <div>
-        asdfjaslfjasdfjsldkajflj
+      <div className='manage-profile__recommendJob'>
+        <RecommendJob />
       </div>
 
     </div>

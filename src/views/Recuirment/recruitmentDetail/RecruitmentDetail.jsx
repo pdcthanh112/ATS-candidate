@@ -176,7 +176,7 @@ const RecruitmentDetail = () => {
             </div>
             <div>
               <i className="fa-solid fa-money-bill-wave"></i>
-              <span><strong className='ml-1'>Salary: </strong> {recruiment.salary}</span>
+              <span><strong className='ml-1'>Salary: </strong> {recruiment.salaryDetail}</span>
             </div>
             <div>
               <i className="fa-solid fa-calendar-days"></i>

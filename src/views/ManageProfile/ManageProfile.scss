@@ -1,17 +1,36 @@
 .manage-profile {
   display: inline-flex;
   width: 100%;
-  
+  padding: 1rem;
+
   .manage-profile__navigation {
-    background-color: aqua;
+    background-color: #fff;
     width: 20%;
+    height: 18rem;
     border-radius: 0.5rem;
-    margin: 1rem 0 0 2rem;
     padding: 1rem 2rem;
+
+    .manage-profile__navigation-item {
+      padding: 0.5rem 0;
+      font-size: 18px;
+      border-top: 1px solid #60d860;
+    }
+    .manage-profile__navigation-item:hover {
+      background-color: #EBFFE8;
+      color: #60d860;
+      font-weight: 500;
+    }
   }
- 
+
   .manage-profile__content {
     width: 60%;
     margin: 0 auto;
+  }
+
+  .manage-profile__recommendJob {
+    background-color: #fff;
+    width: 20%;
+    height: 32rem;
+    border-radius: 0.5rem;
   }
 }

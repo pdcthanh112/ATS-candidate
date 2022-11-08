@@ -26,7 +26,7 @@ export const searchRecruimentRequest = async (searchObject) => {
       jobName: searchObject.jobName,
       salaryFrom: searchObject.salaryFrom,
       salaryTo: searchObject.salaryTo,
-      typeOfWork: searchObject.typeOfWork
+      typeOfWork: searchObject.typeOfWork,
     })
     .then((response) => response.data)
     .catch((error) => error);
@@ -37,4 +37,18 @@ export const getCategory = async (dispatch) => {
   if (response) {
     dispatch(setCategoryData(response.data.data));
   }
+};
+
+export const getNewestRecruitmentRequest = async () => {
+  return await axiosConfig
+    .get("recruitmentRequest/getNewestRecruitmentRequest")
+    .then((response) => response.data)
+    .catch((error) => error);
+};
+
+export const getRecruitmentRequestByCandidateId = async (id) => {
+  return await axiosConfig
+    .get(`recruitmentRequest/getById/{id}?id=${id}`)
+    .then((response) => response.data)
+    .catch((error) => error);
 };

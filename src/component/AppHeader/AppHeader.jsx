@@ -27,17 +27,17 @@ const AppHeader = () => {
           <React.Fragment>
             <div className="dropdown">
               <a className="" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <div className='inline-flex rounded-3xl px-2' style={{border: '1px solid #60d860'}}>
-                  <img src={currentUser.image || defaultUser} alt='' className='profile-image py-1.5' width={'30rem'} />
+                <div className='inline-flex rounded-3xl px-2' style={{ border: '1px solid #60d860' }}>
+                  <img src={currentUser.image || defaultUser} alt='' className='rounded-[50%] py-1.5' width={'30rem'} />
                   <div className='mx-2 py-2.5 font-medium text-lg' style={{ width: '13rem' }}>{currentUser.name}</div>
                   <i className="fa-solid fa-chevron-down m-1.5 py-2.5 text-xs"></i>
                 </div>
               </a>
-              <ul className="dropdown-menu">
-                <a href='/#/manage-profile' className='dropdown-item header-menu-item'><i className="fa-regular fa-address-card mr-2 text-[#60d860]"></i>Thông tin cá nhân</a>
-                <a href='/#/manage-profile/change-password' className='dropdown-item header-menu-item'><i className="fa-sharp fa-solid fa-shield-halved mr-2 text-[#60d860]"></i>Thay đổi mật khẩu</a>
-                <div className='linee'></div>
-                <Link to='/#/logout' onClick={handleLogout} className='dropdown-item header-menu-item'><i className="fa-solid fa-arrow-right-from-bracket mr-2 text-[#ff5858] "></i>Đăng xuất</Link>
+              <ul className="dropdown-menu dropdown-menu_header">
+                <a href='/#/manage-profile/view-profile'><div className='header-menu-item'><i className="fa-regular fa-address-card mr-2 text-[#60d860]"></i>Thông tin cá nhân</div></a>
+                <a href='/#/manage-profile/change-password'><div className='header-menu-item'><i className="fa-sharp fa-solid fa-shield-halved mr-2 text-[#60d860]"></i>Thay đổi mật khẩu</div></a>
+                <a href='/#/manage-profile/my-jobApply'><div className='header-menu-item'><i className="fa-solid fa-list-check mr-2 text-[#60d860]"></i>Việc làm của tôi</div></a>
+                <Link to='/#/logout' onClick={handleLogout}><div className='header-menu-item hover:text-[#000]' style={{ marginTop: 15, marginBottom: 10 }}><i className="fa-solid fa-arrow-right-from-bracket mr-2 text-[#ff5858] "></i>Đăng xuất</div></Link>
               </ul>
             </div>
           </React.Fragment> : <React.Fragment>
