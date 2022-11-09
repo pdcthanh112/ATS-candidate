@@ -36,7 +36,7 @@ const AppHeader = () => {
               <ul className="dropdown-menu dropdown-menu_header">
                 <a href='/#/manage-profile/view-profile'><div className='header-menu-item'><i className="fa-regular fa-address-card mr-2 text-[#60d860]"></i>Thông tin cá nhân</div></a>
                 <a href='/#/manage-profile/change-password'><div className='header-menu-item'><i className="fa-sharp fa-solid fa-shield-halved mr-2 text-[#60d860]"></i>Thay đổi mật khẩu</div></a>
-                <a href='/#/manage-profile/my-jobApply'><div className='header-menu-item'><i className="fa-solid fa-list-check mr-2 text-[#60d860]"></i>Việc làm của tôi</div></a>
+                <a href='/#/manage-profile/my-appliedJob'><div className='header-menu-item'><i className="fa-solid fa-list-check mr-2 text-[#60d860]"></i>Việc làm của tôi</div></a>
                 <Link to='/#/logout' onClick={handleLogout}><div className='header-menu-item hover:text-[#000]' style={{ marginTop: 15, marginBottom: 10 }}><i className="fa-solid fa-arrow-right-from-bracket mr-2 text-[#ff5858] "></i>Đăng xuất</div></Link>
               </ul>
             </div>

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { getAppliedJobByCandidateId } from '../../../apis/jobApplyApi';
 import './AppliedJob.scss'
 import { Pagination, Stack } from '@mui/material';
+import {Link} from 'react-router-dom'
 
 const AppliedJob = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser)
@@ -25,16 +26,37 @@ const AppliedJob = () => {
     fetchData();
   }, [pagination.currentPage])
 
+
+  const showStatusLabel = (status) => {
+    console.log('st', status);
+    if (status === 'APPROVED') {
+      return <span className='bg-[#C9F7F5] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>APPROVED</span>
+    } else if (status === 'REJECTED') {
+      return <span className='bg-[#FFE2E5] text-[#F64E60] text-sm px-2 py-1 rounded-md'>Rejected</span>
+    } else {
+      return <span className='bg-[#FFF4DE] text-[#FFA800] text-sm px-2 py-1 rounded-md'>Pending</span>
+    }
+  }
+
   return (
     <React.Fragment>
       <div className='appliedJob-container'>
         <div className="bg-white h-12 font-bold text-2xl mb-3 rounded-md pt-2 px-4">Việc làm đã ứng tuyển</div>
         <div className='appliedJob-content'>
           {listAppliedJob.map((item, id) => (
-            <div key={id} className='appliedJob-content_item'>
-              <div>{item.recruitmentRequest.position.name}</div>
-              <span>Ngày ứng tuyển: </span>{item.date}
-            </div>
+            <Link to={`/recruitment-detail/${item.recruitmentRequest.id}`} target={'_blank'}>
+              <div key={id} className='appliedJob-content_item'>
+                <div className='flex justify-between'>
+                  <span className='font-semibold text-xl text-[#20D489]'>{item.recruitmentRequest.position.name}</span>
+                  {showStatusLabel(item.status)}
+                </div>
+                <div className='flex justify-between'>
+                  <span><span className='font-semibold'>Lĩnh vực: </span> {item.recruitmentRequest.industry}</span>
+                  <span className='opacity-50 text-xs mt-2'>Ngày ứng tuyển: {item.date}</span>
+                </div>
+                <div><span className='font-semibold opacity-60'>Ngày hết hạn: </span>{item.date}</div>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

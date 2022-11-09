@@ -4,9 +4,13 @@
   .appliedJob-content {
     background-color: #fff;
     border-radius: 0.3rem;
+    padding: 0.4rem 0;
 
     .appliedJob-content_item {
-      border: 1px solid #000;
+      border: 1px solid #116835;
+      border-radius: 0.2rem;
+      padding: 1rem 2rem;
+      margin: 1.2rem 2rem;
     }
   }
 }

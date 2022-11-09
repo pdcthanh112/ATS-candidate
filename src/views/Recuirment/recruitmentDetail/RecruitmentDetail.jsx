@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const RecruitmentDetail = () => {
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser?.candidate);
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
   const categoryData = useSelector((state) => state.categoryData.data);
 
   const recruimentId = useParams().id
@@ -87,8 +87,8 @@ const RecruitmentDetail = () => {
     },
     validationSchema: Yup.object({
       // position: Yup.string().required('Please input your position'),
-      // experience: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
-      // location: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
+      // experience: Yup.string().required('Please input email'),
+      // location: Yup.string().required('Please input your phone number'),
     }),
     onSubmit: async (values) => {
       // if (fileCV == null) {
@@ -201,70 +201,71 @@ const RecruitmentDetail = () => {
         <Box sx={style}>
           <div className='modal-apply-container'>
             <div className='modal-title'>Apply job</div>
-            <div>
-              <form onSubmit={formikApply.handleSubmit}>
-                <div className='my-3'>
-                  <Autocomplete
-                    defaultValue={''}
-                    options={categoryData.province}
-                    size={'small'}
-                    sx={{ width: 170, marginRight: 2 }}
-                    renderInput={(params) => <TextField {...params} label="City" />}
-                    onInputChange={formikApply.handleChange} />
-                  {formikApply.errors.cityName && formikApply.touched.cityName && (
-                    <div className='text-[#ec5555]'>{formikApply.errors.cityName}</div>
-                  )}
-                </div>
-                <div className='my-3'>
-                  <Autocomplete
-                    defaultValue={''}
-                    options={educationLevelData()}
-                    size={'small'}
-                    sx={{ width: 170, marginRight: 2 }}
-                    renderInput={(params) => <TextField {...params} label="Trình độ" />}
-                    onInputChange={formikApply.handleChange} />
-                  {formikApply.errors.cityName && formikApply.touched.cityName && (
-                    <div className='text-[#ec5555]'>{formikApply.errors.cityName}</div>
-                  )}
-                </div>
-                <div className='my-3'>
-                  <Autocomplete
-                    defaultValue={''}
-                    options={foreignLanguageData()}
-                    size={'small'}
-                    sx={{ width: 170, marginRight: 2 }}
-                    renderInput={(params) => <TextField {...params} label="Ngoại ngữ" />}
-                    onInputChange={formikApply.handleChange} />
-                  {formikApply.errors.cityName && formikApply.touched.cityName && (
-                    <div className='text-[#ec5555]'>{formikApply.errors.cityName}</div>
-                  )}
-                </div>
+            <form onSubmit={formikApply.handleSubmit}>
+              <div className='my-3'>
+                <Autocomplete
+                  id='cityName'                 
+                  options={categoryData.province}
+                  size={'small'}
+                  sx={{ width: 170, marginRight: 2 }}
+                  renderInput={(params) => <TextField {...params} label="City" name='cityName'/>}
+                  // onInputChange={() => formikApply.handleChange} />
+                   onInputChange={formikApply.handleChange} />
+                 
+                {formikApply.errors.cityName && formikApply.touched.cityName && (
+                  <div className='text-[#ec5555]'>{formikApply.errors.cityName}</div>
+                )}
+              </div>
+              <div className='my-3'>
+                <Autocomplete
+                  id='educationLevel'
+                  options={educationLevelData()}
+                  size={'small'}
+                  sx={{ width: 170, marginRight: 2 }}
+                  renderInput={(params) => <TextField {...params} label="Trình độ" name='educationLevel' />}
+                  onInputChange={() => formikApply.handleChange} />
+                {/* onInputChange={(event, value) => formikApply.handleChange(value)} />  */}
+                {formikApply.errors.educationLevel && formikApply.touched.educationLevel && (
+                  <div className='text-[#ec5555]'>{formikApply.errors.educationLevel}</div>
+                )}
+              </div>
+              <div className='my-3'>
+                <Autocomplete
+                  id='foreignLanguage'
+                  options={foreignLanguageData()}
+                  size={'small'}
+                  sx={{ width: 170, marginRight: 2 }}
+                  renderInput={(params) => <TextField {...params} label="Ngoại ngữ" name='foreignLanguage' />}
+                  onInputChange={() => formikApply.handleChange} />
+                {formikApply.errors.foreignLanguage && formikApply.touched.foreignLanguage && (
+                  <div className='text-[#ec5555]'>{formikApply.errors.foreignLanguage}</div>
+                )}
+              </div>
 
-                <div className='my-3'>
-                  <Autocomplete
-                    defaultValue={''}
-                    options={categoryData.jobTitle}
-                    size={'small'}
-                    sx={{ width: 170, marginRight: 2 }}
-                    renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
-                    onInputChange={formikApply.handleChange} />
-                  {formikApply.errors.positionName && formikApply.touched.positionName && (
-                    <div className='text-[#ec5555]'>{formikApply.errors.positionName}</div>
-                  )}
-                </div>
+              <div className='my-3'>
+                <Autocomplete
+                  id='positionName'
+                  options={categoryData.jobTitle}
+                  size={'small'}
+                  sx={{ width: 170, marginRight: 2 }}
+                  renderInput={(params) => <TextField {...params} label="Chuyên môn" name='positionName' />}
+                  onInputChange={() => formikApply.handleChange} />
+                {formikApply.errors.positionName && formikApply.touched.positionName && (
+                  <div className='text-[#ec5555]'>{formikApply.errors.positionName}</div>
+                )}
+              </div>
 
-                <div className='my-3'>
-                  <label className='text-lg'>Curriculum vitae</label><br />
-                  <div className='field-input'>
-                    <input type={'file'} className={`form-control  border-none`} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
-                  </div>
-                  {formikApply.errors.linkCV && (
-                    <div className='text-[#ec5555]'>{formikApply.errors.linkCV}</div>
-                  )}
+              <div className='my-3'>
+                <label className='text-lg'>Curriculum vitae</label><br />
+                <div className='field-input'>
+                  <input type={'file'} className={`form-control  border-none`} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
                 </div>
-                <div><button type='submit' className='btn-submit'>Submit</button></div>
-              </form>
-            </div>
+                {formikApply.errors.linkCV && (
+                  <div className='text-[#ec5555]'>{formikApply.errors.linkCV}</div>
+                )}
+              </div>
+              <div><button type='submit' className='btn-submit'>Submit</button></div>
+            </form>
           </div>
         </Box>
       </Modal>

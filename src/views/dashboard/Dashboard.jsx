@@ -68,7 +68,6 @@ const Dashboard = () => {
     <React.Fragment>
       <div className="search-container">
         <Autocomplete
-          defaultValue={''}
           options={typeOfWorkData()}
           size={'small'}
           sx={{ width: 225, height: 10, marginRight: 2 }}
@@ -76,7 +75,6 @@ const Dashboard = () => {
           onInputChange={(event, value) => { handleChangeSearchObject('typeOfWork', value) }} />
 
         <Autocomplete
-          defaultValue={''}
           options={jobLevelData()}
           size={'small'}
           sx={{ width: 145, marginRight: 2 }}
@@ -84,7 +82,6 @@ const Dashboard = () => {
           onInputChange={(event, value) => { handleChangeSearchObject('jobLevel', value) }} />
 
         <Autocomplete
-          defaultValue={''}
           options={dataCategory.industry}
           size={'small'}
           sx={{ width: 180, marginRight: 2 }}
@@ -92,7 +89,6 @@ const Dashboard = () => {
           onInputChange={(event, value) => { handleChangeSearchObject('industry', value) }} />
 
         <Autocomplete
-          defaultValue={''}
           options={dataCategory.jobTitle}
           size={'small'}
           sx={{ width: 190, marginRight: 2 }}
@@ -100,7 +96,6 @@ const Dashboard = () => {
           onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }} />
 
         <Autocomplete
-          defaultValue={''}
           options={experienceData()}
           size={'small'}
           sx={{ width: 180, marginRight: 2 }}
@@ -128,7 +123,6 @@ const Dashboard = () => {
         />
 
         <Autocomplete
-          defaultValue={''}
           options={dataCategory.province}
           size={'small'}
           sx={{ width: 150, marginRight: 0 }}

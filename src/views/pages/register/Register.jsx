@@ -26,12 +26,12 @@ const Register = () => {
 
     },
     validationSchema: Yup.object({
-      fullname: Yup.string().required('Please input your name'),
-      email: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
-      password: Yup.string().required('Please input password').min(8, "Password must be 8 -20 characters").max(20, "Password must be 8 -20 characters"),
-      confirm: Yup.string().required('Please input confirm password').oneOf([Yup.ref("password"), null], 'Not match'),
-      address: Yup.string().required('Please input your address'),
-      phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid')
+      fullname: Yup.string().required('Vui lòng nhập tên của bạn'),
+      email: Yup.string().required('Vui lòng nhập địa chỉ email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
+      password: Yup.string().required('Vui lòng nhập mật khẩu').min(8, "Mật khẩu tối thiểu 8 kí tự"),
+      confirm: Yup.string().required('Vui lòng xác nhận mật khẩu').oneOf([Yup.ref("password"), null], 'Mật khẩu xác nhận không trùng khớp'),
+      address: Yup.string().required('Vui lòng nhập địa chỉ của bạn'),
+      phone: Yup.string().required('Vui lòng nhập số điện thoại của bạn').matches(/^[0-9\-\\+]{10}$/, 'Số điện thoại không hợp lệ')
     }),
     onSubmit: (values) => {
       console.log(values);
@@ -55,7 +55,7 @@ const Register = () => {
                 <label className='text-lg'>Fullname</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-user mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={'text'} className={`form-control  border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br />
+                  <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br />
                 </div>
                 {formik.errors.fullname && formik.touched.fullname && (
                   <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
@@ -65,7 +65,7 @@ const Register = () => {
                 <label className='text-lg'>Email</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-envelope mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={'text'} className={`form-control  border-none ${formik.errors.email && formik.touched.email && 'input-error'}`} name='email' placeholder='Nhập email của bạn' value={formik.values.email} onChange={formik.handleChange} /><br />
+                  <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.email && formik.touched.email && 'input-error'}`} name='email' placeholder='Nhập email của bạn' value={formik.values.email} onChange={formik.handleChange} /><br />
                 </div>
                 {formik.errors.email && formik.touched.email && (
                   <div className='text-[#ec5555]'>{formik.errors.email}</div>
@@ -78,8 +78,8 @@ const Register = () => {
                 <label className='text-lg'>Password</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={isShowPassword ? 'text' : 'password'} className={`form-control  border-none ${formik.errors.password && formik.touched.password && 'input-error'}`} name='password' placeholder='Nhập mật khẩu' value={formik.values.password} onChange={formik.handleChange} />
-                  <span className='hideShowPassword' onClick={() => { setIsShowPassword(!isShowPassword) }}>
+                  <input type={isShowPassword ? 'text' : 'password'} className={`input-tag focus:outline-none ${formik.errors.password && formik.touched.password && 'input-error'}`} name='password' placeholder='Nhập mật khẩu' value={formik.values.password} onChange={formik.handleChange} />
+                  <span className='mx-2 my-auto' onClick={() => { setIsShowPassword(!isShowPassword) }}>
                     <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                   </span>
                 </div>
@@ -91,8 +91,8 @@ const Register = () => {
                 <label className='text-lg'>Confirm</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={isShowPassword ? 'text' : 'password'} className={`form-control  border-none ${formik.errors.confirm && formik.touched.confirm && 'input-error'}`} name='confirm' placeholder='Nhập lại mật khẩu' value={formik.values.confirm} onChange={formik.handleChange} />
-                  <span className='hideShowPassword' onClick={() => { setIsShowPassword(!isShowPassword) }}>
+                  <input type={isShowPassword ? 'text' : 'password'} className={`input-tag focus:outline-none ${formik.errors.confirm && formik.touched.confirm && 'input-error'}`} name='confirm' placeholder='Nhập lại mật khẩu' value={formik.values.confirm} onChange={formik.handleChange} />
+                  <span className='mx-2 my-auto' onClick={() => { setIsShowPassword(!isShowPassword) }}>
                     <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                   </span>
                 </div>
@@ -104,7 +104,7 @@ const Register = () => {
                 <label className='text-lg'>Address</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-address-book mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={'text'} className={`form-control  border-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} /><br />
+                  <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} /><br />
                 </div>
                 {formik.errors.address && formik.touched.address && (
                   <div className='text-[#ec5555]'>{formik.errors.address}</div>
@@ -114,7 +114,7 @@ const Register = () => {
                 <label className='text-lg'>Phone</label><br />
                 <div className='field-input'>
                   <i className="fa-solid fa-mobile-screen-button mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                  <input type={'text'} className={`form-control  border-none ${formik.errors.phone && formik.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formik.values.phone} onChange={formik.handleChange} onBlur={formik.handleBlur} /><br />
+                  <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.phone && formik.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formik.values.phone} onChange={formik.handleChange} onBlur={formik.handleBlur} /><br />
                 </div>
                 {formik.errors.phone && formik.touched.phone && (
                   <div className='text-[#ec5555]'>{formik.errors.phone}</div>

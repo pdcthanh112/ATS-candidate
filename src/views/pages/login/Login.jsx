@@ -72,7 +72,7 @@ const Login = () => {
                   <div className='text-[#ec5555]'>{formik.errors.password}</div>
                 )}
               </div>
-              {loginError && <div className='input-error p-2 rounded'>Incorrect email or password</div>}
+              {loginError && <div className='input-error p-2 rounded'>Email hoặc mật khẩu không chính xác</div>}
               <div className='my-4'>
                 <a href="/#/forget-password" style={{ marginLeft: '20rem' }}>Quên mật khẩu</a>
               </div>
