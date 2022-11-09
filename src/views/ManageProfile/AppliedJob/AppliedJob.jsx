@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { getAppliedJobByCandidateId } from '../../../apis/jobApplyApi';
 import './AppliedJob.scss'
 import { Pagination, Stack } from '@mui/material';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import ReactLoading from 'react-loading'
 
 const AppliedJob = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser)
@@ -39,10 +40,10 @@ const AppliedJob = () => {
   }
 
   return (
-    <React.Fragment>
-      <div className='appliedJob-container'>
-        <div className="bg-white h-12 font-bold text-2xl mb-3 rounded-md pt-2 px-4">Việc làm đã ứng tuyển</div>
-        <div className='appliedJob-content'>
+    <div className='appliedJob-container'>
+      <div className="bg-white h-12 font-bold text-2xl mb-3 rounded-md pt-2 px-4">Việc làm đã ứng tuyển</div>
+      <div className='appliedJob-content'>
+        {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <React.Fragment>
           {listAppliedJob.map((item, id) => (
             <Link to={`/recruitment-detail/${item.recruitmentRequest.id}`} target={'_blank'}>
               <div key={id} className='appliedJob-content_item'>
@@ -58,14 +59,15 @@ const AppliedJob = () => {
               </div>
             </Link>
           ))}
+        </React.Fragment>}
+        <div className='flex justify-center'>
+          <Stack spacing={2}>
+            <Pagination count={pagination.totalPage} onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
+          </Stack>
         </div>
       </div>
-      <div className=''>
-        <Stack spacing={2}>
-          <Pagination count={pagination.totalPage} onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
-        </Stack>
-      </div>
-    </React.Fragment>
+    </div>
+
   )
 }
 

@@ -1,4 +1,18 @@
-.btn-save-edit {
+.editInformation-container {
+  padding: 1rem 2rem;
+  .field-input {
+    height: 2.5rem;
+    border: 1px solid #000;
+    border-radius: 0.2rem;
+
+    .input-tag {
+      margin: 5px 7px;
+      font-size: 1rem;
+      width: 95%;
+    }
+  }
+
+  .btn-save-edit {
     background-color: #116835;
     border-radius: 10px;
     width: 18%;
@@ -12,7 +26,4 @@
     color: #ec3f3f;
     background-color: #ffe5e2;
   }
-
-
-
-  
+}

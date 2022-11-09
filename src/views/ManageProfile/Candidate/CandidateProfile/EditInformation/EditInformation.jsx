@@ -18,7 +18,6 @@ import { genderData } from '../../../../../utils/dropdownData';
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser);
-  console.log(currentUser);
   const [fileImage, setFileImage] = useState(null)
 
   const formik = useFormik({
@@ -37,85 +36,82 @@ const EditInformation = () => {
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
     }),
     onSubmit: async (values) => {
-      if (fileImage !== null) {
-        const imageRef = ref(storage, `candidate-avatar/${fileImage.name + uuidv4()}`)
-        await uploadBytes(imageRef, fileImage).then((snapshot) => {
-          getDownloadURL(snapshot.ref).then(url => {
-            values.image = url
-          })
-        })
-      }
+      // if (fileImage !== null) {
+      //   const imageRef = ref(storage, `candidate-avatar/${fileImage.name + uuidv4()}`)
+      //   await uploadBytes(imageRef, fileImage).then((snapshot) => {
+      //     getDownloadURL(snapshot.ref).then(url => {
+      //       values.image = url
+      //     })
+      //   })
+      // }
       console.log('RRRRRRR', values);
-      updateProfileCandidate(currentUser.candidate.id, currentUser.token, values).then((response) => {
-        response.status === responseStatus.SUCCESS ? toast.success('Edit profile successfully') : toast.error('Edit profile fail')
-      })
+      // updateProfileCandidate(currentUser.candidate.id, currentUser.token, values).then((response) => {
+      //   response.status === responseStatus.SUCCESS ? toast.success('Edit profile successfully') : toast.error('Edit profile fail')
+      // })
     }
   })
 
   return (
     <React.Fragment>
-      <div className="form-group px-2 py-2">
+      <div className="editInformation-container">
         <form onSubmit={formik.handleSubmit}>
-          <div className='inline-flex w-full h-40'>
-            <div className='my-3 mx-2 w-2/6'>
-              <label className='text-lg'>Email</label><br />
-              <div className='field-input'>
-                <input type={'text'} className={`form-control border-none `} name='email' value={currentUser.email} disabled /><br />
+          <div className='flex my-3 mx-2 justify-between'>
+            <div className='w-[30%]'>
+              <label className='text-lg'>Email</label>
+              <div className='field-input bg-slate-300'>
+                <input type={'text'} className={'input-tag focus:outline-none bg-slate-300'} name='email' value={currentUser.email} disabled />
               </div>
               {formik.errors.email && formik.touched.email && (
                 <div className='text-[#ec5555]'>{formik.errors.email}</div>
               )}
             </div>
-            <div className='my-3 mx-2 w-2/6'>
-              <label className='text-lg'>Fullname: </label><br />
+            <div className='w-[30%]'>
+              <label className='text-lg'>Họ tên: </label>
               <div className='field-input'>
-                <input type={'text'} className={`form-control border-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} /><br />
+                <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.fullname && formik.touched.fullname && 'input-error'}`} name='fullname' placeholder='Nhập tên của bạn' value={formik.values.fullname} onChange={formik.handleChange} />
               </div>
               {formik.errors.fullname && formik.touched.fullname && (
                 <div className='text-[#ec5555]'>{formik.errors.fullname}</div>
               )}
             </div>
-            <div className='my-3 mx-2 w-2/6'>
-              <img src={currentUser.candidate.image} alt="avatar" width={'150rem'} style={{ maxHeight: '8rem', maxWidth: '8rem', borderRadius: '50%', marginBottom: 10 }} />
-              <div>
-                <input type={'file'} className='form-control border-none text-sm' name='image' onChange={(e) => { setFileImage(e.target.files[0]) }} /><br />
-              </div>
+            <div className=''>
+              <img src={currentUser.candidate.image} alt="avatar" width={'150rem'} style={{ maxHeight: '8rem', maxWidth: '8rem', borderRadius: '50%', margin: '0 auto 0.5rem auto' }} />
+              <input type={'file'} className='text-sm mx-auto' name='image' onChange={(e) => { setFileImage(e.target.files[0]) }} />
             </div>
           </div>
-          <div className='inline-flex w-full'>
-            <div className='my-3 mx-2 w-2/6'>
-              <label className='text-lg'>Ngày sinh</label><br />
+          <div className='flex my-3 mx-2 justify-between'>
+            <div className='w-[20%]'>
+              <label className='text-lg'>Ngày sinh</label>
               <div className='field-input'>
-                <input type={'date'} className={`form-control border-none ${formik.errors.dateOfBirth && formik.touched.dateOfBirth && 'input-error'}`} name='dateOfBirth' value={formik.values.dateOfBirth} onChange={formik.handleChange} /><br />
+                <input type={'date'} className={`input-tag focus:outline-none ${formik.errors.dateOfBirth && formik.touched.dateOfBirth && 'input-error'}`} name='dateOfBirth' value={formik.values.dateOfBirth} onChange={formik.handleChange} />
               </div>
               {formik.errors.dateOfBirth && formik.touched.dateOfBirth && (
                 <div className='text-[#ec5555]'>{formik.errors.dateOfBirth}</div>
               )}
             </div>
-            <div className='my-3 mx-2 w-3/6'>
-              <label className='text-lg'>Phone</label><br />
+            <div className='w-[30%]'>
+              <label className='text-lg'>Số điện thoại</label>
               <div className='field-input'>
-                <input type={'text'} className={`form-control border-none ${formik.errors.phone && formik.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formik.values.phone} onChange={formik.handleChange} /><br />
+                <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.phone && formik.touched.phone && 'input-error'}`} name='phone' placeholder='Nhập số điện thoại của bạn' value={formik.values.phone} onChange={formik.handleChange} /><br />
               </div>
               {formik.errors.phone && formik.touched.phone && (
                 <div className='text-[#ec5555]'>{formik.errors.phone}</div>
               )}
             </div>
-            <div className='my-3 mx-2 w-1/6'>
+            <div className='mt-4'>
               <Autocomplete
-                defaultValue={''}
                 value={formik.gender}
                 options={genderData()}
                 size={'small'}
-                sx={{ width: 125, marginRight: 2 }}
+                sx={{ width: 135, marginRight: 2 }}
                 renderInput={(params) => <TextField {...params} label="Giới tính" />}
                 onInputChange={formik.handleChange} />
             </div>
           </div>
           <div className='my-3 mx-2'>
-            <label className='text-lg'>Address</label><br />
+            <label className='text-lg'>Địa chỉ</label>
             <div className='field-input'>
-              <input type={'text'} className={`form-control border-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} /><br />
+              <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} /><br />
             </div>
             {formik.errors.address && formik.touched.address && (
               <div className='text-[#ec5555]'>{formik.errors.address}</div>

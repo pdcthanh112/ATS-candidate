@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'
 import { TextField, Autocomplete, Box, Modal } from '@mui/material';
-import { createFilterOptions } from '@mui/material/Autocomplete';
 
 import { getRecruimentRequestDetail } from '../../../apis/recruimentRequestApi';
 import { loginUser, regiserUser } from '../../../apis/authApi';
@@ -17,7 +16,11 @@ import * as Yup from 'yup'
 import { storage } from '../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
+import { applyJob } from '../../../apis/jobApplyApi';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { responseStatus } from '../../../utils/constants';
 
 const RecruitmentDetail = () => {
 
@@ -29,10 +32,21 @@ const RecruitmentDetail = () => {
   const [recruiment, setRecruitment] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingAuth, setIsLoadingAuth] = useState(false)
+  const [isLoadingApplyJob, setIsLoadingApplyJob] = useState(false)
   const [openModalApply, setOpenModalApply] = useState(false);
   const [openModalLogin, setOpenModalLogin] = useState(false);
   const [fileCV, setFileCV] = useState(null)
   const [isShowPassword, setIsShowPassword] = useState(false)
+  const [applyJobObject, setApplyJobObject] = useState({
+    candidateId: currentUser?.candidate?.id,
+    recruitmentRequestId: recruimentId,
+    cityName: "",
+    educationLevel: "",
+    foreignLanguage: "",
+    positionName: "",
+    linkCV: ""
+  })
+  const [isCVNull, setIsCVNull] = useState(false)
 
   const loginError = useSelector((state) => state.auth.login.error);
 
@@ -44,7 +58,7 @@ const RecruitmentDetail = () => {
       setIsLoading(true)
       const response = await getRecruimentRequestDetail(recruimentId);
       if (response) {
-        console.log("data:", response.data.data);
+        //console.log("data:", response.data.data);
         setIsLoading(false)
         setRecruitment(response.data.data)
       }
@@ -75,38 +89,38 @@ const RecruitmentDetail = () => {
     boxShadow: 24,
   };
 
-  const formikApply = useFormik({
-    initialValues: {
-      candidateId: currentUser?.candidate?.id,
-      recruitmentRequestId: recruimentId,
-      cityName: "",
-      educationLevel: "",
-      foreignLanguage: "",
-      positionName: "",
-      linkCV: ""
-    },
-    validationSchema: Yup.object({
-      // position: Yup.string().required('Please input your position'),
-      // experience: Yup.string().required('Please input email'),
-      // location: Yup.string().required('Please input your phone number'),
-    }),
-    onSubmit: async (values) => {
-      // if (fileCV == null) {
-      //   formikApply.errors.linkCV = "Please submit your CV";
-      // } else {
-      //   const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
-      //   await uploadBytes(cvRef, fileCV).then((snapshot) => {
-      //     getDownloadURL(snapshot.ref).then(url => {
-      //       values.linkCV = url
-      //     })
-      //   })
-      // }
-      console.log('RRRRRR', values);
-      // regiserUser(values).then((response) => {
-      //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
-      // })
-    }
-  })
+  // const formikApply = useFormik({
+  //   initialValues: {
+  // candidateId: currentUser?.candidate?.id,
+  // recruitmentRequestId: recruimentId,
+  // cityName: "",
+  // educationLevel: "",
+  // foreignLanguage: "",
+  // positionName: "",
+  // linkCV: ""
+  //   },
+  //   validationSchema: Yup.object({
+  //     // position: Yup.string().required('Please input your position'),
+  //     // experience: Yup.string().required('Please input email'),
+  //     // location: Yup.string().required('Please input your phone number'),
+  //   }),
+  //   onSubmit: async (values) => {
+  //     // if (fileCV == null) {
+  //     //   formikApply.errors.linkCV = "Please submit your CV";
+  //     // } else {
+  //     //   const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
+  //     //   await uploadBytes(cvRef, fileCV).then((snapshot) => {
+  //     //     getDownloadURL(snapshot.ref).then(url => {
+  //     //       values.linkCV = url
+  //     //     })
+  //     //   })
+  //     // }
+  //     console.log('RRRRRR', values);
+  //     // regiserUser(values).then((response) => {
+  //     //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
+  //     // })
+  //   }
+  // })
 
   const formikLogin = useFormik({
     initialValues: {
@@ -114,8 +128,8 @@ const RecruitmentDetail = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().required('Please input email'),
-      password: Yup.string().required('Please input password'),
+      email: Yup.string().required('Vui lòng nhập email'),
+      password: Yup.string().required('Vui lòng nhập mật khẩu'),
     }),
     onSubmit: (values) => {
       setIsLoadingAuth(true)
@@ -133,15 +147,14 @@ const RecruitmentDetail = () => {
       email: "",
       password: "",
       confirm: "",
-
     },
     validationSchema: Yup.object({
-      fullname: Yup.string().required('Please input your name'),
-      email: Yup.string().required('Please input email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
-      password: Yup.string().required('Please input password').min(8, "Password must be 8 -20 characters").max(20, "Password must be 8 -20 characters"),
-      confirm: Yup.string().required('Please input confirm password').oneOf([Yup.ref("password"), null], 'Not match'),
-      address: Yup.string().required('Please input your address'),
-      phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid')
+      fullname: Yup.string().required('Vui lòng điền tên của bạn'),
+      email: Yup.string().required('Vui lòng điền email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'This email is invalid'),
+      password: Yup.string().required('Vui lòng điền mật khẩu').min(8, "Mật khẩu tối thiểu 8 ký tự"),
+      confirm: Yup.string().required('Vui lòng xác nhận mật khẩu').oneOf([Yup.ref("password"), null], 'Mật khẩu xác nhận không trùng khớp'),
+      address: Yup.string().required('Vui lòng điền địa chỉ'),
+      phone: Yup.string().required('Vui lòng điền số điện thoại').matches(/^[0-9\-\\+]{10}$/, 'Số điện thoại không hợp lệ')
     }),
     onSubmit: (values) => {
       console.log(values);
@@ -150,6 +163,38 @@ const RecruitmentDetail = () => {
       })
     }
   })
+
+  const handleChangeApplyJobObject = (id, value) => {
+    setApplyJobObject(() => ({
+      ...applyJobObject,
+      [id]: value
+    }))
+  }
+
+  const handleApplyJob = async () => {
+    if (fileCV == null) {
+      setIsCVNull(true)
+    } else {
+      const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
+      await uploadBytes(cvRef, fileCV).then((snapshot) => {
+        getDownloadURL(snapshot.ref)
+          .then(url => {
+            setApplyJobObject({ ...applyJobObject, linkCV: url })
+            console.log('link1: ', url);
+            console.log('link2: ', applyJobObject.linkCV);
+          })
+          .then(() => {
+            console.log('con mẹ noa', applyJobObject);
+            setIsLoadingApplyJob(true)
+            applyJob(currentUser.token, applyJobObject).then(response => {
+              console.log('UUUUUUUUUUUUUUUU',response);
+              setIsLoadingApplyJob(false)
+              response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
+            })
+          })
+      })
+    }
+  }
 
   return (
     <React.Fragment>
@@ -192,7 +237,7 @@ const RecruitmentDetail = () => {
           </div>
           <div className='inline-flex mt-3'>
             <div className='w-5/6'>{recruiment.description}</div>
-            <button className='recruitment-detail__apply-button' onClick={() => { currentUser !== undefined ? setOpenModalApply(true) : setOpenModalLogin(true) }}>APPLY</button>
+            <button className='recruitment-detail__apply-button' onClick={() => { currentUser ? setOpenModalApply(true) : setOpenModalLogin(true) }}>APPLY</button>
           </div>
         </div>
       }
@@ -201,71 +246,53 @@ const RecruitmentDetail = () => {
         <Box sx={style}>
           <div className='modal-apply-container'>
             <div className='modal-title'>Apply job</div>
-            <form onSubmit={formikApply.handleSubmit}>
-              <div className='my-3'>
-                <Autocomplete
-                  id='cityName'                 
-                  options={categoryData.province}
-                  size={'small'}
-                  sx={{ width: 170, marginRight: 2 }}
-                  renderInput={(params) => <TextField {...params} label="City" name='cityName'/>}
-                  // onInputChange={() => formikApply.handleChange} />
-                   onInputChange={formikApply.handleChange} />
-                 
-                {formikApply.errors.cityName && formikApply.touched.cityName && (
-                  <div className='text-[#ec5555]'>{formikApply.errors.cityName}</div>
-                )}
-              </div>
-              <div className='my-3'>
-                <Autocomplete
-                  id='educationLevel'
-                  options={educationLevelData()}
-                  size={'small'}
-                  sx={{ width: 170, marginRight: 2 }}
-                  renderInput={(params) => <TextField {...params} label="Trình độ" name='educationLevel' />}
-                  onInputChange={() => formikApply.handleChange} />
-                {/* onInputChange={(event, value) => formikApply.handleChange(value)} />  */}
-                {formikApply.errors.educationLevel && formikApply.touched.educationLevel && (
-                  <div className='text-[#ec5555]'>{formikApply.errors.educationLevel}</div>
-                )}
-              </div>
-              <div className='my-3'>
-                <Autocomplete
-                  id='foreignLanguage'
-                  options={foreignLanguageData()}
-                  size={'small'}
-                  sx={{ width: 170, marginRight: 2 }}
-                  renderInput={(params) => <TextField {...params} label="Ngoại ngữ" name='foreignLanguage' />}
-                  onInputChange={() => formikApply.handleChange} />
-                {formikApply.errors.foreignLanguage && formikApply.touched.foreignLanguage && (
-                  <div className='text-[#ec5555]'>{formikApply.errors.foreignLanguage}</div>
-                )}
-              </div>
+            {/* <form onSubmit={formikApply.handleSubmit}> */}
+            <div className='my-3'>
+              <Autocomplete
+                options={categoryData.province}
+                size={'small'}
+                sx={{ width: 170, marginRight: 2 }}
+                renderInput={(params) => <TextField {...params} label="City" />}
+                onInputChange={(event, value) => { handleChangeApplyJobObject('cityName', value) }} />
+            </div>
+            <div className='my-3'>
+              <Autocomplete
+                options={educationLevelData()}
+                size={'small'}
+                sx={{ width: 170, marginRight: 2 }}
+                renderInput={(params) => <TextField {...params} label="Trình độ" />}
+                onInputChange={(event, value) => { handleChangeApplyJobObject('educationLevel', value) }} />
+            </div>
+            <div className='my-3'>
+              <Autocomplete
+                options={foreignLanguageData()}
+                size={'small'}
+                sx={{ width: 170, marginRight: 2 }}
+                renderInput={(params) => <TextField {...params} label="Ngoại ngữ" />}
+                onInputChange={(event, value) => { handleChangeApplyJobObject('foreignLanguage', value) }} />
+            </div>
 
-              <div className='my-3'>
-                <Autocomplete
-                  id='positionName'
-                  options={categoryData.jobTitle}
-                  size={'small'}
-                  sx={{ width: 170, marginRight: 2 }}
-                  renderInput={(params) => <TextField {...params} label="Chuyên môn" name='positionName' />}
-                  onInputChange={() => formikApply.handleChange} />
-                {formikApply.errors.positionName && formikApply.touched.positionName && (
-                  <div className='text-[#ec5555]'>{formikApply.errors.positionName}</div>
-                )}
-              </div>
+            <div className='my-3'>
+              <Autocomplete
+                options={categoryData.jobTitle}
+                size={'small'}
+                sx={{ width: 170, marginRight: 2 }}
+                renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
+                onInputChange={(event, value) => { handleChangeApplyJobObject('positionName', value) }} />
+            </div>
 
-              <div className='my-3'>
-                <label className='text-lg'>Curriculum vitae</label><br />
-                <div className='field-input'>
-                  <input type={'file'} className={`form-control  border-none`} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
-                </div>
-                {formikApply.errors.linkCV && (
-                  <div className='text-[#ec5555]'>{formikApply.errors.linkCV}</div>
-                )}
+            <div className='my-3'>
+              <label className='text-lg'>Curriculum vitae</label><br />
+              <div className='field-input'>
+                <input type={'file'} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
               </div>
-              <div><button type='submit' className='btn-submit'>Submit</button></div>
-            </form>
+              {isCVNull && <div className='bg-[#FFBDBD] text-[#FF3333] px-2 py-1 mt-3'>Vui lòng chọn CV của bạn</div>}
+            </div>
+            <div className='flex'>
+              <button type='submit' onClick={() => handleApplyJob()} className='btn-submit'>Submit</button>
+              {isLoadingApplyJob && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
+            </div>
+            {/* </form> */}
           </div>
         </Box>
       </Modal>
@@ -273,7 +300,6 @@ const RecruitmentDetail = () => {
       <Modal open={openModalLogin} onClose={() => setOpenModalLogin(false)}>
         <Box sx={styleAuthModal}>
           <div className='modal-auth-container'>
-
             <input type="radio" class="tabs__radio" name="tabs-example" id="tab1" checked />
             <label for="tab1" class="tabs__label ml-10">Đăng nhập</label>
             <div class="tabs__content">
@@ -283,7 +309,7 @@ const RecruitmentDetail = () => {
                     <label className='text-base'>Email</label><br />
                     <div className='field-input'>
                       <i className="far fa-envelope mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                      <input type={'text'} className='form-control border-none' name='email' placeholder='Nhập email của bạn' value={formikLogin.values.email} onChange={formikLogin.handleChange} /><br />
+                      <input type={'text'} className='input-tag focus:outline-none' name='email' placeholder='Nhập email của bạn' value={formikLogin.values.email} onChange={formikLogin.handleChange} /><br />
                     </div>
                     {formikLogin.errors.email && formikLogin.touched.email && (
                       <div className='text-[#ec5555]'>{formikLogin.errors.email}</div>
@@ -293,8 +319,8 @@ const RecruitmentDetail = () => {
                     <label className='text-base'>Mật khẩu</label><br />
                     <div className='field-input'>
                       <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
-                      <input type={isShowPassword ? 'text' : 'password'} className='form-control border-none' name='password' placeholder='Nhập mật khẩu' value={formikLogin.values.password} onChange={formikLogin.handleChange} />
-                      <span className='hideShowPassword mx-2 my-auto' onClick={() => { setIsShowPassword(!isShowPassword) }}>
+                      <input type={isShowPassword ? 'text' : 'password'} className='input-tag focus:outline-none' name='password' placeholder='Nhập mật khẩu' value={formikLogin.values.password} onChange={formikLogin.handleChange} />
+                      <span className='mx-2 my-auto' onClick={() => { setIsShowPassword(!isShowPassword) }}>
                         <i className={isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                       </span>
                     </div>
@@ -385,6 +411,19 @@ const RecruitmentDetail = () => {
         </Box>
       </Modal>
 
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
     </React.Fragment>
   )
 }
