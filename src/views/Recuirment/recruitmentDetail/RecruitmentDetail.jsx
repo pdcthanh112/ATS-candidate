@@ -179,15 +179,13 @@ const RecruitmentDetail = () => {
       await uploadBytes(cvRef, fileCV).then((snapshot) => {
         getDownloadURL(snapshot.ref)
           .then(url => {
-            setApplyJobObject({ ...applyJobObject, linkCV: url })
-            console.log('link1: ', url);
-            console.log('link2: ', applyJobObject.linkCV);
+            setApplyJobObject({ ...applyJobObject, linkCV: url })           
           })
           .then(() => {
             console.log('con mẹ noa', applyJobObject);
             setIsLoadingApplyJob(true)
             applyJob(currentUser.token, applyJobObject).then(response => {
-              console.log('UUUUUUUUUUUUUUUU',response);
+              console.log('UUUUUUUUUUUUUUUU', response);
               setIsLoadingApplyJob(false)
               response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
             })
