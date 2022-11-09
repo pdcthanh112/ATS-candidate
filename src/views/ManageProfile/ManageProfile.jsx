@@ -26,7 +26,7 @@ const ManageProfile = () => {
     },
     {
       title: 'Thông báo',
-      path: '/notification',
+      path: '/manage-profile/notification',
       icon: <i className="fa-regular fa-bell mr-2"></i>,
     },
   ];

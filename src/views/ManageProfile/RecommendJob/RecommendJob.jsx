@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
 import { getNewestRecruitmentRequest } from '../../../apis/recruimentRequestApi'
 import './RecommendJob.scss'
 import SalaryIcon from '../../../assets/icon/salary.png'
@@ -8,16 +8,12 @@ import { Link } from 'react-router-dom'
 const RecommendJob = () => {
 
   const [listRecruitmentRequest, setListRecruitmentRequest] = useState([])
-  //const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
-      //setIsLoading(true)
       const response = await getNewestRecruitmentRequest();
       if (response) {
-        console.log('UUUUUUU', response.data);
         setListRecruitmentRequest(response.data)
-        //setIsLoading(false)
       }
     }
     fetchData();

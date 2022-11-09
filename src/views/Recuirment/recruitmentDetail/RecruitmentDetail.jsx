@@ -22,7 +22,6 @@ import { v4 as uuidv4 } from 'uuid';
 const RecruitmentDetail = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser?.candidate);
-  console.log('current: ', currentUser);
   const categoryData = useSelector((state) => state.categoryData.data);
 
   const recruimentId = useParams().id

@@ -15,6 +15,12 @@
       .login-form {
         margin: 20px 20px 30px 20px;
 
+        .input-tag {
+          margin: 5px 7px;
+          font-size: 1rem;
+          width: 100%;
+        }
+        
         .btn-login {
           background-color: #116835;
           border-radius: 10px;
@@ -39,9 +45,6 @@
   background-color: #ffe5e2;
 }
 
-.hideShowPassword {
-  margin: auto 5px;
-}
 
 
 

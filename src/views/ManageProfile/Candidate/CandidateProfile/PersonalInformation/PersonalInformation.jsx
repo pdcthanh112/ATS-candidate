@@ -8,8 +8,6 @@ const PersonalInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser)
 
-  console.log('CCCCCCCCCCC', currentUser);
-
   const [data, setData] = useState({})
   const [isLoading, setIsLoading] = useState(true)
 

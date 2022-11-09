@@ -46,9 +46,3 @@ export const getNewestRecruitmentRequest = async () => {
     .catch((error) => error);
 };
 
-export const getRecruitmentRequestByCandidateId = async (id) => {
-  return await axiosConfig
-    .get(`recruitmentRequest/getById/{id}?id=${id}`)
-    .then((response) => response.data)
-    .catch((error) => error);
-};
