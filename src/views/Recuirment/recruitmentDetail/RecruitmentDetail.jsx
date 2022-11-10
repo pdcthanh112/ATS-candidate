@@ -15,7 +15,6 @@ import * as Yup from 'yup'
 
 import { storage } from '../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { v4 as uuidv4 } from 'uuid';
 import { applyJob } from '../../../apis/jobApplyApi';
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -175,14 +174,17 @@ const RecruitmentDetail = () => {
     if (fileCV == null) {
       setIsCVNull(true)
     } else {
-      const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
+      const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
       await uploadBytes(cvRef, fileCV).then((snapshot) => {
         getDownloadURL(snapshot.ref)
           .then(url => {
-            setApplyJobObject({ ...applyJobObject, linkCV: url })           
+            setApplyJobObject(() => ({ ...applyJobObject, linkCV: url }))
+            console.log('link1: ', url);
+            console.log('link2: ', applyJobObject.linkCV);
           })
           .then(() => {
-            console.log('con mẹ noa', applyJobObject);
+            console.log('2222222222222222');
+            console.log('cai obj', applyJobObject);
             setIsLoadingApplyJob(true)
             applyJob(currentUser.token, applyJobObject).then(response => {
               console.log('UUUUUUUUUUUUUUUU', response);

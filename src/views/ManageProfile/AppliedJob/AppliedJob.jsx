@@ -29,7 +29,6 @@ const AppliedJob = () => {
 
 
   const showStatusLabel = (status) => {
-    console.log('st', status);
     if (status === 'APPROVED') {
       return <span className='bg-[#C9F7F5] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>APPROVED</span>
     } else if (status === 'REJECTED') {
@@ -45,8 +44,8 @@ const AppliedJob = () => {
       <div className='appliedJob-content'>
         {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <React.Fragment>
           {listAppliedJob.map((item, id) => (
-            <Link to={`/recruitment-detail/${item.recruitmentRequest.id}`} target={'_blank'}>
-              <div key={id} className='appliedJob-content_item'>
+            <Link to={`/recruitment-detail/${item.recruitmentRequest.id}`} target={'_blank'}  key={id}>
+              <div className='appliedJob-content_item'>
                 <div className='flex justify-between'>
                   <span className='font-semibold text-xl text-[#20D489]'>{item.recruitmentRequest.position.name}</span>
                   {showStatusLabel(item.status)}

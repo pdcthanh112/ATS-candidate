@@ -20,10 +20,10 @@ const RecommendJob = () => {
   }, [])
   return (
     <React.Fragment>
-      <div className='font-semibold text-center text-lg bg-[#d0ffc8] rounded-t-lg py-2'>Công việc mới nhất</div>
+      <div className='font-semibold text-center text-lg bg-[#d0ffc8] rounded-t-lg py-2'>Top việc làm mới</div>
       {listRecruitmentRequest.map((item, id) => (
-        <Link to={`/recruitment-detail/${item.id}`} target={'_blank'}>
-        <div key={id} className='job-container'>
+        <Link to={`/recruitment-detail/${item.id}`} target={'_blank'} key={id}>
+        <div className='job-container'>
           <div className='font-semibold text-lg font-mono'>{item.position.name}</div>
           <div className='font-sans'>{item.industry}</div>
           <div className='flex justify-between'>
