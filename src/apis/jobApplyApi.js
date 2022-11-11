@@ -16,7 +16,7 @@ export const applyJob = async (token, data) => {
       educationLevel: data.educationLevel,
       foreignLanguage: data.foreignLanguage,
       linkCV: data.linkCV,
-      positionName: data.positionName,
+      positionName: [data.positionName],
       recruitmentRequestId: data.recruitmentRequestId,
     }, {
       headers: { Authorization: `Bearer ${token}` },

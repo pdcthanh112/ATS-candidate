@@ -1,27 +1,19 @@
-export const typeOfWorkData = () => [
-  { label: 'Fulltime', value: 'Full Time' },
-  { label: 'Parttime', value: 'Part Time' },
-  { label: 'Work from home', value: 'Work from home' },
-];
+export const typeOfWorkData = () => ['Fulltime',  'Part Time', 'Work from home'];
 
-export const jobLevelData = () => [
-  { label: 'Fresher', value: 'Fresher' },
-  { label: 'Junior', value: 'Junior' },
-  { label: 'Senior', value: 'Senior' },
-  { label: 'Suppervisor', value: 'Suppervisor' },
-];
+export const jobLevelData = () => ['Fresher', 'Junior', 'Senior', 'Suppervisor'];
 
 export const experienceData = () => [
-  { label: 'Dưới 1 năm', value: '0' },
-  { label: '1 năm', value: '1' },
-  { label: '2 năm', value: '2' },
-  { label: '3 năm', value: '3' },
-  { label: '4 năm', value: '4' },
-  { label: '5 năm', value: '5' },
-  { label: 'Trên 5 năm', value: '6' },
-  { label: 'Trên 7 năm', value: '7' },
-  { label: 'Trên 10 năm', value: '8' }, 
-];
+  'Chưa có kinh nghiệm',
+  'Dưới 1 năm', 
+  '1 năm',
+  '2 năm',
+  '3 năm',
+  '4 năm',
+  '5 năm',
+  'Trên 5 năm',
+  'Trên 8 năm',
+  'Trên10 năm',
+ ];
 
 export const salaryData = () => [
   { label: 'Trên 6.000.000 VNĐ', value: '6000' },

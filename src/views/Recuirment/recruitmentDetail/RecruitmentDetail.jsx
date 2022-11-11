@@ -57,9 +57,8 @@ const RecruitmentDetail = () => {
       setIsLoading(true)
       const response = await getRecruimentRequestDetail(recruimentId);
       if (response) {
-        //console.log("data:", response.data.data);
-        setIsLoading(false)
         setRecruitment(response.data.data)
+        setIsLoading(false)
       }
     }
     fetchData();
