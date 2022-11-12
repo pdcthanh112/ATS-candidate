@@ -9,7 +9,6 @@ import * as Yup from 'yup'
 
 import { storage } from '../../../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { v4 as uuidv4 } from 'uuid';
 import { updateProfileCandidate } from '../../../../../apis/candidateApi';
 import { responseStatus } from '../../../../../utils/constants'
 import { Autocomplete, TextField } from '@mui/material';
@@ -36,18 +35,18 @@ const EditInformation = () => {
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
     }),
     onSubmit: async (values) => {
-      // if (fileImage !== null) {
-      //   const imageRef = ref(storage, `candidate-avatar/${fileImage.name + uuidv4()}`)
-      //   await uploadBytes(imageRef, fileImage).then((snapshot) => {
-      //     getDownloadURL(snapshot.ref).then(url => {
-      //       values.image = url
-      //     })
-      //   })
-      // }
-      console.log('RRRRRRR', values);
-      // updateProfileCandidate(currentUser.candidate.id, currentUser.token, values).then((response) => {
-      //   response.status === responseStatus.SUCCESS ? toast.success('Edit profile successfully') : toast.error('Edit profile fail')
-      // })
+      if (fileImage !== null) {
+        const imageRef = ref(storage, `candidate-avatar/${fileImage.name}`)
+        await uploadBytes(imageRef, fileImage).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then(url => {
+            values.image = url
+          })
+        })
+      }
+
+      updateProfileCandidate(currentUser.candidate.id, currentUser.token, values).then((response) => {
+        response.status === responseStatus.SUCCESS ? toast.success('Edit profile successfully') : toast.error('Edit profile fail')
+      })
     }
   })
 
@@ -100,18 +99,19 @@ const EditInformation = () => {
             </div>
             <div className='mt-4'>
               <Autocomplete
-                value={formik.gender}
+                name='gender'
                 options={genderData()}
                 size={'small'}
                 sx={{ width: 135, marginRight: 2 }}
                 renderInput={(params) => <TextField {...params} label="Giới tính" />}
-                onInputChange={formik.handleChange} />
+                onChange={(event, value) => { formik.setFieldValue('gender', value) }}
+              />
             </div>
           </div>
           <div className='my-3 mx-2'>
             <label className='text-lg'>Địa chỉ</label>
             <div className='field-input'>
-              <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} /><br />
+              <input type={'text'} className={`input-tag focus:outline-none ${formik.errors.address && formik.touched.address && 'input-error'}`} name='address' placeholder='Nhập địa chỉ của bạn' value={formik.values.address} onChange={formik.handleChange} />
             </div>
             {formik.errors.address && formik.touched.address && (
               <div className='text-[#ec5555]'>{formik.errors.address}</div>
