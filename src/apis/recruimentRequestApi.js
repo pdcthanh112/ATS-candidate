@@ -11,7 +11,7 @@ export const getAllRecruimentRequest = async (pageNo, pageSize) => {
 export const getRecruimentRequestDetail = async (id) => {
   return await axiosConfig
     .get(`recruitmentRequest/getById/{id}?id=${id}`)
-    .then((response) => response)
+    .then((response) => response.data)
     .catch((error) => error);
 };
 

@@ -26,6 +26,7 @@ const Login = () => {
     initialValues: {
       email: "",
       password: "",
+      notificationToken: '',
     },
     validationSchema: Yup.object({
       email: Yup.string().required('Please input email'),

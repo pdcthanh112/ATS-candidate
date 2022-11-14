@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import './Dashboard.scss'
-import { getAllRecruimentRequest, getCategory, searchRecruimentRequest } from '../../apis/recruimentRequestApi';
-import RecruitmentList from '../Recuirment/recruitmentList/RecruitmentList';
+
+import { Link } from 'react-router-dom';
+import { getAllRecruimentRequest, getCategory } from '../../apis/recruimentRequestApi';
+import RecruitmentList from '../Recuirment/RecruitmentList/RecruitmentList';
 import ReactLoading from 'react-loading'
-import { Pagination, Stack, TextField, Autocomplete, InputAdornment } from '@mui/material';
-import { typeOfWorkData, jobLevelData, experienceData, locationData } from '../../utils/dropdownData';
-import { useDispatch, useSelector } from 'react-redux';
+import { Pagination, Stack } from '@mui/material';
+
+import { useDispatch } from 'react-redux';
+import HomeImage from '../../assets/image/home.png'
+import RecruiterImage from '../../assets/icon/recruiter.png'
 
 const Dashboard = () => {
 
-  const dataCategory = useSelector((state) => state.categoryData.data);
-
-  useSelector((state) => state.auth.login.currentUser);
   const [listRecruitment, setListRecruitment] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [searchObject, setSearchObject] = useState({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' });
-  const [searchError, setSearchError] = useState(false)
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   const dispatch = useDispatch();
@@ -37,108 +36,25 @@ const Dashboard = () => {
     getCategory(dispatch)
   }, [])
 
-  const handleChangeSearchObject = (id, value) => {
-    setSearchObject(() => ({
-      ...searchObject,
-      [id]: value
-    }))
-  }
-
-  const onHandleSearch = () => {
-    setIsLoading(true)
-    searchRecruimentRequest(searchObject).then((response) => {
-      console.log('res', response);
-      if (response?.data.length > 0) {
-        setListRecruitment(response.data)
-        setSearchError(false)
-      } else {
-        setSearchError(true)
-        setPagination({ ...pagination, currentPage: 1 })
-      }
-      setSearchObject({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' })
-      setIsLoading(false)
-    }).catch(error => {
-      setSearchObject({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' })
-      setIsLoading(false)
-      setSearchError(true)
-    })
-  };
-
   return (
     <React.Fragment>
-      <div className="search-container">
-        <Autocomplete
-          options={typeOfWorkData()}
-          size={'small'}
-          sx={{ width: 225, height: 10, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Hình thức làm việc" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('typeOfWork', value) }} />
+      <div><img src={HomeImage} alt="" /></div>
+      <div className='recruitmentDashboard-container'>
+        <div className='flex justify-between px-5 py-3 bg-[#1DAF5A90]'>
+          <div className='flex'>
+            <img src={RecruiterImage} alt="" width={'30rem'} />
+            <span className='font-semibold text-xl font-sans ml-2'>Tin tuyển dụng, việc làm hot</span>
+          </div>
+          <div className='flex text-white hover:underline'><Link to='all-recruitment' target={'_blank'} className='font-semibold mr-2 hover:text-white'>Xem tất cả <i className="fa-solid fa-arrow-right"></i></Link> </div>
+        </div>
 
-        <Autocomplete
-          options={jobLevelData()}
-          size={'small'}
-          sx={{ width: 145, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Cấp bậc" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('jobLevel', value) }} />
+        {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
 
-        <Autocomplete
-          options={dataCategory.industry}
-          size={'small'}
-          sx={{ width: 180, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('industry', value) }} />
-
-        <Autocomplete
-          options={dataCategory.jobTitle}
-          size={'small'}
-          sx={{ width: 190, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Tên công việc" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }} />
-
-        <Autocomplete
-          options={experienceData()}
-          size={'small'}
-          sx={{ width: 180, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Kinh nghiệm" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('experience', value) }} />
-
-        <TextField
-          label="Từ"
-          size={'small'}
-          sx={{ width: 145, marginRight: 2 }}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">triệu</InputAdornment>,
-          }}
-          onChange={(event) => { handleChangeSearchObject('salaryFrom', event.target.value) }}
-        />
-
-        <TextField
-          label="Đến"
-          size={'small'}
-          sx={{ width: 145, marginRight: 2 }}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">triệu</InputAdornment>,
-          }}
-          onChange={(event) => { handleChangeSearchObject('salaryTo', event.target.value) }}
-        />
-
-        <Autocomplete
-          options={dataCategory.province}
-          size={'small'}
-          sx={{ width: 150, marginRight: 0 }}
-          renderInput={(params) => <TextField {...params} label="Địa điểm" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('city', value) }} />
-
-        <button onClick={() => { onHandleSearch() }} className='btn-search bg-[#50d71e]'><i className="fa-solid fa-magnifying-glass mr-1"></i>Search</button>
-      </div>
-
-      {searchError && <div className='search-error'>Không tìm thấy việc làm phù hợp với yêu cầu tìm kiếm của bạn</div>}
-      {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
-
-      <div className='pagination-container'>
-        <Stack spacing={2}>
-          <Pagination count={pagination.totalPage} onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
-        </Stack>
+        <div className='flex justify-center pb-3'>
+          <Stack spacing={2}>
+            <Pagination count={pagination.totalPage} variant="outlined" shape="rounded" onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
+          </Stack>
+        </div>
       </div>
     </React.Fragment>
   )

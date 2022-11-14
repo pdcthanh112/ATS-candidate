@@ -4,7 +4,7 @@ import './RecruitmentDetail.scss'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'
-import { TextField, Autocomplete, Box, Modal } from '@mui/material';
+import { TextField, Autocomplete, Box, Modal, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 import { getRecruimentRequestDetail } from '../../../apis/recruimentRequestApi';
 import { loginUser, regiserUser } from '../../../apis/authApi';
@@ -19,7 +19,11 @@ import { applyJob } from '../../../apis/jobApplyApi';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import UploadFile from '../../../assets/icon/upload-folder.png'
+import ViewCV from '../../../assets/icon/viewCV.png'
 import { responseStatus } from '../../../utils/constants';
+import { getCVByCandidateId } from '../../../apis/candidateApi';
 
 const RecruitmentDetail = () => {
 
@@ -45,7 +49,9 @@ const RecruitmentDetail = () => {
     positionName: "",
     linkCV: ""
   })
+  const [listCV, setListCV] = useState([])
   const [isCVNull, setIsCVNull] = useState(false)
+  const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   const loginError = useSelector((state) => state.auth.login.error);
 
@@ -57,20 +63,34 @@ const RecruitmentDetail = () => {
       setIsLoading(true)
       const response = await getRecruimentRequestDetail(recruimentId);
       if (response) {
-        setRecruitment(response.data.data)
+        setRecruitment(response.data)
         setIsLoading(false)
       }
     }
     fetchData();
   }, [])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getCVByCandidateId(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
+      if (response) {
+        console.log('CV', response.data);
+        setListCV(response.data.responseList)
+      }
+    }
+    fetchData();
+  }, [pagination.currentPage])
+
+
 
   const style = {
     position: 'absolute',
-    top: '18rem',
+    top: '20rem',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 600,
+    height: 600,
+    overflow: 'scroll',
     bgcolor: 'background.paper',
     border: '1px solid #0F6B14',
     boxShadow: 24,
@@ -87,43 +107,45 @@ const RecruitmentDetail = () => {
     boxShadow: 24,
   };
 
-  // const formikApply = useFormik({
-  //   initialValues: {
-  // candidateId: currentUser?.candidate?.id,
-  // recruitmentRequestId: recruimentId,
-  // cityName: "",
-  // educationLevel: "",
-  // foreignLanguage: "",
-  // positionName: "",
-  // linkCV: ""
-  //   },
-  //   validationSchema: Yup.object({
-  //     // position: Yup.string().required('Please input your position'),
-  //     // experience: Yup.string().required('Please input email'),
-  //     // location: Yup.string().required('Please input your phone number'),
-  //   }),
-  //   onSubmit: async (values) => {
-  //     // if (fileCV == null) {
-  //     //   formikApply.errors.linkCV = "Please submit your CV";
-  //     // } else {
-  //     //   const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuidv4()}`)
-  //     //   await uploadBytes(cvRef, fileCV).then((snapshot) => {
-  //     //     getDownloadURL(snapshot.ref).then(url => {
-  //     //       values.linkCV = url
-  //     //     })
-  //     //   })
-  //     // }
-  //     console.log('RRRRRR', values);
-  //     // regiserUser(values).then((response) => {
-  //     //   response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(responseStatus.FAILURE)
-  //     // })
-  //   }
-  // })
+  const formikApply = useFormik({
+    initialValues: {
+      candidateId: currentUser.candidate.id,
+      cityName: '',
+      educationLevel: '',
+      foreignLanguage: '',
+      linkCV: '',
+      positionName: '',
+      recruitmentRequestId: recruimentId
+    },
+    validationSchema: Yup.object({
+      cityName: Yup.string().required('Please input your city name'),
+      educationLevel: Yup.string().required('Please input your education level'),
+      foreignLanguage: '',
+      positionName: Yup.string().required('Please input your position'),
+    }),
+    onSubmit: async (values) => {
+      if (fileCV == null) {
+        formikApply.errors.linkCV = "Please submit your CV";
+      } else {
+        const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
+        await uploadBytes(cvRef, fileCV).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then(url => {
+            values.linkCV = url
+          })
+        })
+      }
+      //console.log('RRRRRR', values);
+      applyJob(currentUser.token, values).then((response) => {
+        response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
+      })
+    }
+  })
 
   const formikLogin = useFormik({
     initialValues: {
       email: "",
       password: "",
+      notificationToken: ""
     },
     validationSchema: Yup.object({
       email: Yup.string().required('Vui lòng nhập email'),
@@ -199,8 +221,14 @@ const RecruitmentDetail = () => {
     <React.Fragment>
       {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> :
         <div className='recruitment-detail-container'>
-          <div className='recruitment-detail__title'>{recruiment.position.name}</div>
-          <div className='recruitment-detail__summary grid grid-cols-3 gap-4'>
+          <div className='flex justify-between bg-[#FFF] px-60 py-3'>
+            <div>
+              <div className='font-bold text-xl text-[#0f6b14]'>{recruiment.position.name}</div>
+              <div><span>Ngày đăng tuyển: </span>{recruiment.date}</div>
+            </div>
+            <button className='bg-[#0f6b14] w-56 h-10 rounded text-[#FFF]' onClick={() => { currentUser ? setOpenModalApply(true) : setOpenModalLogin(true) }}>Ứng tuyển</button>
+          </div>
+          <div className='recruitment-detail__summary'>
             <div>
               <i className="fa-sharp fa-solid fa-file-lines"></i>
               <span><strong className='ml-1'>Type of work: </strong> {recruiment.typeOfWork}</span>
@@ -234,9 +262,19 @@ const RecruitmentDetail = () => {
               <span><strong className='ml-1'>Status: </strong> {recruiment.status}</span>
             </div>
           </div>
-          <div className='inline-flex mt-3'>
-            <div className='w-5/6'>{recruiment.description}</div>
-            <button className='recruitment-detail__apply-button' onClick={() => { currentUser ? setOpenModalApply(true) : setOpenModalLogin(true) }}>APPLY</button>
+          <div className='recruitment-detail__description'>
+            <div className=''>
+              <div className='font-semibold text-2xl'>Các phúc lợi dành cho bạn</div>
+              <div>{recruiment.benefit.split("\\n").map((item) => (<div>{item}</div>))}</div>
+            </div>
+            <div className=''>
+              <div className='font-semibold text-2xl'>Mô tả công việc</div>
+              <div>{recruiment.description.split("\\n").map((item) => (<div>{item}</div>))}</div>
+            </div>
+            <div className=''>
+              <div className='font-semibold text-2xl'>Yêu cầu công việc</div>
+              <div>{recruiment.requirement.split("\\n").map((item) => (<div>{item}</div>))}</div>
+            </div>
           </div>
         </div>
       }
@@ -244,54 +282,80 @@ const RecruitmentDetail = () => {
       <Modal open={openModalApply} onClose={() => setOpenModalApply(false)}>
         <Box sx={style}>
           <div className='modal-apply-container'>
-            <div className='modal-title'>Apply job</div>
-            {/* <form onSubmit={formikApply.handleSubmit}> */}
-            <div className='my-3'>
+
+            <form onSubmit={formikApply.handleSubmit}>
+
+              <div className='grid grid-cols-2 my-3'>
+                <Autocomplete
+                  options={educationLevelData()}
+                  size={'small'}
+                  sx={{ marginRight: 2 }}
+                  renderInput={(params) => <TextField {...params} label="Trình độ học vấn" />}
+                  onChange={(event, value) => { formikApply.setFieldValue('educationLevel', value) }} />
+
+                <Autocomplete
+                  options={foreignLanguageData()}
+                  size={'small'}
+                  sx={{ marginRight: 2 }}
+                  renderInput={(params) => <TextField {...params} label="Ngoại ngữ" />}
+                  onChange={(event, value) => { formikApply.setFieldValue('foreignLanguage', value) }} />
+              </div>
+
               <Autocomplete
                 options={categoryData.province}
                 size={'small'}
-                sx={{ width: 170, marginRight: 2 }}
-                renderInput={(params) => <TextField {...params} label="City" />}
-                onInputChange={(event, value) => { handleChangeApplyJobObject('cityName', value) }} />
-            </div>
-            <div className='my-3'>
-              <Autocomplete
-                options={educationLevelData()}
-                size={'small'}
-                sx={{ width: 170, marginRight: 2 }}
-                renderInput={(params) => <TextField {...params} label="Trình độ" />}
-                onInputChange={(event, value) => { handleChangeApplyJobObject('educationLevel', value) }} />
-            </div>
-            <div className='my-3'>
-              <Autocomplete
-                options={foreignLanguageData()}
-                size={'small'}
-                sx={{ width: 170, marginRight: 2 }}
-                renderInput={(params) => <TextField {...params} label="Ngoại ngữ" />}
-                onInputChange={(event, value) => { handleChangeApplyJobObject('foreignLanguage', value) }} />
-            </div>
+                sx={{ marginRight: 2 }}
+                renderInput={(params) => <TextField {...params} label="Thành phố" />}
+                onChange={(event, value) => { formikApply.setFieldValue('cityName', value) }} />
 
-            <div className='my-3'>
-              <Autocomplete
-                options={categoryData.jobTitle}
-                size={'small'}
-                sx={{ width: 170, marginRight: 2 }}
-                renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
-                onInputChange={(event, value) => { handleChangeApplyJobObject('positionName', value) }} />
-            </div>
 
-            <div className='my-3'>
-              <label className='text-lg'>Curriculum vitae</label><br />
+              <div className='my-3'>
+                <Autocomplete
+                  options={categoryData.jobTitle}
+                  size={'small'}
+                  sx={{ marginRight: 2 }}
+                  renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
+                  onChange={(event, value) => { formikApply.setFieldValue('positionName', value) }} />
+              </div>
+
+              <div className='my-3'>
+                <span>Hồ sơ ứng tuyển</span>
+                <div className='modal-apply__CV'>
+                  <input type="radio" class="tabs__radio" name="tabs-example" id="tab1" />
+                  <label for="tab1" class="tabs__label ml-10">Tải mới</label>
+                  <div class="tabs__content">
+                    <input type="file" name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} id="uploadFile" class="inputfile" />
+                    <label for="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '2rem 5rem', borderRadius: '3rem' }} /></label>
+                  </div>
+
+                  <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" />
+                  <label for="tab2" class="tabs__label">Có sẵn</label>
+                  <div class="tabs__content">
+                    <div>
+                    <RadioGroup onChange={formikApply.handleChange}>
+                      {listCV?.map((item) => (
+                        <div className='flex justify-between w-[100%]'>
+                          <FormControlLabel key={item.id} name={item.id} value={item.linkCV} control={<Radio />} label={item.title} />
+                          <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} /></a>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                    </div>
+                  </div>
+
+                  <i className="fa-solid fa-xmark edit-icon cancel-icon" onClick={() => setOpenModalApply(false)}></i>
+                </div>
+                {/* <label className='text-lg'>Curriculum vitae</label><br />
               <div className='field-input'>
                 <input type={'file'} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
               </div>
-              {isCVNull && <div className='bg-[#FFBDBD] text-[#FF3333] px-2 py-1 mt-3'>Vui lòng chọn CV của bạn</div>}
-            </div>
-            <div className='flex'>
-              <button type='submit' onClick={() => handleApplyJob()} className='btn-submit'>Submit</button>
-              {isLoadingApplyJob && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
-            </div>
-            {/* </form> */}
+              {isCVNull && <div className='bg-[#FFBDBD] text-[#FF3333] px-2 py-1 mt-3'>Vui lòng chọn CV của bạn</div>} */}
+              </div>
+              <div className='flex justify-center'>
+                <button type='submit' className='btn-submit'>Ứng tuyển</button>
+                {isLoadingApplyJob && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
+              </div>
+            </form>
           </div>
         </Box>
       </Modal>
