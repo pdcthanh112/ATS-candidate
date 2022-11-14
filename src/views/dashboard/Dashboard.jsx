@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './Dashboard.scss'
 
 import { Link } from 'react-router-dom';
-import { getAllRecruimentRequest, getCategory } from '../../apis/recruimentRequestApi';
+import { getAllOpenRecruimentRequest, getCategory } from '../../apis/recruimentRequestApi';
 import RecruitmentList from '../Recuirment/RecruitmentList/RecruitmentList';
 import ReactLoading from 'react-loading'
 import { Pagination, Stack } from '@mui/material';
@@ -22,7 +22,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const response = await getAllRecruimentRequest(pagination.currentPage - 1, 12);
+      const response = await getAllOpenRecruimentRequest(pagination.currentPage - 1, 12);
       if (response) {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListRecruitment(response.data.responseList)
@@ -45,7 +45,7 @@ const Dashboard = () => {
             <img src={RecruiterImage} alt="" width={'30rem'} />
             <span className='font-semibold text-xl font-sans ml-2'>Tin tuyển dụng, việc làm hot</span>
           </div>
-          <div className='flex text-white hover:underline'><Link to='all-recruitment' target={'_blank'} className='font-semibold mr-2 hover:text-white'>Xem tất cả <i className="fa-solid fa-arrow-right"></i></Link> </div>
+          <div className='flex text-white hover:underline'><Link to='/all-recruitment' target={'_blank'} className='font-semibold mr-2 hover:text-white'>Xem tất cả <i className="fa-solid fa-arrow-right"></i></Link> </div>
         </div>
 
         {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}

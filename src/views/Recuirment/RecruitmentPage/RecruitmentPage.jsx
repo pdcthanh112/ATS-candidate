@@ -1,10 +1,15 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
+import './RecruitmentPage.scss'
 
 import { Pagination, Stack, TextField, Autocomplete, InputAdornment } from '@mui/material';
 import { typeOfWorkData, jobLevelData, experienceData } from '../../../utils/dropdownData';
 import { useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'
 import RecruitmentList from '../RecruitmentList/RecruitmentList';
+import { getAllOpenRecruimentRequest } from '../../../apis/recruimentRequestApi';
+
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 const RecruitmentPage = () => {
 
@@ -15,14 +20,28 @@ const RecruitmentPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [searchObject, setSearchObject] = useState({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' });
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
-  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+      const response = await getAllOpenRecruimentRequest(pagination.currentPage - 1, 24);
+      if (response) {
+        setPagination({ ...pagination, totalPage: response.data.totalPage })
+        setListRecruitment(response.data.responseList)
+        setIsLoading(false)
+      }
+    }
+    fetchData();
+  }, [pagination.currentPage])
+
+
   const handleChangeSearchObject = (id, value) => {
     setSearchObject(() => ({
       ...searchObject,
       [id]: value
     }))
   }
-  
+
   const onHandleSearch = () => {
     // setIsLoading(true)
     // searchRecruimentRequest(searchObject).then((response) => {
@@ -43,15 +62,35 @@ const RecruitmentPage = () => {
     // })
   };
 
+  const formik = useFormik({
+    initialValues: {
+      city: '',
+      experience: '',
+      industry: '',
+      jobLevel: '',
+      jobName: '',
+      salaryFrom: '',
+      salaryTo: '',
+      typeOfWork: ''
+    },
+    onSubmit: async (values) => {
+      console.log('search', values);
+      // applyJob(currentUser.token, values).then((response) => {
+      //   response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
+      // })
+    }
+  })
+
+
 
   return (
     <React.Fragment>
 
-      {/* <div className="search-container">
+      <div className="search-container">
         <Autocomplete
           options={typeOfWorkData()}
           size={'small'}
-          sx={{ width: 225, height: 10, marginRight: 2 }}
+          sx={{ width: 235, height: 10, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Hình thức làm việc" />}
           onInputChange={(event, value) => { handleChangeSearchObject('typeOfWork', value) }} />
 
@@ -74,7 +113,8 @@ const RecruitmentPage = () => {
           size={'small'}
           sx={{ width: 190, marginRight: 2 }}
           renderInput={(params) => <TextField {...params} label="Tên công việc" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }} />
+          onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }} 
+          onChange={(event, value) => { formik.setFieldValue('jobName', value) }} />
 
         <Autocomplete
           options={experienceData()}
@@ -110,17 +150,18 @@ const RecruitmentPage = () => {
           renderInput={(params) => <TextField {...params} label="Địa điểm" />}
           onInputChange={(event, value) => { handleChangeSearchObject('city', value) }} />
 
-        <button onClick={() => { onHandleSearch() }} className='btn-search bg-[#50d71e]'><i className="fa-solid fa-magnifying-glass mr-1"></i>Search</button>
+        <button onClick={() => { onHandleSearch() }} className='flex px-3 py-2 rounded-lg bg-[#50d71e] ml-3'><i className="fa-solid fa-magnifying-glass mt-1 mr-1"></i>Search</button>
       </div>
 
-      {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
+      <div className='bg-[#FFF] w-[70%] mx-auto py-3 mt-3'>
+        {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
+      </div>
 
-      <div className='pagination-container'>
+      <div className='flex justify-center'>
         <Stack spacing={2}>
           <Pagination count={pagination.totalPage} onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
         </Stack>
-      </div> */}
-aaaaaaaaaaa
+      </div>
     </React.Fragment>
   )
 }

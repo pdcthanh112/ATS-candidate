@@ -57,8 +57,8 @@ const EditInformation = () => {
           <div className='flex my-3 mx-2 justify-between'>
             <div className='w-[30%]'>
               <label className='text-lg'>Email</label>
-              <div className='field-input bg-slate-300'>
-                <input type={'text'} className={'input-tag focus:outline-none bg-slate-300'} name='email' value={currentUser.email} disabled />
+              <div className='field-input bg-slate-200'>
+                <input type={'text'} className={'input-tag focus:outline-none bg-slate-200'} name='email' value={currentUser.email} disabled />
               </div>
               {formik.errors.email && formik.touched.email && (
                 <div className='text-[#ec5555]'>{formik.errors.email}</div>
