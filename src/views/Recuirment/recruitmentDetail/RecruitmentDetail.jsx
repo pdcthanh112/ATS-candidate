@@ -95,7 +95,7 @@ const RecruitmentDetail = () => {
     border: '1px solid #0F6B14',
     boxShadow: 24,
   };
-console.log(currentUser);
+
   const formikApply = useFormik({
     initialValues: {
       candidateId: currentUser?.candidate.id,

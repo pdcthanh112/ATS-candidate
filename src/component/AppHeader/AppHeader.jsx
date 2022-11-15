@@ -2,9 +2,11 @@ import React from 'react'
 import './AppHeader.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import {Avatar} from '@mui/material'
 import headerLogo from '../../assets/image/big-logo.png'
 import defaultUser from '../../assets/image/defaultUser.png'
 import { logoutUser } from '../../apis/authApi'
+import AppNavigation from '../AppNavigation/AppNavigation'
 
 const AppHeader = () => {
 
@@ -22,13 +24,16 @@ const AppHeader = () => {
       <div className='header-logo'>
         <a href="#/dashboard"><img src={headerLogo} alt='Logo' width={180} height={40} /></a>
       </div>
+      <div className='w-[65%] mt-2'>
+        <AppNavigation/>
+      </div>
       <div className='header-menu'>
         {currentUser ?
           <React.Fragment>
             <div className="dropdown">
               <a className="" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className='inline-flex rounded-3xl px-2' style={{ border: '1px solid #60d860' }}>
-                  <img src={currentUser.image || defaultUser} alt='' className='rounded-[50%] py-1.5' width={'30rem'} />
+                  <Avatar src={currentUser.image || defaultUser} alt='' className='my-auto' />
                   <div className='mx-2 py-2.5 font-medium text-lg' style={{ width: '13rem' }}>{currentUser.name}</div>
                   <i className="fa-solid fa-chevron-down m-1.5 py-2.5 text-xs"></i>
                 </div>
