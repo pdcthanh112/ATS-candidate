@@ -40,17 +40,8 @@ const RecruitmentDetail = () => {
   const [openModalLogin, setOpenModalLogin] = useState(false);
   const [fileCV, setFileCV] = useState(null)
   const [isShowPassword, setIsShowPassword] = useState(false)
-  const [applyJobObject, setApplyJobObject] = useState({
-    candidateId: currentUser?.candidate?.id,
-    recruitmentRequestId: recruimentId,
-    cityName: "",
-    educationLevel: "",
-    foreignLanguage: "",
-    positionName: "",
-    linkCV: ""
-  })
   const [listCV, setListCV] = useState([])
-  const [isCVNull, setIsCVNull] = useState(false)
+
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   const loginError = useSelector((state) => state.auth.login.error);
@@ -63,6 +54,7 @@ const RecruitmentDetail = () => {
       setIsLoading(true)
       const response = await getRecruimentRequestDetail(recruimentId);
       if (response) {
+        console.log(response.data);
         setRecruitment(response.data)
         setIsLoading(false)
       }
@@ -74,14 +66,11 @@ const RecruitmentDetail = () => {
     const fetchData = async () => {
       const response = await getCVByCandidateId(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
       if (response) {
-        console.log('CV', response.data);
         setListCV(response.data.responseList)
       }
     }
     fetchData();
   }, [pagination.currentPage])
-
-
 
   const style = {
     position: 'absolute',
@@ -89,7 +78,7 @@ const RecruitmentDetail = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 600,
-    height: 600,
+    maxHeight: 600,
     overflow: 'scroll',
     bgcolor: 'background.paper',
     border: '1px solid #0F6B14',
@@ -106,10 +95,10 @@ const RecruitmentDetail = () => {
     border: '1px solid #0F6B14',
     boxShadow: 24,
   };
-
+console.log(currentUser);
   const formikApply = useFormik({
     initialValues: {
-      candidateId: currentUser.candidate.id,
+      candidateId: currentUser?.candidate.id,
       cityName: '',
       educationLevel: '',
       foreignLanguage: '',
@@ -118,26 +107,29 @@ const RecruitmentDetail = () => {
       recruitmentRequestId: recruimentId
     },
     validationSchema: Yup.object({
-      cityName: Yup.string().required('Please input your city name'),
-      educationLevel: Yup.string().required('Please input your education level'),
-      foreignLanguage: '',
-      positionName: Yup.string().required('Please input your position'),
+      cityName: Yup.string().required('Vui lòng chọn tên thành phố'),
+      educationLevel: Yup.string().required('Vui lòng chọn trình độ học vấn'),
+      foreignLanguage: Yup.string().required('Vui lòng chọn ngoại ngữ của bạn'),
+      positionName: Yup.string().required('Vui lòng chọn vị trí ứng tuyển'),
     }),
     onSubmit: async (values) => {
-      if (fileCV == null) {
+      setIsLoadingApplyJob(true)
+      if (fileCV == null && formikApply.values.linkCV === '') {
         formikApply.errors.linkCV = "Please submit your CV";
       } else {
-        const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
-        await uploadBytes(cvRef, fileCV).then((snapshot) => {
-          getDownloadURL(snapshot.ref).then(url => {
-            values.linkCV = url
+        if (fileCV != null) {
+          const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
+          await uploadBytes(cvRef, fileCV).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then(url => {
+              values.linkCV = url
+            })
           })
+        }
+        applyJob(currentUser.token, values).then((response) => {
+          response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
         })
       }
-      //console.log('RRRRRR', values);
-      applyJob(currentUser.token, values).then((response) => {
-        response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
-      })
+      setIsLoadingApplyJob(false)
     }
   })
 
@@ -183,39 +175,6 @@ const RecruitmentDetail = () => {
       })
     }
   })
-
-  const handleChangeApplyJobObject = (id, value) => {
-    setApplyJobObject(() => ({
-      ...applyJobObject,
-      [id]: value
-    }))
-  }
-
-  const handleApplyJob = async () => {
-    if (fileCV == null) {
-      setIsCVNull(true)
-    } else {
-      const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
-      await uploadBytes(cvRef, fileCV).then((snapshot) => {
-        getDownloadURL(snapshot.ref)
-          .then(url => {
-            setApplyJobObject(() => ({ ...applyJobObject, linkCV: url }))
-            console.log('link1: ', url);
-            console.log('link2: ', applyJobObject.linkCV);
-          })
-          .then(() => {
-            console.log('2222222222222222');
-            console.log('cai obj', applyJobObject);
-            setIsLoadingApplyJob(true)
-            applyJob(currentUser.token, applyJobObject).then(response => {
-              console.log('UUUUUUUUUUUUUUUU', response);
-              setIsLoadingApplyJob(false)
-              response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
-            })
-          })
-      })
-    }
-  }
 
   return (
     <React.Fragment>
@@ -282,32 +241,40 @@ const RecruitmentDetail = () => {
       <Modal open={openModalApply} onClose={() => setOpenModalApply(false)}>
         <Box sx={style}>
           <div className='modal-apply-container'>
-
             <form onSubmit={formikApply.handleSubmit}>
-
               <div className='grid grid-cols-2 my-3'>
-                <Autocomplete
-                  options={educationLevelData()}
-                  size={'small'}
-                  sx={{ marginRight: 2 }}
-                  renderInput={(params) => <TextField {...params} label="Trình độ học vấn" />}
-                  onChange={(event, value) => { formikApply.setFieldValue('educationLevel', value) }} />
-
-                <Autocomplete
-                  options={foreignLanguageData()}
-                  size={'small'}
-                  sx={{ marginRight: 2 }}
-                  renderInput={(params) => <TextField {...params} label="Ngoại ngữ" />}
-                  onChange={(event, value) => { formikApply.setFieldValue('foreignLanguage', value) }} />
+                <div>
+                  <Autocomplete
+                    options={educationLevelData()}
+                    size={'small'}
+                    sx={{ marginRight: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Trình độ học vấn" />}
+                    onChange={(event, value) => { formikApply.setFieldValue('educationLevel', value) }} />
+                  {formikApply.errors.educationLevel && formikApply.touched.educationLevel && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.educationLevel}</div>
+                  )}
+                </div>
+                <div>
+                  <Autocomplete
+                    options={foreignLanguageData()}
+                    size={'small'}
+                    sx={{ marginRight: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Ngoại ngữ" />}
+                    onChange={(event, value) => { formikApply.setFieldValue('foreignLanguage', value) }} />
+                  {formikApply.errors.foreignLanguage && formikApply.touched.foreignLanguage && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.foreignLanguage}</div>
+                  )}
+                </div>
               </div>
-
               <Autocomplete
                 options={categoryData.province}
                 size={'small'}
                 sx={{ marginRight: 2 }}
                 renderInput={(params) => <TextField {...params} label="Thành phố" />}
                 onChange={(event, value) => { formikApply.setFieldValue('cityName', value) }} />
-
+              {formikApply.errors.cityName && formikApply.touched.cityName && (
+                <div className='text-[#ec5555]'>{formikApply.errors.cityName}</div>
+              )}
 
               <div className='my-3'>
                 <Autocomplete
@@ -316,6 +283,9 @@ const RecruitmentDetail = () => {
                   sx={{ marginRight: 2 }}
                   renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
                   onChange={(event, value) => { formikApply.setFieldValue('positionName', value) }} />
+                {formikApply.errors.positionName && formikApply.touched.positionName && (
+                  <div className='text-[#ec5555]'>{formikApply.errors.positionName}</div>
+                )}
               </div>
 
               <div className='my-3'>
@@ -325,24 +295,28 @@ const RecruitmentDetail = () => {
                   <label for="tab1" class="tabs__label ml-10">Tải mới</label>
                   <div class="tabs__content">
                     <input type="file" name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} id="uploadFile" class="inputfile" />
-                    <label for="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '2rem 5rem', borderRadius: '3rem' }} /></label>
+                    <label htmlFor="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '2rem 5rem', borderRadius: '3rem' }} /></label>
+
                   </div>
 
                   <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" />
                   <label for="tab2" class="tabs__label">Có sẵn</label>
                   <div class="tabs__content">
                     <div>
-                    <RadioGroup onChange={formikApply.handleChange}>
-                      {listCV?.map((item) => (
-                        <div className='flex justify-between w-[100%]'>
-                          <FormControlLabel key={item.id} name={item.id} value={item.linkCV} control={<Radio />} label={item.title} />
-                          <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} /></a>
-                        </div>
-                      ))}
-                    </RadioGroup>
+                      <RadioGroup onChange={(event) => formikApply.setFieldValue('linkCV', event.target.value)}>
+                        {/* <RadioGroup onChange={formikApply.handleChange}> */}
+                        {listCV?.map((item) => (
+                          <div className='flex justify-between w-[100%]'>
+                            <FormControlLabel key={item.id} name={item.id} value={item.linkCV} control={<Radio />} label={item.title} />
+                            <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} /></a>
+                          </div>
+                        ))}
+                      </RadioGroup>
                     </div>
                   </div>
-
+                  {formikApply.errors.linkCV && formikApply.touched.linkCV && (
+                    <div className='text-[#ec5555]'>{formikApply.errors.linkCV}</div>
+                  )}
                   <i className="fa-solid fa-xmark edit-icon cancel-icon" onClick={() => setOpenModalApply(false)}></i>
                 </div>
                 {/* <label className='text-lg'>Curriculum vitae</label><br />
@@ -486,7 +460,6 @@ const RecruitmentDetail = () => {
         pauseOnHover
         theme="light"
       />
-      <ToastContainer />
     </React.Fragment>
   )
 }

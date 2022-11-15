@@ -24,7 +24,7 @@ const RecruitmentPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const response = await getAllOpenRecruimentRequest(pagination.currentPage - 1, 24);
+      const response = await getAllOpenRecruimentRequest(pagination.currentPage - 1, 18);
       if (response) {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListRecruitment(response.data.responseList)
