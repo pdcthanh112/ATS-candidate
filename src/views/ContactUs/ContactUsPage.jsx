@@ -16,8 +16,8 @@ import youtubeLogo from "../../assets/image/youtube-logo.png"
 
 const ContactUsPage = () => {
 
-  //const {isLoaded} = useLoadScript({googleMapsApiKey: process.env.REACT_APP_API_URL})
-  const { isLoaded } = useLoadScript({ googleMapsApiKey: 'AIzaSyARSg5UKCm1D242xUn8QCX5LpjsIoCm28o' })
+  const {isLoaded} = useLoadScript({googleMapsApiKey: process.env.REACT_APP_GOOGLEMAP_API})
+  //const { isLoaded } = useLoadScript({ googleMapsApiKey: 'AIzaSyARSg5UKCm1D242xUn8QCX5LpjsIoCm28o' })
 
   if (!isLoaded) return <div>Loading...</div>
 

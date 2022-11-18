@@ -1,4 +1,5 @@
 import axiosConfig from "../configs/axiosConfig";
+import { editFailed, editStart, editSuccess } from "../redux/authSlice";
 
 export const getCandidateById = async (id, token) => {
   return await axiosConfig
@@ -9,7 +10,7 @@ export const getCandidateById = async (id, token) => {
     .catch((error) => error);
 };
 
-export const updateProfileCandidate = async (id, token, data) => {
+export const updateProfileCandidate = async (id, token, data, dispatch) => {
   return await axiosConfig
     .put(
       `candidate/update/{id}?id=${id}`,
@@ -26,7 +27,7 @@ export const updateProfileCandidate = async (id, token, data) => {
       }
     )
     .then((response) => response.data)
-    .catch((error) => error);
+    .catch((error) => dispatch(editFailed()));
 };
 
 export const getCVByCandidateId = async (token, id, pageNo, pageSize) => {
@@ -62,11 +63,9 @@ export const uploadCV = async (token, candidateId, linkCV, title) => {
 
 export const deleteCV = async (token, id) => {
   return await axiosConfig
-    .delete(`cv/delete/{id}?id=${id}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    .delete(`cv/delete/{id}?id=${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
     .then((response) => response.data)
     .catch((error) => error);
 };

@@ -88,6 +88,21 @@ const RecruitmentPage = () => {
 
       <div className="search-container">
         <Autocomplete
+          options={dataCategory.industry}
+          size={'small'}
+          sx={{ width: 180, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
+          onInputChange={(event, value) => { handleChangeSearchObject('industry', value) }} />
+
+        <Autocomplete
+          options={dataCategory.jobTitle}
+          size={'small'}
+          sx={{ width: 190, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Tên công việc" />}
+          onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }}
+          onChange={(event, value) => { formik.setFieldValue('jobName', value) }} />
+
+        <Autocomplete
           options={typeOfWorkData()}
           size={'small'}
           sx={{ width: 235, height: 10, marginRight: 2 }}
@@ -102,19 +117,11 @@ const RecruitmentPage = () => {
           onInputChange={(event, value) => { handleChangeSearchObject('jobLevel', value) }} />
 
         <Autocomplete
-          options={dataCategory.industry}
+          options={dataCategory.province}
           size={'small'}
-          sx={{ width: 180, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('industry', value) }} />
-
-        <Autocomplete
-          options={dataCategory.jobTitle}
-          size={'small'}
-          sx={{ width: 190, marginRight: 2 }}
-          renderInput={(params) => <TextField {...params} label="Tên công việc" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('jobName', value) }} 
-          onChange={(event, value) => { formik.setFieldValue('jobName', value) }} />
+          sx={{ width: 150, marginRight: 2 }}
+          renderInput={(params) => <TextField {...params} label="Địa điểm" />}
+          onInputChange={(event, value) => { handleChangeSearchObject('city', value) }} />
 
         <Autocomplete
           options={experienceData()}
@@ -142,13 +149,6 @@ const RecruitmentPage = () => {
           }}
           onChange={(event) => { handleChangeSearchObject('salaryTo', event.target.value) }}
         />
-
-        <Autocomplete
-          options={dataCategory.province}
-          size={'small'}
-          sx={{ width: 150, marginRight: 0 }}
-          renderInput={(params) => <TextField {...params} label="Địa điểm" />}
-          onInputChange={(event, value) => { handleChangeSearchObject('city', value) }} />
 
         <button onClick={() => { onHandleSearch() }} className='flex px-3 py-2 rounded-lg bg-[#50d71e] ml-3'><i className="fa-solid fa-magnifying-glass mt-1 mr-1"></i>Search</button>
       </div>

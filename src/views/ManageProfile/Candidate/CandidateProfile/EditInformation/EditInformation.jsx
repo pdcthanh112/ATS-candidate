@@ -1,23 +1,28 @@
 import React, { useState } from 'react'
 import './EditInformation.scss'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom'
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import defaultImage from "../../../../../assets/image/defaultUser.png"
 import { storage } from '../../../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { updateProfileCandidate } from '../../../../../apis/candidateApi';
-import { responseStatus } from '../../../../../utils/constants'
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, TextField, Avatar } from '@mui/material';
 import { genderData } from '../../../../../utils/dropdownData';
+import { editSuccess } from '../../../../../redux/authSlice';
 
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser);
   const [fileImage, setFileImage] = useState(null)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -44,8 +49,13 @@ const EditInformation = () => {
         })
       }
 
-      updateProfileCandidate(currentUser.candidate.id, currentUser.token, values).then((response) => {
-        response.status === responseStatus.SUCCESS ? toast.success('Edit profile successfully') : toast.error('Edit profile fail')
+      updateProfileCandidate(currentUser.candidate.id, currentUser.token, values, dispatch, navigate).then((response) => { 
+        if(response.data) {
+          toast.success('Edit profile successfully')
+          dispatch(editSuccess(response.data))       
+        } else {
+          toast.error('Edit profile fail')
+        }       
       })
     }
   })
@@ -74,7 +84,7 @@ const EditInformation = () => {
               )}
             </div>
             <div className=''>
-              <img src={currentUser.candidate.image} alt="avatar" width={'150rem'} style={{ maxHeight: '8rem', maxWidth: '8rem', borderRadius: '50%', margin: '0 auto 0.5rem auto' }} />
+              <Avatar src={currentUser.candidate.image  || defaultImage} alt="avatar" sx={{ width: '10rem', height: '10rem', margin: '0 auto' }} />
               <input type={'file'} className='text-sm mx-auto' name='image' onChange={(e) => { setFileImage(e.target.files[0]) }} />
             </div>
           </div>
@@ -131,8 +141,7 @@ const EditInformation = () => {
         draggable
         pauseOnHover
         theme="light"
-      />
-      <ToastContainer />
+      />    
     </React.Fragment>
   )
 }
