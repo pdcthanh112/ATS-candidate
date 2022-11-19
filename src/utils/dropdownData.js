@@ -27,7 +27,7 @@ export const salaryData = () => [
 
 export const educationLevelData = () => ['Tốt nghiệp THPT', 'Trung cấp', 'Cao đẳng', 'Đại học'];
 
-export const foreignLanguageData = () => ['Tiếng Anh','Tiếng Nhật'];
+export const foreignLanguageData = () => ['Tiếng Anh', 'Tiếng Nhật', 'Tiếng Trung'];
 
 export const genderData = () => ['Nam', 'Nữ', 'Khác'];
 

@@ -10,6 +10,7 @@ import { Pagination, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import HomeImage from '../../assets/image/home.png'
 import RecruiterImage from '../../assets/icon/recruiter.png'
+import QuyTrinhUngTuyen from '../../assets/image/quy-trinh-ung-tuyen.png'
 
 const Dashboard = () => {
 
@@ -55,6 +56,11 @@ const Dashboard = () => {
             <Pagination count={pagination.totalPage} variant="outlined" shape="rounded" onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
           </Stack>
         </div>
+      </div>
+
+      <div className='bg-[#fff]'>
+        <div className='flex justify-center text-[#1DAF5A] font-semibold text-3xl pt-5'>Quy trình ứng tuyển</div>
+        <img src={QuyTrinhUngTuyen} alt="" className='mx-auto'/>
       </div>
     </React.Fragment>
   )

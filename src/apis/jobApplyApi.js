@@ -8,6 +8,7 @@ export const getAppliedJobByCandidateId = async (token, id, pageNo, pageSize) =>
 };
 
 export const applyJob = async (token, data) => {
+  console.log(data);
   return await axiosConfig
     .post("jobApply/create", {
       candidateId: data.candidateId,

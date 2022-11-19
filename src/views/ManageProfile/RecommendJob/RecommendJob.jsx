@@ -27,8 +27,8 @@ const RecommendJob = () => {
           <div className='font-semibold text-lg font-mono'>{item.position.name}</div>
           <div className='font-sans'>{item.industry}</div>
           <div className='flex justify-between'>
-            <span className='flex text-base'><img src={TypeOfWorkIcon} alt='' width={22} style={{marginRight: 5}}/>{item.typeOfWork}</span>
-            <span className='flex'><img src={SalaryIcon} alt='' width={22} style={{marginRight: 5}}/>{item.salaryDetail}</span>
+            <div className='flex text-sm w-[40%]'><img src={TypeOfWorkIcon} alt='' width={22} style={{marginRight: 5}}/>{item.typeOfWork}</div>
+            <div className='flex text-sm w-[60%]'><img src={SalaryIcon} alt='' width={22} style={{marginRight: 5}}/>{item.salaryDetail}</div>
           </div>
         </div>
         </Link>
