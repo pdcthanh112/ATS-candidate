@@ -9,11 +9,9 @@ import RecruitmentList from '../RecruitmentList/RecruitmentList';
 import { getAllOpenRecruimentRequest } from '../../../apis/recruimentRequestApi';
 
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 
 const RecruitmentPage = () => {
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser);
   const dataCategory = useSelector((state) => state.categoryData.data);
 
   const [listRecruitment, setListRecruitment] = useState([])
