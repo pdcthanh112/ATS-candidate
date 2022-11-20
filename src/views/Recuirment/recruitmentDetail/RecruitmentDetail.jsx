@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'
 import { TextField, Autocomplete, Box, Modal, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
-import { getRecruimentRequestDetail } from '../../../apis/recruimentRequestApi';
+import { getRecruimentRequestById } from '../../../apis/recruimentRequestApi';
 import { loginUser, regiserUser } from '../../../apis/authApi';
 import { educationLevelData, foreignLanguageData } from '../../../utils/dropdownData'
 
@@ -52,9 +52,8 @@ const RecruitmentDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const response = await getRecruimentRequestDetail(recruimentId);
+      const response = await getRecruimentRequestById(recruimentId);
       if (response) {
-        console.log(response.data);
         setRecruitment(response.data)
         setIsLoading(false)
       }
@@ -101,7 +100,7 @@ const RecruitmentDetail = () => {
       candidateId: currentUser?.candidate.id,
       cityName: '',
       educationLevel: '',
-      foreignLanguage: '',
+      foreignLanguage: [],
       linkCV: '',
       positionName: '',
       recruitmentRequestId: recruimentId
@@ -109,10 +108,11 @@ const RecruitmentDetail = () => {
     validationSchema: Yup.object({
       cityName: Yup.string().required('Vui lòng chọn tên thành phố'),
       educationLevel: Yup.string().required('Vui lòng chọn trình độ học vấn'),
-      foreignLanguage: Yup.string().required('Vui lòng chọn ngoại ngữ của bạn'),
+      foreignLanguage: Yup.array().min(1, 'Vui lòng chọn ít nhất 1 ngoại ngữ của bạn'),
       positionName: Yup.string().required('Vui lòng chọn vị trí ứng tuyển'),
     }),
     onSubmit: async (values) => {
+      formikApply.values.foreignLanguage = formikApply.values.foreignLanguage.toString(); 
       setIsLoadingApplyJob(true)
       if (fileCV == null && formikApply.values.linkCV === '') {
         formikApply.errors.linkCV = "Please submit your CV";
@@ -125,7 +125,7 @@ const RecruitmentDetail = () => {
             })
           })
         }
-        applyJob(currentUser.token, values).then((response) => {
+        await applyJob(currentUser.token, values).then((response) => {
           response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
         })
       }
@@ -185,6 +185,7 @@ const RecruitmentDetail = () => {
               <div className='font-bold text-xl text-[#0f6b14]'>{recruiment.position.name}</div>
               <div><span>Ngày đăng tuyển: </span>{recruiment.date}</div>
             </div>
+            <div className='font-semibold text-xl max-w-[30rem]'>{recruiment.name}</div>
             <button className='bg-[#0f6b14] w-56 h-10 rounded text-[#FFF]' onClick={() => { currentUser ? setOpenModalApply(true) : setOpenModalLogin(true) }}>Ứng tuyển</button>
           </div>
           <div className='recruitment-detail__summary'>
@@ -222,17 +223,17 @@ const RecruitmentDetail = () => {
             </div>
           </div>
           <div className='recruitment-detail__description'>
-            <div className=''>
+            <div className='mt-5'>
               <div className='font-semibold text-2xl'>Các phúc lợi dành cho bạn</div>
-              <div>{recruiment.benefit.split("\\n").map((item) => (<div>{item}</div>))}</div>
+              <div>{recruiment.benefit.split("\n").map((item) => (<div>{item}</div>))}</div>
             </div>
-            <div className=''>
+            <div className='mt-5'>
               <div className='font-semibold text-2xl'>Mô tả công việc</div>
-              <div>{recruiment.description.split("\\n").map((item) => (<div>{item}</div>))}</div>
+              <div>{recruiment.description.split("\n").map((item) => (<div>{item}</div>))}</div>
             </div>
-            <div className=''>
+            <div className='mt-5'>
               <div className='font-semibold text-2xl'>Yêu cầu công việc</div>
-              <div>{recruiment.requirement.split("\\n").map((item) => (<div>{item}</div>))}</div>
+              <div>{recruiment.requirement.split("\n").map((item) => (<div>{item}</div>))}</div>
             </div>
           </div>
         </div>
@@ -242,23 +243,24 @@ const RecruitmentDetail = () => {
         <Box sx={style}>
           <div className='modal-apply-container'>
             <form onSubmit={formikApply.handleSubmit}>
-              <div className='grid grid-cols-2 my-3'>
-                <div>
+              <div className='flex w-full mb-3'>
+                <div className='w-[35%] mr-2'>
                   <Autocomplete
                     options={educationLevelData()}
                     size={'small'}
-                    sx={{ marginRight: 2 }}
+                    sx={{ marginRight: 2, width: '100%' }}
                     renderInput={(params) => <TextField {...params} label="Trình độ học vấn" />}
                     onChange={(event, value) => { formikApply.setFieldValue('educationLevel', value) }} />
                   {formikApply.errors.educationLevel && formikApply.touched.educationLevel && (
                     <div className='text-[#ec5555]'>{formikApply.errors.educationLevel}</div>
                   )}
                 </div>
-                <div>
+                <div className='w-[60%]'>
                   <Autocomplete
+                    multiple
                     options={foreignLanguageData()}
                     size={'small'}
-                    sx={{ marginRight: 2 }}
+                    sx={{ marginRight: 2, width: '100%' }}
                     renderInput={(params) => <TextField {...params} label="Ngoại ngữ" />}
                     onChange={(event, value) => { formikApply.setFieldValue('foreignLanguage', value) }} />
                   {formikApply.errors.foreignLanguage && formikApply.touched.foreignLanguage && (
