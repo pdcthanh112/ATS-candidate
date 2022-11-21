@@ -97,7 +97,7 @@ const RecruitmentDetail = () => {
 
   const formikApply = useFormik({
     initialValues: {
-      candidateId: currentUser?.candidate.id,
+      candidateId: currentUser?.candidate?.id,
       cityName: '',
       educationLevel: '',
       foreignLanguage: [],
@@ -169,7 +169,6 @@ const RecruitmentDetail = () => {
       phone: Yup.string().required('Vui lòng điền số điện thoại').matches(/^[0-9\-\\+]{10}$/, 'Số điện thoại không hợp lệ')
     }),
     onSubmit: (values) => {
-      console.log(values);
       regiserUser(values).then((response) => {
         //response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(response.message)
       })
@@ -186,7 +185,7 @@ const RecruitmentDetail = () => {
               <div><span>Ngày đăng tuyển: </span>{recruiment.date}</div>
             </div>
             <div className='font-semibold text-xl max-w-[30rem]'>{recruiment.name}</div>
-            <button className='bg-[#0f6b14] w-56 h-10 rounded text-[#FFF]' onClick={() => { currentUser ? setOpenModalApply(true) : setOpenModalLogin(true) }}>Ứng tuyển</button>
+            <button className='bg-[#0f6b14] w-56 h-10 rounded text-[#FFF]' onClick={() => { currentUser && currentUser.candidate ? setOpenModalApply(true) : setOpenModalLogin(true) }}>Ứng tuyển</button>
           </div>
           <div className='recruitment-detail__summary'>
             <div>
