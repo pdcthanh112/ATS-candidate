@@ -23,9 +23,9 @@ const ChangePassword = () => {
       confirm: "",
     },
     validationSchema: Yup.object({
-      oldPassword: Yup.string().required('Please input your current password').min(8, "Password must be 8 -20 characters").max(20, "Password must be 8 -20 characters"),
-      newPassword: Yup.string().required('Please input new password').min(8, "Password must be 8 -20 characters").max(20, "Password must be 8 -20 characters"),
-      confirm: Yup.string().required('Please input confirm password').oneOf([Yup.ref("newPassword"), null], 'Not match'),
+      oldPassword: Yup.string().required('Vui lòng nhập mật khẩu hiện tại').min(8, "Mật khẩu phải có ít nhất 8 ký tự").max(20, "Mật khẩu không được vượt quá 20 ký tự"),
+      newPassword: Yup.string().required('Vui lòng nhập mật khẩu mới').min(8, "Mật khẩu phải có ít nhất 8 ký tự").max(20, "Mật khẩu không được vượt quá 20 ký tự"),
+      confirm: Yup.string().required('Vui lòng xác nhận mật khẩu').oneOf([Yup.ref("newPassword"), null], 'Mật khẩu xác nhận không trùng khớp'),
     }),
     onSubmit: async (values) => {
       await changePassword(currentUser.email, values.newPassword, values.oldPassword).then((response) => {
@@ -48,7 +48,7 @@ const ChangePassword = () => {
               </div>
             </div>
             <div className='my-3'>
-              <label className='text-lg'>Current password</label><br />
+              <label className='text-lg'>Mật khẩu hiện tại</label><br />
               <div className='field-input'>
                 <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
                 <input type={isShowPassword ? 'text' : 'password'} className={`input-tag focus:outline-none ${formik.errors.oldPassword && formik.touched.oldPassword && 'input-error'}`} name='oldPassword' placeholder='Nhập mật khẩu hiện tại' value={formik.values.oldPassword} onChange={formik.handleChange} />
@@ -61,7 +61,7 @@ const ChangePassword = () => {
               )}
             </div>
             <div className='my-3'>
-              <label className='text-lg'>New password</label><br />
+              <label className='text-lg'>Mật khẩu mới</label><br />
               <div className='field-input'>
                 <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
                 <input type={isShowPassword ? 'text' : 'password'} className={`input-tag focus:outline-none ${formik.errors.newPassword && formik.touched.newPassword && 'input-error'}`} name='newPassword' placeholder='Nhập mật khẩu mới' value={formik.values.newPassword} onChange={formik.handleChange} />
@@ -74,7 +74,7 @@ const ChangePassword = () => {
               )}
             </div>
             <div className='my-3'>
-              <label className='text-lg'>Confirm</label><br />
+              <label className='text-lg'>Xác nhận mật khẩu</label><br />
               <div className='field-input'>
                 <i className="fa-solid fa-lock mx-2 my-auto" style={{ color: "#116835", fontSize: '22px' }}></i>
                 <input type={isShowPassword ? 'text' : 'password'} className={`input-tag focus:outline-none ${formik.errors.confirm && formik.touched.confirm && 'input-error'}`} name='confirm' placeholder='Nhập lại mật khẩu' value={formik.values.confirm} onChange={formik.handleChange} />
