@@ -55,6 +55,7 @@ const RecruitmentDetail = () => {
       const response = await getRecruimentRequestById(recruimentId);
       if (response) {
         setRecruitment(response.data)
+console.log(response.data);
         setIsLoading(false)
       }
     }
@@ -190,15 +191,15 @@ const RecruitmentDetail = () => {
           <div className='recruitment-detail__summary'>
             <div>
               <i className="fa-sharp fa-solid fa-file-lines"></i>
-              <span><strong className='ml-1'>Type of work: </strong> {recruiment.typeOfWork}</span>
+              <span><strong className='ml-1'>Hình thức làm việc: </strong> {recruiment.typeOfWork}</span>
             </div>
             <div>
               <i className="fa-sharp fa-solid fa-file-lines"></i>
-              <span><strong className='ml-1'>Job level: </strong> {recruiment.jobLevel}</span>
+              <span><strong className='ml-1'>Cấp bậc: </strong> {recruiment.jobLevel}</span>
             </div>
             <div>
               <i className="fa-solid fa-calendar-days"></i>
-              <span><strong className='ml-1'>Create date: </strong> {recruiment.date}</span>
+              <span><strong className='ml-1'>Ngày tạo: </strong> {recruiment.date}</span>
             </div>
             <div>
               <i className="fa-solid fa-building"></i>
@@ -206,19 +207,23 @@ const RecruitmentDetail = () => {
             </div>
             <div>
               <i className="fa-solid fa-money-bill-wave"></i>
-              <span><strong className='ml-1'>Salary: </strong> {recruiment.salaryDetail}</span>
+              <span><strong className='ml-1'>Mức lương: </strong> {recruiment.salaryDetail}</span>
             </div>
             <div>
               <i className="fa-solid fa-calendar-days"></i>
-              <span><strong className='ml-1'>Expired date: </strong> {recruiment.expiryDate}</span>
+              <span><strong className='ml-1'>Ngày hết hạn: </strong> {recruiment.expiryDate}</span>
             </div>
             <div>
               <i className="fa-sharp fa-solid fa-school"></i>
-              <span><strong className='ml-1'>Experience: </strong> {recruiment.experience}</span>
+              <span><strong className='ml-1'>Kinh nghiệm: </strong> {recruiment.experience}</span>
             </div>
             <div>
-              <i className="fa-solid fa-calendar-days"></i>
-              <span><strong className='ml-1'>Status: </strong> {recruiment.status}</span>
+            <i className="fa-solid fa-earth-americas"></i>
+              <span><strong className='ml-1'>Ngoại ngữ: </strong> {recruiment.foreignLanguage}</span>
+            </div>
+            <div>
+              <i className="fa-solid fa-chalkboard-user"></i>
+              <span><strong className='ml-1'>Trạng thái: </strong> {recruiment.status}</span>
             </div>
           </div>
           <div className='recruitment-detail__description'>
