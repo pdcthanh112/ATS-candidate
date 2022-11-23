@@ -24,3 +24,11 @@ export const applyJob = async (token, data) => {
     .then((response) => response.data)
     .catch((error) => error);
 };
+
+
+export const checkApplyByCandidateAndRequest = async (token, candidateId, requestId) => {
+  return await axiosConfig.get(`jobApply/checkApplyByCandidateAndRequest?candidateId=${candidateId}&requestId=${requestId}`, 
+    {headers: { Authorization: `Bearer ${token}` }})
+    .then((response) => response)
+    .catch((error) => error);
+};
