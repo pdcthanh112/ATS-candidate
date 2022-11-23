@@ -8,7 +8,7 @@ import { TextField, Autocomplete, Box, Modal, RadioGroup, FormControlLabel, Radi
 
 import { getRecruimentRequestById } from '../../../apis/recruimentRequestApi';
 import { loginUser, regiserUser } from '../../../apis/authApi';
-import { educationLevelData, foreignLanguageData } from '../../../utils/dropdownData'
+import { educationLevelData, experienceData, foreignLanguageData } from '../../../utils/dropdownData'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -103,7 +103,7 @@ console.log(response.data);
       educationLevel: '',
       foreignLanguage: [],
       linkCV: '',
-      positionName: '',
+      experience: '',
       recruitmentRequestId: recruimentId
     },
     validationSchema: Yup.object({
@@ -284,13 +284,13 @@ console.log(response.data);
 
               <div className='my-3'>
                 <Autocomplete
-                  options={categoryData.jobTitle}
+                  options={experienceData()}
                   size={'small'}
                   sx={{ marginRight: 2 }}
-                  renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
+                  renderInput={(params) => <TextField {...params} label="Kinh nghiệm" />}
                   onChange={(event, value) => { formikApply.setFieldValue('positionName', value) }} />
-                {formikApply.errors.positionName && formikApply.touched.positionName && (
-                  <div className='text-[#ec5555]'>{formikApply.errors.positionName}</div>
+                {formikApply.errors.experience && formikApply.touched.experience && (
+                  <div className='text-[#ec5555]'>{formikApply.errors.experience}</div>
                 )}
               </div>
 

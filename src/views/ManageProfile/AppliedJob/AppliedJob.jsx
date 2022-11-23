@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux';
-import { getAppliedJobByCandidateId } from '../../../apis/jobApplyApi';
 import './AppliedJob.scss'
-import { Pagination, Stack } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { getAppliedJobByCandidateId } from '../../../apis/jobApplyApi';
+import { Pagination, Stack } from '@mui/material';
 import ReactLoading from 'react-loading'
 
 const AppliedJob = () => {
@@ -39,12 +39,12 @@ const AppliedJob = () => {
   }
 
   return (
-    <div className='appliedJob-container'>
+    <div className='px-4'>
       <div className="bg-white h-12 font-bold text-2xl mb-3 rounded-md pt-2 px-4">Việc làm đã ứng tuyển</div>
       <div className='appliedJob-content'>
         {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <React.Fragment>
           {listAppliedJob.map((item, id) => (
-            <Link to={`/recruitment-detail/${item.recruitmentRequest.id}`} target={'_blank'}  key={id}>
+            <Link to={`/recruitment-detail/${item.recruitmentRequest.id}`} target={'_blank'} key={id}>
               <div className='appliedJob-content_item'>
                 <div className='flex justify-between'>
                   <span className='font-semibold text-xl text-[#20D489]'>{item.recruitmentRequest.position.name}</span>
@@ -66,7 +66,6 @@ const AppliedJob = () => {
         </div>
       </div>
     </div>
-
   )
 }
 
