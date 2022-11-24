@@ -15,7 +15,7 @@ import * as Yup from 'yup'
 
 import { storage } from '../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { applyJob } from '../../../apis/jobApplyApi';
+import { applyJob, checkApplyByCandidateAndRequest } from '../../../apis/jobApplyApi';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,6 +24,7 @@ import UploadFile from '../../../assets/icon/upload-folder.png'
 import ViewCV from '../../../assets/icon/viewCV.png'
 import { responseStatus } from '../../../utils/constants';
 import { getCVByCandidateId } from '../../../apis/candidateApi';
+import { confirm } from "mui-confirm-modal";
 
 const RecruitmentDetail = () => {
 
@@ -55,7 +56,7 @@ const RecruitmentDetail = () => {
       const response = await getRecruimentRequestById(recruimentId);
       if (response) {
         setRecruitment(response.data)
-console.log(response.data);
+        console.log(response.data);
         setIsLoading(false)
       }
     }
@@ -113,7 +114,7 @@ console.log(response.data);
       positionName: Yup.string().required('Vui lòng chọn vị trí ứng tuyển'),
     }),
     onSubmit: async (values) => {
-      formikApply.values.foreignLanguage = formikApply.values.foreignLanguage.toString(); 
+      formikApply.values.foreignLanguage = formikApply.values.foreignLanguage.toString();
       setIsLoadingApplyJob(true)
       if (fileCV == null && formikApply.values.linkCV === '') {
         formikApply.errors.linkCV = "Please submit your CV";
@@ -176,6 +177,21 @@ console.log(response.data);
     }
   })
 
+  const handleCheckApplied = async () => {
+    await checkApplyByCandidateAndRequest(currentUser.token, currentUser.candidate.id, recruimentId).then((response) => {
+      console.log(response);
+      if (response.data) {
+        confirm({ message: "Are you already apply this job \n Are you sure to apply again" }).then((response) => {
+          if (response) {
+            setOpenModalApply(true)
+          }
+        })
+      } else {
+        setOpenModalApply(true)
+      }
+    })
+  }
+
   return (
     <React.Fragment>
       {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> :
@@ -186,7 +202,7 @@ console.log(response.data);
               <div><span>Ngày đăng tuyển: </span>{recruiment.date}</div>
             </div>
             <div className='font-semibold text-xl max-w-[30rem]'>{recruiment.name}</div>
-            <button className='bg-[#0f6b14] w-56 h-10 rounded text-[#FFF]' onClick={() => { currentUser && currentUser.candidate ? setOpenModalApply(true) : setOpenModalLogin(true) }}>Ứng tuyển</button>
+            <button className='bg-[#0f6b14] w-56 h-10 rounded text-[#FFF]' onClick={() => { currentUser && currentUser.candidate ? handleCheckApplied() : setOpenModalLogin(true) }}>Ứng tuyển</button>
           </div>
           <div className='recruitment-detail__summary'>
             <div>
@@ -218,7 +234,7 @@ console.log(response.data);
               <span><strong className='ml-1'>Kinh nghiệm: </strong> {recruiment.experience}</span>
             </div>
             <div>
-            <i className="fa-solid fa-earth-americas"></i>
+              <i className="fa-solid fa-earth-americas"></i>
               <span><strong className='ml-1'>Ngoại ngữ: </strong> {recruiment.foreignLanguage}</span>
             </div>
             <div>
@@ -325,11 +341,6 @@ console.log(response.data);
                   )}
                   <i className="fa-solid fa-xmark edit-icon cancel-icon" onClick={() => setOpenModalApply(false)}></i>
                 </div>
-                {/* <label className='text-lg'>Curriculum vitae</label><br />
-              <div className='field-input'>
-                <input type={'file'} name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} /><br />
-              </div>
-              {isCVNull && <div className='bg-[#FFBDBD] text-[#FF3333] px-2 py-1 mt-3'>Vui lòng chọn CV của bạn</div>} */}
               </div>
               <div className='flex justify-center'>
                 <button type='submit' className='btn-submit'>Ứng tuyển</button>

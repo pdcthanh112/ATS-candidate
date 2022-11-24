@@ -3,7 +3,7 @@ import './Notification.scss'
 
 import ReactLoading from 'react-loading'
 import { useSelector } from 'react-redux'
-import { confirmInterview, getInterviewNotification } from '../../../apis/notificationApi'
+import { confirmInterview, getInterviewNotification, rejectInterview } from '../../../apis/notificationApi'
 import { Pagination, Stack } from '@mui/material';
 import ApproveIcon from '../../../assets/icon/approve.png'
 import RejectIcon from '../../../assets/icon/reject.png'
@@ -48,7 +48,7 @@ const Notification = () => {
   const handleRejectInterview = async (interviewId) => {
     await confirm({ message: "Bạn xác nhận sẽ từ chối cuộc phỏng vấn này?" }).then((response) => {
       if (response) {
-        confirmInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
+        rejectInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
           response.status === responseStatus.SUCCESS ? toast.success('Xác nhận thành công') : toast.error('Có lỗi xảy ra')
         })
       }
@@ -60,9 +60,9 @@ const Notification = () => {
       return <span className='bg-[#D0FFC8] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>APPROVED</span>
     } else if (status === 'CANCELED') {
       return <span className='bg-[#FFE2E5] text-[#F64E60] text-sm px-2 py-1 rounded-md'>Rejected</span>
-    } else if(status === 'DONE') {
+    } else if (status === 'DONE') {
       return <span className='bg-[#C9F7F5] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>DONE</span>
-    }else {
+    } else {
       return <span className='bg-[#FFF4DE] text-[#FFA800] text-sm px-2 py-1 rounded-md'>Pending</span>
     }
   }
@@ -76,17 +76,23 @@ const Notification = () => {
             {listInterviewNotification.map((item) => (
               <div key={item.id} className='notification-content_item'>
                 <div className='flex justify-between'>
-                <div className='font-medium'>Bạn được sắp xếp một cuộc phỏng vấn</div>
-                <span>{showStatusLabel(item.status)}</span>
+                  <div className='font-medium'>Bạn được sắp xếp một cuộc phỏng vấn</div>
+                  <span>{showStatusLabel(item.status)}</span>
                 </div>
-                <div>
-                  <span className='font-medium'>Tại địa chỉ: </span>
-                  <span>{item.address}</span>
+                {item.type === 'OFFLINE' ? <React.Fragment>
+                  <div>
+                    <span className='font-medium'>Tại địa chỉ: </span>
+                    <span>{item.address}</span>
+                  </div>
+                  <div>
+                    <span className='font-medium'>Phòng: </span>
+                    <span>{item.room}</span>
+                  </div>
+                </React.Fragment> : <div>
+                  <span className='font-medium'>Tại đường dẫn: </span>
+                  <span>{item.linkMeeting}</span>
                 </div>
-                <div>
-                  <span className='font-medium'>Phòng: </span>
-                  <span>{item.room}</span>
-                </div>
+                }
                 <div className='flex'>
                   <div className='w-[30%]'>
                     <span className='font-medium'>Vào lúc </span>

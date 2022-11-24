@@ -15,7 +15,7 @@ export const getInterviewNotification = async (token, id, pageNo, pageSize) => {
 export const confirmInterview = async (token, candidateId, interviewId) => {
   return await axiosConfig
     .patch(
-      `interview/confirmByEmployee?idEmployee=${candidateId}&idInterview=${interviewId}`, {},
+      `interview/confirmByCandidate?idCandidate=${candidateId}&idInterview=${interviewId}`, {},
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -27,7 +27,7 @@ export const confirmInterview = async (token, candidateId, interviewId) => {
 export const rejectInterview = async (token, candidateId, interviewId) => {
   return await axiosConfig
     .patch(
-      `interview/rejectByEmployee?idEmployee=${candidateId}&idInterview=${interviewId}`, {},
+      `interview/rejectByCandidate?idCandidate=${candidateId}&idInterview=${interviewId}`, {},
       {
         headers: { Authorization: `Bearer ${token}` },
       }
