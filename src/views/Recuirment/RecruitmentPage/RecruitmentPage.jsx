@@ -5,7 +5,7 @@ import { Pagination, Stack, TextField, Autocomplete, InputAdornment } from '@mui
 import { typeOfWorkData, jobLevelData, experienceData } from '../../../utils/dropdownData';
 import { useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'
-import RecruitmentList from '../RecruitmentListPage/RecruitmentListPage';
+import RecruitmentList from '../RecruitmentList/RecruitmentList';
 import { getAllOpenRecruimentRequest, searchRecruimentRequest } from '../../../apis/recruimentRequestApi';
 
 import { useFormik } from 'formik'
