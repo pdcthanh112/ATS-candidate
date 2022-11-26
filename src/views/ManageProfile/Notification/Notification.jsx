@@ -3,7 +3,7 @@ import './Notification.scss'
 
 import ReactLoading from 'react-loading'
 import { useSelector } from 'react-redux'
-import { confirmInterview, getInterviewNotification, rejectInterview } from '../../../apis/notificationApi'
+import { confirmInterview, getInterviewNotification, rejectInterview } from '../../../apis/notificationApii'
 import { Pagination, Stack } from '@mui/material';
 import ApproveIcon from '../../../assets/icon/approve.png'
 import RejectIcon from '../../../assets/icon/reject.png'
