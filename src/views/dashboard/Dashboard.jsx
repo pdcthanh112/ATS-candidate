@@ -3,7 +3,7 @@ import './Dashboard.scss'
 
 import { Link } from 'react-router-dom';
 import { getAllOpenRecruimentRequest, getCategory } from '../../apis/recruimentRequestApi';
-import RecruitmentList from '../Recuirment/RecruitmentList/RecruitmentList';
+import RecruitmentList from '../Recuirment/RecruitmentListPage/RecruitmentListPage';
 import ReactLoading from 'react-loading'
 import { Pagination, Stack } from '@mui/material';
 

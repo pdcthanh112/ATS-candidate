@@ -1,5 +1,5 @@
 import React from 'react'
-import './RecruitmentList.scss'
+import './RecruitmentListPage.scss'
 import { Link } from 'react-router-dom'
 
 const RecruitmentList = ({ listRecruitment }) => {
