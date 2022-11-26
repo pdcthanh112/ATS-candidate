@@ -24,13 +24,13 @@ import UploadFile from '../../../assets/icon/upload-folder.png'
 import ViewCV from '../../../assets/icon/viewCV.png'
 import { responseStatus } from '../../../utils/constants';
 import { getCVByCandidateId } from '../../../apis/candidateApi';
-import { confirm } from "mui-confirm-modal";
+import { useConfirm } from "material-ui-confirm";
 
 const RecruitmentDetail = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser);
   const categoryData = useSelector((state) => state.categoryData.data);
-
+  const confirm = useConfirm();
   const recruimentId = useParams().id
 
   const [recruiment, setRecruitment] = useState({})
@@ -179,12 +179,9 @@ const RecruitmentDetail = () => {
 
   const handleCheckApplied = async () => {
     await checkApplyByCandidateAndRequest(currentUser.token, currentUser.candidate.id, recruimentId).then((response) => {
-      console.log(response);
       if (response.data) {
-        confirm({ message: "Are you already apply this job \n Are you sure to apply again" }).then((response) => {
-          if (response) {
-            setOpenModalApply(true)
-          }
+        confirm({ description: "Are you already apply this job \n Are you sure to apply again" }).then(() => {
+          setOpenModalApply(true)
         })
       } else {
         setOpenModalApply(true)

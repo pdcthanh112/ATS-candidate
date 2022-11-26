@@ -8,7 +8,7 @@ import { Pagination, Stack } from '@mui/material';
 import ApproveIcon from '../../../assets/icon/approve.png'
 import RejectIcon from '../../../assets/icon/reject.png'
 
-import { confirm } from "mui-confirm-modal";
+import { useConfirm } from "material-ui-confirm";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { responseStatus } from '../../../utils/constants'
@@ -16,6 +16,7 @@ import { responseStatus } from '../../../utils/constants'
 const Notification = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser)
+  const confirm = useConfirm();
 
   const [listInterviewNotification, setListInterviewNotification] = useState([])
   const [isLoading, setIsLoading] = useState(false);
@@ -46,12 +47,10 @@ const Notification = () => {
   }
 
   const handleRejectInterview = async (interviewId) => {
-    await confirm({ message: "Bạn xác nhận sẽ từ chối cuộc phỏng vấn này?" }).then((response) => {
-      if (response) {
-        rejectInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
-          response.status === responseStatus.SUCCESS ? toast.success('Xác nhận thành công') : toast.error('Có lỗi xảy ra')
-        })
-      }
+    await confirm({ description: "Bạn xác nhận sẽ từ chối cuộc phỏng vấn này?" }).then(() => {
+      rejectInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
+        response.status === responseStatus.SUCCESS ? toast.success('Xác nhận thành công') : toast.error('Có lỗi xảy ra')
+      })
     })
   }
 
