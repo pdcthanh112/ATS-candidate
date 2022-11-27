@@ -12,6 +12,18 @@ export const getInterviewNotification = async (token, id, pageNo, pageSize) => {
     .catch((error) => error);
 };
 
+export const getCommonNotification = async (token, id, pageNo, pageSize) => {
+  return await axiosConfig
+    .get(
+      `notification/getByCandidate?candidateId=${id}&pageNo=${pageNo}&pageSize=${pageSize}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+    .then((response) => response.data)
+    .catch((error) => error);
+};
+
 export const confirmInterview = async (token, candidateId, interviewId) => {
   return await axiosConfig
     .patch(

@@ -1,4 +1,4 @@
-.notification-content {
+.interview-notification-content {
   background-color: #fff;
   border-radius: 0.3rem;
   padding: 0.4rem 0;
@@ -10,5 +10,20 @@
     border-radius: 0.2rem;
     padding: 1rem 2rem;
     margin: 1.2rem 2rem;
+  }
+}
+
+.common-notification-content {
+  margin-top: 1rem;
+  background-color: #fff;
+  border-radius: 0.3rem;
+  padding: 0.4rem 0;
+  // height: 30rem;
+  // overflow-y: scroll;
+
+  .common-notification-content_item{
+    background-color: #E0E0E0;
+    margin: 1rem;
+    padding: 0.5rem 1rem;
   }
 }
