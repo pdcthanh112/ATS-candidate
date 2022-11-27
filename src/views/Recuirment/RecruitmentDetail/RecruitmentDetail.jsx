@@ -110,7 +110,7 @@ const RecruitmentDetail = () => {
       cityName: Yup.string().required('Vui lòng chọn tên thành phố'),
       educationLevel: Yup.string().required('Vui lòng chọn trình độ học vấn'),
       foreignLanguage: Yup.array().min(1, 'Vui lòng chọn ít nhất 1 ngoại ngữ của bạn'),
-      positionName: Yup.string().required('Vui lòng chọn vị trí ứng tuyển'),
+      experience: Yup.string().required('Vui lòng chọn kinh nghiệm của bạn'),
     }),
     onSubmit: async (values) => {
       formikApply.values.foreignLanguage = formikApply.values.foreignLanguage.toString();
@@ -122,7 +122,7 @@ const RecruitmentDetail = () => {
           const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
           await uploadBytes(cvRef, fileCV).then((snapshot) => {
             getDownloadURL(snapshot.ref).then(url => {
-              values.linkCV = url
+              formikApply.values.linkCV = url
             })
           })
         }
@@ -179,7 +179,7 @@ const RecruitmentDetail = () => {
   const handleCheckApplied = async () => {
     await checkApplyByCandidateAndRequest(currentUser.token, currentUser.candidate.id, recruimentId).then((response) => {
       if (response.data) {
-        confirm({ description: "Are you already apply this job \n Are you sure to apply again" }).then(() => {
+        confirm({ description: "Are you already apply this job. \n Are you sure to apply again" }).then(() => {
           setOpenModalApply(true)
         })
       } else {
@@ -300,7 +300,7 @@ const RecruitmentDetail = () => {
                   size={'small'}
                   sx={{ marginRight: 2 }}
                   renderInput={(params) => <TextField {...params} label="Kinh nghiệm" />}
-                  onChange={(event, value) => { formikApply.setFieldValue('positionName', value) }} />
+                  onChange={(event, value) => { formikApply.setFieldValue('experience', value) }} />
                 {formikApply.errors.experience && formikApply.touched.experience && (
                   <div className='text-[#ec5555]'>{formikApply.errors.experience}</div>
                 )}
