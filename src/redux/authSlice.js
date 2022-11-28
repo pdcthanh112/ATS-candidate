@@ -49,7 +49,6 @@ const authSlice = createSlice({
       //state.login.isFetching = true;
     },
     editSuccess: (state, action) => {
-      console.log('redux', action.payload);
       //state.login.isFetching = false;
       state.login.currentUser.candidate.address = action.payload.address;
       state.login.currentUser.candidate.dob = action.payload.dob;

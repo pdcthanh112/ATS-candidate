@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { v4 as uuid } from 'uuid';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
@@ -21,7 +21,7 @@ import ReactLoading from 'react-loading'
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser);
-  console.log('AAAAAAAAAAAAAA',currentUser.candidate.dob);
+  console.log('AAAAAAAAAAAAAA', currentUser);
   const [fileImage, setFileImage] = useState(null)
   const [isEditing, setIsEditting] = useState(false)
   const dispatch = useDispatch();
@@ -44,22 +44,25 @@ const EditInformation = () => {
     }),
     onSubmit: async (values) => {
       setIsEditting(true)
-      if (fileImage !== null) {
-        const imageRef = ref(storage, `candidate-avatar/${fileImage.name}`)
+      if (fileImage != null) {
+        console.log('check1');
+        const imageRef = ref(storage, `candidate-avatar/${fileImage.name + uuid()}`)
         await uploadBytes(imageRef, fileImage).then((snapshot) => {
           getDownloadURL(snapshot.ref).then(url => {
-            values.image = url
+            formik.values.image = url
+            console.log('1', url);
+            console.log('2', formik.values.image);
           })
         })
-      }
-
-      await updateProfileCandidate(currentUser.candidate.id, currentUser.token, values, dispatch, navigate).then((response) => { 
-        if(response.data) {
+      }      
+      console.log('check2');
+      await updateProfileCandidate(currentUser.candidate.id, currentUser.token, values, dispatch, navigate).then((response) => {
+        if (response.data) {
           toast.success('Edit profile successfully')
-          dispatch(editSuccess(response.data))       
+          dispatch(editSuccess(response.data))
         } else {
           toast.error('Edit profile fail')
-        }       
+        }
       })
       setIsEditting(false)
     }
@@ -89,7 +92,7 @@ const EditInformation = () => {
               )}
             </div>
             <div className=''>
-              <Avatar src={currentUser.candidate.image  || defaultImage} alt="avatar" sx={{ width: '10rem', height: '10rem', margin: '0 auto' }} />
+              <Avatar src={currentUser.candidate.image || defaultImage} alt="avatar" sx={{ width: '10rem', height: '10rem', margin: '0 auto' }} />
               <input type={'file'} className='text-sm mx-auto' name='image' onChange={(e) => { setFileImage(e.target.files[0]) }} />
             </div>
           </div>
@@ -133,10 +136,10 @@ const EditInformation = () => {
               <div className='text-[#ec5555]'>{formik.errors.address}</div>
             )}
           </div>
-         <div className='flex'>
-         <button type='submit' className='btn-save-edit'>Save</button>
-          {isEditing && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
-         </div>
+          <div className='flex'>
+            <button type='submit' className='btn-save-edit'>Save</button>
+            {isEditing && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
+          </div>
         </form>
       </div>
       <ToastContainer
@@ -150,7 +153,7 @@ const EditInformation = () => {
         draggable
         pauseOnHover
         theme="light"
-      />    
+      />
     </React.Fragment>
   )
 }

@@ -89,7 +89,7 @@ const ViewProfile = () => {
         <div className='modal-apply__CV'>
           <div className="modal-CV-container">
             <input type="radio" class="tabs__radio" name="tabs-example" id="tab1" />
-            <label for="tab1" class="tabs__label ml-10">Tải mới</label>
+            <label htmlFor="tab1" class="tabs__label ml-10">Tải mới</label>
             <div class="tabs__content">
               <div className="uploadFolder-content">
                 <input type="file" name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} id="uploadFile" class="inputfile" />
@@ -102,7 +102,7 @@ const ViewProfile = () => {
             </div>
 
             <input type="radio" className="tabs__radio" name="tabs-example" id="tab2" />
-            <label for="tab2" className="tabs__label">Có sẵn</label>
+            <label htmlFor="tab2" className="tabs__label">Có sẵn</label>
             <div className="tabs__content">
               <div>
                 {listCV?.map((item) => (

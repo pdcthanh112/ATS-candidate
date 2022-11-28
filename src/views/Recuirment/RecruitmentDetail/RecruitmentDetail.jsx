@@ -21,6 +21,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import UploadFile from '../../../assets/icon/upload-folder.png'
+import { v4 as uuid } from 'uuid';
 import ViewCV from '../../../assets/icon/viewCV.png'
 import { responseStatus } from '../../../utils/constants';
 import { getCVByCandidateId } from '../../../apis/candidateApi';
@@ -102,6 +103,7 @@ const RecruitmentDetail = () => {
       cityName: '',
       educationLevel: '',
       foreignLanguage: [],
+      titleCV: '',
       linkCV: '',
       experience: '',
       recruitmentRequestId: recruimentId
@@ -119,7 +121,8 @@ const RecruitmentDetail = () => {
         formikApply.errors.linkCV = "Please submit your CV";
       } else {
         if (fileCV != null) {
-          const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
+          formikApply.values.titleCV = fileCV.name
+          const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuid()}`)
           await uploadBytes(cvRef, fileCV).then((snapshot) => {
             getDownloadURL(snapshot.ref).then(url => {
               formikApply.values.linkCV = url
