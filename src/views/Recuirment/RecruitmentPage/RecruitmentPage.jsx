@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'
 import RecruitmentList from '../RecruitmentList/RecruitmentList';
 import { getAllOpenRecruimentRequest, searchRecruimentRequest } from '../../../apis/recruimentRequestApi';
-
 import { useFormik } from 'formik'
 
 const RecruitmentPage = () => {
@@ -16,7 +15,6 @@ const RecruitmentPage = () => {
 
   const [listRecruitment, setListRecruitment] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [searchObject, setSearchObject] = useState({ city: '', experience: '', industry: '', jobLevel: '', jobName: '', salaryFrom: '', salaryTo: '', typeOfWork: '' });
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
   const [isSearching, setIsSearching] = useState(false)
   const [searchError, setSearchError] = useState(false)
@@ -33,7 +31,6 @@ const RecruitmentPage = () => {
     }
     fetchData();
   }, [pagination.currentPage])
-
 
   const formikSearch = useFormik({
     initialValues: {
@@ -71,44 +68,44 @@ const RecruitmentPage = () => {
           <Autocomplete
             options={dataCategory.industry}
             size={'small'}
-            sx={{ width: 180, marginRight: 2 }}
-            renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
+            sx={{ width: 190, marginRight: 2}}           
+            renderInput={(params) => <TextField {...params} label="Chuyên môn"/>}
             onChange={(event, value) => { formikSearch.setFieldValue('industry', value) }}
           />
 
           <Autocomplete
             options={dataCategory.jobTitle}
             size={'small'}
-            sx={{ width: 200, marginRight: 2 }}
-            renderInput={(params) => <TextField {...params} label="Tên công việc" />}
+            sx={{ width: 240, marginRight: 2 }}
+            renderInput={(params) => <TextField {...params} label="Tên công việc"/>}
             onChange={(event, value) => { formikSearch.setFieldValue('jobName', value) }}
           />
 
           <Autocomplete
             options={typeOfWorkData()}
             size={'small'}
-            sx={{ width: 245, height: 10, marginRight: 2 }}
+            sx={{ width: 250, height: 10, marginRight: 2 }}
             renderInput={(params) => <TextField {...params} label="Hình thức làm việc" />}
             onChange={(event, value) => { formikSearch.setFieldValue('typeOfWork', value) }} />
 
           <Autocomplete
             options={jobLevelData()}
             size={'small'}
-            sx={{ width: 145, marginRight: 2 }}
+            sx={{ width: 245, marginRight: 2 }}
             renderInput={(params) => <TextField {...params} label="Cấp bậc" />}
             onInputChange={(event, value) => { formikSearch.setFieldValue('jobLevel', value) }} />
 
           <Autocomplete
             options={dataCategory.province}
             size={'small'}
-            sx={{ width: 150, marginRight: 2 }}
+            sx={{ width: 180, marginRight: 2 }}
             renderInput={(params) => <TextField {...params} label="Địa điểm" />}
             onInputChange={(event, value) => { formikSearch.setFieldValue('city', value) }} />
 
           <Autocomplete
             options={experienceData()}
             size={'small'}
-            sx={{ width: 180, marginRight: 2 }}
+            sx={{ width: 200, marginRight: 2 }}
             renderInput={(params) => <TextField {...params} label="Kinh nghiệm" />}
             onInputChange={(event, value) => { formikSearch.setFieldValue('experience', value) }} />
 
@@ -142,7 +139,7 @@ const RecruitmentPage = () => {
         {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <RecruitmentList listRecruitment={listRecruitment} />}
       </div>
 
-      <div className='flex justify-center'>
+      <div className='flex justify-center bg-[#FFF] w-[70%] mx-auto mb-5 pb-3'>
         <Stack spacing={2}>
           <Pagination count={pagination.totalPage} onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />
         </Stack>

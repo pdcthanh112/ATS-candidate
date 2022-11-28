@@ -16,18 +16,21 @@ import { updateProfileCandidate } from '../../../../../apis/candidateApi';
 import { Autocomplete, TextField, Avatar } from '@mui/material';
 import { genderData } from '../../../../../utils/dropdownData';
 import { editSuccess } from '../../../../../redux/authSlice';
+import ReactLoading from 'react-loading'
 
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser);
+  console.log('AAAAAAAAAAAAAA',currentUser.candidate.dob);
   const [fileImage, setFileImage] = useState(null)
+  const [isEditing, setIsEditting] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       fullname: currentUser.candidate.name,
-      dateOfBirth: currentUser.candidate.dob,
+      dateOfBirth: currentUser.candidate.dob.slice(0, 10),
       address: currentUser.candidate.address,
       phone: currentUser.candidate.phone,
       gender: currentUser.candidate.gender,
@@ -40,6 +43,7 @@ const EditInformation = () => {
       phone: Yup.string().required('Please input your phone number').matches(/^[0-9\-\\+]{10}$/, 'This phone number is invalid'),
     }),
     onSubmit: async (values) => {
+      setIsEditting(true)
       if (fileImage !== null) {
         const imageRef = ref(storage, `candidate-avatar/${fileImage.name}`)
         await uploadBytes(imageRef, fileImage).then((snapshot) => {
@@ -49,7 +53,7 @@ const EditInformation = () => {
         })
       }
 
-      updateProfileCandidate(currentUser.candidate.id, currentUser.token, values, dispatch, navigate).then((response) => { 
+      await updateProfileCandidate(currentUser.candidate.id, currentUser.token, values, dispatch, navigate).then((response) => { 
         if(response.data) {
           toast.success('Edit profile successfully')
           dispatch(editSuccess(response.data))       
@@ -57,6 +61,7 @@ const EditInformation = () => {
           toast.error('Edit profile fail')
         }       
       })
+      setIsEditting(false)
     }
   })
 
@@ -111,6 +116,7 @@ const EditInformation = () => {
               <Autocomplete
                 name='gender'
                 options={genderData()}
+                value={formik.values.gender}
                 size={'small'}
                 sx={{ width: 135, marginRight: 2 }}
                 renderInput={(params) => <TextField {...params} label="Giới tính" />}
@@ -127,7 +133,10 @@ const EditInformation = () => {
               <div className='text-[#ec5555]'>{formik.errors.address}</div>
             )}
           </div>
-          <button type='submit' className='btn-save-edit'>Save</button>
+         <div className='flex'>
+         <button type='submit' className='btn-save-edit'>Save</button>
+          {isEditing && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
+         </div>
         </form>
       </div>
       <ToastContainer

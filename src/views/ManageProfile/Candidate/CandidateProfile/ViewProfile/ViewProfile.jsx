@@ -76,7 +76,7 @@ const ViewProfile = () => {
         <div className="bg-white h-12 font-bold text-2xl mb-3 rounded-md pt-2 px-4">Hồ sơ của tôi</div>
         <div className="profile-container">
           <div className="text-2xl font-semibold pt-4">
-            {isEditProfile ? <i className="fa-solid fa-xmark edit-icon" onClick={() => setIsEditProfile(false)}></i> : <i className="fa-regular fa-pen-to-square edit-icon" onClick={() => setIsEditProfile(true)}></i>}
+            {isEditProfile ? <i className="fa-solid fa-xmark edit-icon hover:cursor-pointer" title="Cancel" onClick={() => setIsEditProfile(false)}></i> : <i className="fa-regular fa-pen-to-square edit-icon hover:cursor-pointer" title="Edit your profile" onClick={() => setIsEditProfile(true)}></i>}
             <div className="ml-3 text-center">Thông tin cá nhân </div>
           </div>
           {isEditProfile ? <><EditInformation /></> : <PersonalInformation />}
@@ -85,32 +85,6 @@ const ViewProfile = () => {
 
       <div className="uploadFolder-container">
         <div className="pl-5 pt-3 font-semibold text-2xl">Hồ sơ đính kèm</div>
-
-        {/* <input type="radio" class="tabs__radio" name="tabs-example" id="tab1" />
-        <label for="tab1" class="tabs__label ml-10">Tải mới</label>
-        <div class="tabs__content">
-          <div className="uploadFolder-content">
-            <input type="file" name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} id="uploadFile" class="inputfile" />
-            <label htmlFor="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '2rem 5rem', borderRadius: '1rem' }} /></label>
-          </div>
-          {uploadError && <div className="flex justify-center text-[#F64E60]">Chọn tệp hồ sơ</div>}
-          <div className="relative">
-            <button onClick={() => uploadCandidateFolder()} className='upload-button'>Upload</button>
-          </div>
-        </div>
-
-        <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" />
-        <label for="tab2" class="tabs__label">Có sẵn</label>
-        <div class="tabs__content">
-          <div>
-            {listCV?.map((item) => (
-              <div className='flex justify-between w-[100%]'>
-                <FormControlLabel key={item.id} name={item.id} value={item.linkCV} control={<Radio />} label={item.title} />
-                <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={PDFIcon} alt="" width={'20rem'} /></a>
-              </div>
-            ))}
-          </div>
-        </div> */}
 
         <div className='modal-apply__CV'>
           <div className="modal-CV-container">
@@ -127,9 +101,9 @@ const ViewProfile = () => {
               </div>
             </div>
 
-            <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" />
-            <label for="tab2" class="tabs__label">Có sẵn</label>
-            <div class="tabs__content">
+            <input type="radio" className="tabs__radio" name="tabs-example" id="tab2" />
+            <label for="tab2" className="tabs__label">Có sẵn</label>
+            <div className="tabs__content">
               <div>
                 {listCV?.map((item) => (
                   <div className="flex my-4 justify-evenly w-[60%] mx-auto" style={{ borderBottom: '1px solid #000' }}>
