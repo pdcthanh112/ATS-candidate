@@ -68,6 +68,7 @@ const RecruitmentDetail = () => {
       const response = await getCVByCandidateId(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
       if (response) {
         setListCV(response.data.responseList)
+        console.log(listCV);
       }
     }
     fetchData();
@@ -105,6 +106,7 @@ const RecruitmentDetail = () => {
       foreignLanguage: [],
       titleCV: '',
       linkCV: '',
+      cvId: 0,
       experience: '',
       recruitmentRequestId: recruimentId
     },
@@ -117,8 +119,8 @@ const RecruitmentDetail = () => {
     onSubmit: async (values) => {
       formikApply.values.foreignLanguage = formikApply.values.foreignLanguage.toString();
       setIsLoadingApplyJob(true)
-      if (fileCV == null && formikApply.values.linkCV === '') {
-        formikApply.errors.linkCV = "Please submit your CV";
+      if (fileCV == null && formikApply.values.cvId === 0) {
+        formikApply.errors.linkCV = "Vui lòng chọn 1 trong những CV có sẵn hoặc nộp CV mới";
       } else {
         if (fileCV != null) {
           formikApply.values.titleCV = fileCV.name
@@ -182,7 +184,7 @@ const RecruitmentDetail = () => {
   const handleCheckApplied = async () => {
     await checkApplyByCandidateAndRequest(currentUser.token, currentUser.candidate.id, recruimentId).then((response) => {
       if (response.data) {
-        confirm({ description: "Are you already apply this job. \n Are you sure to apply again" }).then(() => {
+        confirm({ description: "Bạn đã từng ứng tuyển công việc này trước đây.\n\nBạn có muốn ứng tuyển lại" }).then(() => {
           setOpenModalApply(true)
         })
       } else {
@@ -317,18 +319,16 @@ const RecruitmentDetail = () => {
                   <div class="tabs__content">
                     <input type="file" name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} id="uploadFile" class="inputfile" />
                     <label htmlFor="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '2rem 5rem', borderRadius: '3rem' }} /></label>
-
                   </div>
 
                   <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" />
                   <label for="tab2" class="tabs__label">Có sẵn</label>
                   <div class="tabs__content">
                     <div>
-                      <RadioGroup onChange={(event) => formikApply.setFieldValue('linkCV', event.target.value)}>
-                        {/* <RadioGroup onChange={formikApply.handleChange}> */}
+                      <RadioGroup onChange={(event, value) => { formikApply.setFieldValue('cvId', value) }}>
                         {listCV?.map((item) => (
                           <div className='flex justify-between w-[100%]'>
-                            <FormControlLabel key={item.id} name={item.id} value={item.linkCV} control={<Radio />} label={item.title} />
+                            <FormControlLabel key={item.id} name={item.id} value={item.id} control={<Radio />} label={item.title} />
                             <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} /></a>
                           </div>
                         ))}

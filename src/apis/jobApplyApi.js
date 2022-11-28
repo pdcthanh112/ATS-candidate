@@ -22,6 +22,7 @@ export const applyJob = async (token, data) => {
         foreignLanguage: data.foreignLanguage,
         titleCV: data.titleCV,
         linkCV: data.linkCV,
+        cvId: data.cvId,
         experience: data.experience,
         recruitmentRequestId: data.recruitmentRequestId,
       },
