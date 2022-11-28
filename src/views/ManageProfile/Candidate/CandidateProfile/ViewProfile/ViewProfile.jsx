@@ -9,7 +9,7 @@ import PersonalInformation from "../PersonalInformation/PersonalInformation";
 
 import { storage } from '../../../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-
+import { v4 as uuid } from 'uuid';
 import { Pagination, Stack } from '@mui/material';
 import UploadFile from '../../../../../assets/icon/upload-folder.png'
 import PDFIcon from '../../../../../assets/icon/pdf.png'
@@ -43,7 +43,7 @@ const ViewProfile = () => {
     if (fileCV == null) {
       setUploadError(true);
     } else {
-      const cvRef = ref(storage, `candidate-CV/${fileCV.name}`)
+      const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuid()}`)
       await uploadBytes(cvRef, fileCV).then((snapshot) => {
         getDownloadURL(snapshot.ref).then(url => {
           uploadCV(currentUser.token, currentUser.candidate.id, url, fileCV.name).then((response) => {
