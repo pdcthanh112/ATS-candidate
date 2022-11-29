@@ -21,7 +21,6 @@ const AppliedJob = () => {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListAppliedJob(response.data.responseList)
         setIsLoading(false)
-        console.log(listAppliedJob);
       }
     }
     fetchData();

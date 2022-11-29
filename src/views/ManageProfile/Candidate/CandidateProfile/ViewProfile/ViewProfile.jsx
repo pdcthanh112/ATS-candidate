@@ -34,6 +34,7 @@ const ViewProfile = () => {
       if (response) {
         setListCV(response.data.responseList)
         setPagination({ ...pagination, totalPage: response.data.totalPage })
+        console.log(response.data.responseList);
       }
     }
     fetchData();
@@ -97,7 +98,7 @@ const ViewProfile = () => {
               </div>
               {uploadError && <div className="flex justify-center text-[#F64E60] text-xl">Chọn tệp hồ sơ</div>}
               <div className="flex justify-end">
-                <button onClick={() => uploadCandidateFolder()} className='upload-button'>Upload</button>
+                <button onClick={() => uploadCandidateFolder()} className='text-[#FFF] bg-[#20d489] px-8 py-2 rounded-lg'>Upload</button>
               </div>
             </div>
 
@@ -106,7 +107,7 @@ const ViewProfile = () => {
             <div className="tabs__content">
               <div>
                 {listCV?.map((item) => (
-                  <div className="flex my-4 justify-evenly w-[60%] mx-auto" style={{ borderBottom: '1px solid #000' }}>
+                  <div className="flex my-4 justify-between w-[60%] mx-auto" style={{ borderBottom: '1px solid #000' }}>
                     <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'>
                       <div className='flex'>
                         <img src={PDFIcon} alt="" width={'20rem'} />

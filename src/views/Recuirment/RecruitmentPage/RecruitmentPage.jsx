@@ -47,7 +47,6 @@ const RecruitmentPage = () => {
       setSearchError(false)
       setIsSearching(true)
       await searchRecruimentRequest(values).then((response) => {
-        console.log(response);
         if (response && response.data.length > 0) {
           setListRecruitment(response.data)
         } else {

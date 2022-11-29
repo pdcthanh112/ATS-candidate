@@ -11,7 +11,6 @@ export const getCandidateById = async (id, token) => {
 };
 
 export const updateProfileCandidate = async (id, token, data, dispatch) => {
-  console.log('3', data.image);
   return await axiosConfig
     .put(
       `candidate/update/{id}?id=${id}`,

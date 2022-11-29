@@ -23,7 +23,6 @@ export const getRecruimentRequestById = async (id) => {
 };
 
 export const searchRecruimentRequest = async (searchObject) => {
-  console.log("apii", searchObject);
   return await axiosConfig
     .put("recruitmentRequest/searchRecruitmentRequest", {
       city: searchObject.city,

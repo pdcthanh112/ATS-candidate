@@ -68,7 +68,6 @@ const RecruitmentDetail = () => {
       const response = await getCVByCandidateId(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
       if (response) {
         setListCV(response.data.responseList)
-        console.log(listCV);
       }
     }
     fetchData();
@@ -318,7 +317,7 @@ const RecruitmentDetail = () => {
                   <label for="tab1" class="tabs__label ml-10">Tải mới</label>
                   <div class="tabs__content">
                     <input type="file" name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} id="uploadFile" class="inputfile" />
-                    <label htmlFor="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '2rem 5rem', borderRadius: '3rem' }} /></label>
+                    <label htmlFor="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '3rem 7rem', borderRadius: '2rem' }} /></label>
                   </div>
 
                   <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" />

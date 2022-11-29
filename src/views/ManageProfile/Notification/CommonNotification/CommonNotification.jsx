@@ -20,7 +20,6 @@ const CommonNotification = () => {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListNotification(response.data.responseList)
         setIsLoading(false)
-        console.log(listNotification);
       }
     }
     fetchData();

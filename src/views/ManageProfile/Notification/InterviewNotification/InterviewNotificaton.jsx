@@ -27,7 +27,6 @@ const InterviewNotificaton = () => {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListInterviewNotification(response.data.responseList)
         setIsLoading(false)
-        console.log(listInterviewNotification);
       }
     }
     fetchData();

@@ -21,14 +21,17 @@ export const loginUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const regiserUser = async (user) => {
+export const regiserUser = async (data) => {
   return await axiosConfig
     .post("/auth/register", {
-      email: user.email,
-      name: user.fullname,
-      password: user.password,
-      address: user.address,
-      phone: user.phone,
+      address: data.address,
+      dob: data.dob,
+      email: data.email,
+      gender: data.gender,
+      image: data.image,
+      name: data.name,
+      password: data.password,
+      phone: data.phone,
     })
     .then((response) => response.data)
     .catch((error) => error.response.data);
@@ -54,22 +57,22 @@ export const forgetPassword = async (email) => {
     .then((response) => response)
     .catch((error) => error);
 };
-export const resetPassword = async ( email, newPassword, resetToken) => {
+export const resetPassword = async (email, newPassword, resetToken) => {
   return axiosConfig
-    .patch("auth/reset-password", {         
-        email: email,
-        newPassword: newPassword,
-        token: resetToken,
+    .patch("auth/reset-password", {
+      email: email,
+      newPassword: newPassword,
+      token: resetToken,
     })
     .then((response) => response)
     .catch((error) => error);
 };
-export const changePassword = async ( email, newPassword, oldPassword) => {
+export const changePassword = async (email, newPassword, oldPassword) => {
   return axiosConfig
-    .patch("auth/change-password", {         
-        email: email,
-        newPassword: newPassword,
-        oldPassword: oldPassword,
+    .patch("auth/change-password", {
+      email: email,
+      newPassword: newPassword,
+      oldPassword: oldPassword,
     })
     .then((response) => response)
     .catch((error) => error);

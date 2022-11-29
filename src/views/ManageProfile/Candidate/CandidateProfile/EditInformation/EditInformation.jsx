@@ -21,7 +21,7 @@ import ReactLoading from 'react-loading'
 const EditInformation = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser);
-  console.log('AAAAAAAAAAAAAA', currentUser);
+
   const [fileImage, setFileImage] = useState(null)
   const [isEditing, setIsEditting] = useState(false)
   const dispatch = useDispatch();
