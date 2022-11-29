@@ -25,6 +25,7 @@ export const getCommonNotification = async (token, id, pageNo, pageSize) => {
 };
 
 export const confirmInterview = async (token, candidateId, interviewId) => {
+  console.log('asdfas');
   return await axiosConfig
     .patch(
       `interview/confirmByCandidate?idCandidate=${candidateId}&idInterview=${interviewId}`, {},

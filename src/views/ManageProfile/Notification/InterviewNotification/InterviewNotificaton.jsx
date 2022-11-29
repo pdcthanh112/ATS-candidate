@@ -18,7 +18,7 @@ const InterviewNotificaton = () => {
   const [listInterviewNotification, setListInterviewNotification] = useState([])
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
-                  
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
@@ -35,12 +35,10 @@ const InterviewNotificaton = () => {
 
 
   const handleApproveInterview = async (interviewId) => {
-    await confirm({ message: "Bạn xác nhận sẽ tham gia cuộc phỏng vấn này?" }).then((response) => {
-      if (response) {
-        confirmInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
-          response.status === responseStatus.SUCCESS ? toast.success('Xác nhận thành công') : toast.error('Có lỗi xảy ra')
-        })
-      }
+    await confirm({ description: "Bạn xác nhận sẽ tham gia cuộc phỏng vấn này?" }).then(() => {
+      confirmInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
+        response.status === responseStatus.SUCCESS ? toast.success('Xác nhận thành công') : toast.error('Có lỗi xảy ra')
+      })
     })
   }
 
