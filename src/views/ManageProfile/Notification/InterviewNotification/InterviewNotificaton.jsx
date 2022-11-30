@@ -6,8 +6,8 @@ import { responseStatus } from '../../../../utils/constants'
 import { confirmInterview, getInterviewNotification, rejectInterview } from '../../../../apis/notificationApi';
 import { useSelector } from 'react-redux';
 import { Pagination, Stack } from '@mui/material';
-import ApproveIcon from '../../../../assets/icon/approve.png'
-import RejectIcon from '../../../../assets/icon/reject.png'
+import ApproveIcon from '../../../../assets/icon/approve-icon.png'
+import RejectIcon from '../../../../assets/icon/reject-icon.png'
 import ReactLoading from 'react-loading'
 
 const InterviewNotificaton = () => {
@@ -97,8 +97,8 @@ const InterviewNotificaton = () => {
             {item.status === 'PENDING' && <div className='flex justify-evenly'>
               <div className='flex items-center'>Vui lòng xác nhận lịch phỏng vấn với chúng tôi</div>
               <div className='flex'>
-                <img src={ApproveIcon} alt="" width={'50rem'} title='Xác nhận phỏng vấn' className='mr-2 hover:cursor-pointer' onClick={() => handleApproveInterview(item.id)} />
-                <img src={RejectIcon} alt="" width={'50rem'} title='Từ chối phỏng vấn' className='mr-2 hover:cursor-pointer' onClick={() => handleRejectInterview(item.id)} />
+                <img src={ApproveIcon} alt="" style={{width: '2.4rem', height: '2.4rem'}} title='Xác nhận phỏng vấn' className='mr-2 mt-1 hover:cursor-pointer' onClick={() => handleApproveInterview(item.id)} />
+                <img src={RejectIcon} alt="" style={{width: '2.8rem', height: '2.8rem'}} title='Từ chối phỏng vấn' className='mr-2 hover:cursor-pointer' onClick={() => handleRejectInterview(item.id)} />
               </div>
             </div>}
           </div>

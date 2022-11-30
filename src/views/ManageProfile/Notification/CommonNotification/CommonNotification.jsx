@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getCommonNotification } from '../../../../apis/notificationApi'
+import moment from 'moment'
 import ReactLoading from 'react-loading'
 import { Pagination, Stack } from '@mui/material';
 
@@ -32,6 +33,7 @@ const CommonNotification = () => {
             <div className='common-notification-content_item'>
               <div className='font-medium'>{item.subject}</div>
               <div className='px-2'>{item.content}</div>
+              <div className='text-[#00000090] flex justify-end'>{moment(item.createTime).fromNow()}</div>
             </div>
           ))}
         </React.Fragment>
