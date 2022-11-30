@@ -18,6 +18,7 @@ import DeleteIcon from '../../../../../assets/icon/delete.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { responseStatus } from "../../../../../utils/constants";
+import ReactLoading from 'react-loading'
 
 const ViewProfile = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser);
@@ -27,6 +28,7 @@ const ViewProfile = () => {
   const [uploadError, setUploadError] = useState(false)
   const [listCV, setListCV] = useState([])
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
+  const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +46,7 @@ const ViewProfile = () => {
     if (fileCV == null) {
       setUploadError(true);
     } else {
+      setIsUploading(true)
       const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuid()}`)
       await uploadBytes(cvRef, fileCV).then((snapshot) => {
         getDownloadURL(snapshot.ref).then(url => {
@@ -57,6 +60,7 @@ const ViewProfile = () => {
           })
         })
       })
+      setIsUploading(false)
     }
   }
 
@@ -98,7 +102,9 @@ const ViewProfile = () => {
               </div>
               {uploadError && <div className="flex justify-center text-[#F64E60] text-xl">Chọn tệp hồ sơ</div>}
               <div className="flex justify-end">
-                <button onClick={() => uploadCandidateFolder()} className='text-[#FFF] bg-[#20d489] px-8 py-2 rounded-lg'>Upload</button>
+                <button onClick={() => uploadCandidateFolder()} className='text-[#FFF] bg-[#20d489] w-24 h-10 rounded-lg flex justify-center items-center'>
+                {isUploading ? <ReactLoading type='spin' color='#FFF' width={20} height={20}/> : <>Tải lên</>}
+                  </button>
               </div>
             </div>
 

@@ -148,12 +148,14 @@ const RecruitmentDetail = () => {
       email: Yup.string().required('Vui lòng nhập email'),
       password: Yup.string().required('Vui lòng nhập mật khẩu'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setIsLoadingAuth(true)
-      loginUser(values, dispatch, navigate).then(() => {
-        setIsLoadingAuth(false)
-        setOpenModalLogin(false)
-        navigate(`#/recruitment-detail/${recruimentId}`)
+      await loginUser(values, dispatch, navigate).then((response) => {
+        if (response.status === responseStatus.SUCCESS) {
+          setIsLoadingAuth(false)
+          setOpenModalLogin(false)
+          navigate(`#/recruitment-detail/${recruimentId}`)
+        }
       })
     }
   })
@@ -173,8 +175,8 @@ const RecruitmentDetail = () => {
       address: Yup.string().required('Vui lòng điền địa chỉ'),
       phone: Yup.string().required('Vui lòng điền số điện thoại').matches(/^[0-9\-\\+]{10}$/, 'Số điện thoại không hợp lệ')
     }),
-    onSubmit: (values) => {
-      regiserUser(values).then((response) => {
+    onSubmit: async (values) => {
+      await regiserUser(values).then((response) => {
         //response === responseStatus.SUCCESS ? setRegisterStatus(responseStatus.SUCCESS) : setRegisterStatus(response.message)
       })
     }

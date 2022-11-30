@@ -18,6 +18,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const loginError = useSelector((state) => state.auth.login.error);
+  console.log('uuu', loginError);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
