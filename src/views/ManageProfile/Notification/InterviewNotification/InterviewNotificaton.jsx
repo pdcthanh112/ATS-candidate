@@ -94,7 +94,7 @@ const InterviewNotificaton = () => {
                 <span>{item.date}</span>
               </div>
             </div>
-            {item.status === 'PENDING' && <div className='flex justify-evenly'>
+            {item.candidateConfirm == null && <div className='flex justify-evenly'>
               <div className='flex items-center'>Vui lòng xác nhận lịch phỏng vấn với chúng tôi</div>
               <div className='flex'>
                 <img src={ApproveIcon} alt="" style={{width: '2.4rem', height: '2.4rem'}} title='Xác nhận phỏng vấn' className='mr-2 mt-1 hover:cursor-pointer' onClick={() => handleApproveInterview(item.id)} />
