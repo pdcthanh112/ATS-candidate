@@ -68,6 +68,7 @@ export default ContactUsPage
 function Map() {
 
   const center = useMemo(() => ({ lat: 10.78893790666693, lng: 106.69969237668658 }), [])
+  //10.76910317485184, 106.68309228835665
 
   return <GoogleMap zoom={10} center={center} mapContainerClassName='map-container'>
     <MarkerF position={{ center }} />

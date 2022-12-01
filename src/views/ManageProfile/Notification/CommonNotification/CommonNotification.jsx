@@ -19,9 +19,9 @@ const CommonNotification = () => {
       const response = await getCommonNotification(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
       if (response) {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
-        setListNotification(response.data.responseList)
-        setIsLoading(false)
+        setListNotification(response.data.responseList)       
       }
+      setIsLoading(false)
     }
     fetchData();
   }, [pagination.currentPage])

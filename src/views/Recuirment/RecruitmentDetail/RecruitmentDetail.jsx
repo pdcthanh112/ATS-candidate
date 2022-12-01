@@ -131,7 +131,10 @@ const RecruitmentDetail = () => {
           })
         }
         await applyJob(currentUser.token, values).then((response) => {
-          response.status === responseStatus.SUCCESS ? toast.success('Ứng tuyển thành công') : toast.error('Có lỗi xảy ra')
+          if (response.status === responseStatus.SUCCESS) {
+            toast.success('Ứng tuyển thành công')
+            setOpenModalApply(false)
+          } else { toast.error('Có lỗi xảy ra') }
         })
       }
       setIsLoadingApplyJob(false)
@@ -330,7 +333,7 @@ const RecruitmentDetail = () => {
                         {listCV?.map((item) => (
                           <div className='flex justify-between w-[100%]'>
                             <FormControlLabel key={item.id} name={item.id} value={item.id} control={<Radio />} label={item.title} />
-                            <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} /></a>
+                            <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} className='my-auto'/></a>
                           </div>
                         ))}
                       </RadioGroup>

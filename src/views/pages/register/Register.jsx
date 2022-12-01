@@ -42,12 +42,12 @@ const Register = () => {
       setIsRegistring(true)
       await regiserUser(values).then((response) => {    
         if (response.status === responseStatus.SUCCESS) {
-          toast.success('Register successfully')
+          toast.success('Đăng ký tài khoản thành công')
         } else if (response && response.message) {
           if (response?.message.includes('email')) {
             formik.errors.email = 'Email này đã tồn tại'
           } else if (response?.message.includes('phone')) {
-            formik.errors.email = 'Số điện thoại này đã tồn tại'
+            formik.errors.phone = 'Số điện thoại này đã tồn tại'
           }
         } else {
           toast.error('Register fail')
