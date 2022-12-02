@@ -67,7 +67,6 @@ const InterviewNotificaton = () => {
         {listInterviewNotification && listInterviewNotification.map((item) => (
           <div key={item.id} className='notification-content_item'>
             <div className='flex justify-between'>
-              <div className='font-medium'>Bạn được sắp xếp một cuộc phỏng vấn</div>
               <span>{showStatusLabel(item.status)}</span>
             </div>
             {item.type === 'OFFLINE' ? <React.Fragment>
@@ -97,8 +96,8 @@ const InterviewNotificaton = () => {
             {item.candidateConfirm == null && <div className='flex justify-evenly'>
               <div className='flex items-center'>Vui lòng xác nhận lịch phỏng vấn với chúng tôi</div>
               <div className='flex'>
-                <img src={ApproveIcon} alt="" style={{width: '2.4rem', height: '2.4rem'}} title='Xác nhận phỏng vấn' className='mr-2 mt-1 hover:cursor-pointer' onClick={() => handleApproveInterview(item.id)} />
-                <img src={RejectIcon} alt="" style={{width: '2.8rem', height: '2.8rem'}} title='Từ chối phỏng vấn' className='mr-2 hover:cursor-pointer' onClick={() => handleRejectInterview(item.id)} />
+                <button style={{ width: '6rem', height: '2.2rem' }} title='Từ chối phỏng vấn' className='hover:cursor-pointer bg-[#F64E60] text-[#FBFBFB] rounded-lg ml-4' onClick={() => handleRejectInterview(item.id)}>Từ chối</button>
+                <button style={{ width: '6rem', height: '2.2rem' }} title='Chấp nhận phỏng vấn' className='hover:cursor-pointer bg-[#20D489] text-[#FBFBFB] rounded-lg ml-4' onClick={() => handleApproveInterview(item.id)}>Chấp nhận</button>
               </div>
             </div>}
           </div>
