@@ -14,6 +14,7 @@ import { Pagination, Stack } from '@mui/material';
 import UploadFile from '../../../../../assets/icon/upload-folder.png'
 import PDFIcon from '../../../../../assets/icon/pdf.png'
 import DeleteIcon from '../../../../../assets/icon/delete.png'
+import ViewIcon from '../../../../../assets/icon/view.png'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -68,7 +69,7 @@ const ViewProfile = () => {
     await deleteCV(currentUser.token, id).then((response) => {
       if (response.status === responseStatus.SUCCESS) {
         setPagination({ ...pagination, currentPage: 1 })
-        toast.success('Xóa sơ thành công')
+        toast.success('Xóa hồ sơ thành công')
       } else {
         toast.error('Có lỗi xảy ra')
       }
@@ -103,8 +104,8 @@ const ViewProfile = () => {
               {uploadError && <div className="flex justify-center text-[#F64E60] text-xl">Chọn tệp hồ sơ</div>}
               <div className="flex justify-end">
                 <button onClick={() => uploadCandidateFolder()} className='text-[#FFF] bg-[#20d489] w-24 h-10 rounded-lg flex justify-center items-center'>
-                {isUploading ? <ReactLoading type='spin' color='#FFF' width={20} height={20}/> : <>Tải lên</>}
-                  </button>
+                  {isUploading ? <ReactLoading type='spin' color='#FFF' width={20} height={20} /> : <>Tải lên</>}
+                </button>
               </div>
             </div>
 
@@ -114,13 +115,14 @@ const ViewProfile = () => {
               <div>
                 {listCV?.map((item) => (
                   <div className="flex my-4 justify-between w-[60%] mx-auto" style={{ borderBottom: '1px solid #000' }}>
-                    <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'>
-                      <div className='flex'>
-                        <img src={PDFIcon} alt="" width={'20rem'} />
-                        <span className="ml-3">{item.title}</span>
-                      </div>
-                    </a>
-                    <div onClick={() => { handleDeleteCV(item.id) }}><img src={DeleteIcon} alt="" width={'25rem'} title='Delete' /></div>
+                    <div className='flex'>
+                      <img src={PDFIcon} alt="" width={'35rem'} />
+                      <span className="ml-3 my-auto">{item.title}</span>
+                    </div>
+                    <div className="flex">
+                      <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewIcon} alt="" width={'30rem'} className='mr-2'/></a>
+                      <div onClick={() => { handleDeleteCV(item.id) }}><img src={DeleteIcon} alt="" width={'25rem'} title='Delete' /></div>
+                    </div>
                   </div>
                 ))}
               </div>

@@ -4,8 +4,11 @@ import { NavLink } from 'react-router-dom';
 
 import ManageProfileContent from './ManageProfileContent/ManageProfileContent';
 import RecommendJob from './RecommendJob/RecommendJob';
+import { useSelector } from 'react-redux';
 
 const ManageProfile = () => {
+
+  const currentUser = useSelector((state) => state.auth.login.currentUser)
 
   const SidebarData = [
     {
@@ -34,21 +37,23 @@ const ManageProfile = () => {
   return (
     <div className='manage-profile'>
       <div className='manage-profile__navigation'>
-        <div className='font-semibold text-xl text-center mb-3'>Quản lý thông tin</div>
-        <ul>
-          {SidebarData.map((item, index) => {
-            return (
-              <li key={index}>
-                <NavLink to={item.path}>
-                  <div className='manage-profile__navigation-item'>
-                    {item.icon}
-                    <span>{item.title}</span>
-                  </div>
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
+        {currentUser ? <>
+          <div className='font-semibold text-xl text-center mb-3'>Quản lý thông tin</div>
+          <ul>
+            {SidebarData.map((item, index) => {
+              return (
+                <li key={index}>
+                  <NavLink to={item.path}>
+                    <div className='manage-profile__navigation-item'>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </div>
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+        </> : <div></div>}
       </div>
 
       <div className='manage-profile__content'>

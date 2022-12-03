@@ -6,8 +6,6 @@ import { responseStatus } from '../../../../utils/constants'
 import { confirmInterview, getInterviewNotification, rejectInterview } from '../../../../apis/notificationApi';
 import { useSelector } from 'react-redux';
 import { Pagination, Stack } from '@mui/material';
-import ApproveIcon from '../../../../assets/icon/approve-icon.png'
-import RejectIcon from '../../../../assets/icon/reject-icon.png'
 import ReactLoading from 'react-loading'
 
 const InterviewNotificaton = () => {
