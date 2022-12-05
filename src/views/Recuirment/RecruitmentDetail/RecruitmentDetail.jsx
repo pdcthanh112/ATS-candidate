@@ -117,6 +117,7 @@ const RecruitmentDetail = () => {
     }),
     onSubmit: async (values) => {
       formikApply.values.foreignLanguage = formikApply.values.foreignLanguage.toString();
+
       setIsLoadingApplyJob(true)
       if (fileCV == null && formikApply.values.cvId === 0) {
         formikApply.errors.linkCV = "Vui lòng chọn 1 trong những CV có sẵn hoặc nộp CV mới";

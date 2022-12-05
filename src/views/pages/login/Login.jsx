@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
-import './Login.scss'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
+import './Login.scss'
 
-import { loginUser } from '../../../apis/authApi'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { redirect, useNavigate } from 'react-router-dom'
+import { loginUser } from '../../../apis/authApi'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { GoogleButton } from 'react-google-button'
 import ReactLoading from 'react-loading'
+import { UserAuth } from '../../../context/AuthContext'
 
 const Login = () => {
 
@@ -18,7 +20,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const loginError = useSelector((state) => state.auth.login.error);
-
+  const { googleSignIn } = UserAuth()
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -37,6 +39,20 @@ const Login = () => {
       loginUser(values, dispatch, navigate).then(() => setIsLoading(false))
     }
   })
+
+  const handleGoogleSignIn = async () => {
+    // const provider = new GoogleAuthProvider()
+    // signInWithPopup(auth, provider).then(res => {
+    //   console.log(res);
+    // })
+    // console.log('asdfasdf');
+    try {
+      await googleSignIn()
+      redirect('/')
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className='login-container grid grid-cols-2'>
@@ -73,6 +89,7 @@ const Login = () => {
                   <div className='text-[#ec5555]'>{formik.errors.password}</div>
                 )}
               </div>
+              <GoogleButton onClick={() => handleGoogleSignIn()} />
               {loginError && <div className='input-error p-2 rounded'>Email hoặc mật khẩu không chính xác</div>}
               <div className='my-4'>
                 <a href="/#/forget-password" style={{ marginLeft: '20rem' }}>Quên mật khẩu</a>
