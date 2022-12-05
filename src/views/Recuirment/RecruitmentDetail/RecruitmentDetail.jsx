@@ -20,12 +20,14 @@ import { applyJob, checkApplyByCandidateAndRequest } from '../../../apis/jobAppl
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import UploadFile from '../../../assets/icon/upload-folder.png'
+import { GoogleButton } from 'react-google-button'
+
 import { v4 as uuid } from 'uuid';
 import ViewCV from '../../../assets/icon/viewCV.png'
 import { responseStatus } from '../../../utils/constants';
 import { getCVByCandidateId } from '../../../apis/candidateApi';
 import { useConfirm } from "material-ui-confirm";
+import { UserAuth } from '../../../context/AuthContext';
 
 const RecruitmentDetail = () => {
 
@@ -47,7 +49,7 @@ const RecruitmentDetail = () => {
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   const loginError = useSelector((state) => state.auth.login.error);
-
+  const { googleSignIn } = UserAuth()
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -79,6 +81,7 @@ const RecruitmentDetail = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 600,
+    minHeight: 480,
     maxHeight: 600,
     overflow: 'scroll',
     bgcolor: 'background.paper',
@@ -102,7 +105,7 @@ const RecruitmentDetail = () => {
       candidateId: currentUser?.candidate?.id,
       cityName: '',
       educationLevel: '',
-      foreignLanguage: [],
+      foreignLanguage: '',
       titleCV: '',
       linkCV: '',
       cvId: 0,
@@ -117,7 +120,6 @@ const RecruitmentDetail = () => {
     }),
     onSubmit: async (values) => {
       formikApply.values.foreignLanguage = formikApply.values.foreignLanguage.toString();
-
       setIsLoadingApplyJob(true)
       if (fileCV == null && formikApply.values.cvId === 0) {
         formikApply.errors.linkCV = "Vui lòng chọn 1 trong những CV có sẵn hoặc nộp CV mới";
@@ -163,7 +165,18 @@ const RecruitmentDetail = () => {
       })
     }
   })
-
+  const handleGoogleSignIn = async () => {
+    // const provider = new GoogleAuthProvider()
+    // signInWithPopup(auth, provider).then(res => {
+    //   console.log(res);
+    // })
+    // console.log('asdfasdf');
+    try {
+      await googleSignIn()
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const formikRegister = useFormik({
     initialValues: {
       fullname: "",
@@ -250,15 +263,15 @@ const RecruitmentDetail = () => {
           </div>
           <div className='recruitment-detail__description'>
             <div className='mt-5'>
-              <div className='font-semibold text-2xl'>Các phúc lợi dành cho bạn</div>
+              <div className='font-semibold text-2xl mb-1'>Các phúc lợi dành cho bạn</div>
               <div>{recruiment.benefit.split("\n").map((item) => (<div>{item}</div>))}</div>
             </div>
             <div className='mt-5'>
-              <div className='font-semibold text-2xl'>Mô tả công việc</div>
+              <div className='font-semibold text-2xl mb-1'>Mô tả công việc</div>
               <div>{recruiment.description.split("\n").map((item) => (<div>{item}</div>))}</div>
             </div>
             <div className='mt-5'>
-              <div className='font-semibold text-2xl'>Yêu cầu công việc</div>
+              <div className='font-semibold text-2xl mb-1'>Yêu cầu công việc</div>
               <div>{recruiment.requirement.split("\n").map((item) => (<div>{item}</div>))}</div>
             </div>
           </div>
@@ -322,8 +335,11 @@ const RecruitmentDetail = () => {
                   <input type="radio" class="tabs__radio" name="tabs-example" id="tab1" />
                   <label for="tab1" class="tabs__label ml-10">Tải mới</label>
                   <div class="tabs__content">
-                    <input type="file" name='fileCV' onChange={(e) => { setFileCV(e.target.files[0]) }} id="uploadFile" class="inputfile" />
-                    <label htmlFor="uploadFile" className='choose-file-area'><img src={UploadFile} alt="" style={{ border: '1px dashed #00000050', padding: '3rem 7rem', borderRadius: '2rem' }} /></label>
+                    <TextField
+                      type={'file'}
+                      name='fileCV'
+                      onChange={(e) => { setFileCV(e.target.files[0]) }}
+                    />
                   </div>
 
                   <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" />
@@ -334,7 +350,7 @@ const RecruitmentDetail = () => {
                         {listCV?.map((item) => (
                           <div className='flex justify-between w-[100%]'>
                             <FormControlLabel key={item.id} name={item.id} value={item.id} control={<Radio />} label={item.title} />
-                            <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} className='my-auto'/></a>
+                            <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewCV} alt="" width={'20rem'} className='my-auto' /></a>
                           </div>
                         ))}
                       </RadioGroup>
@@ -390,7 +406,8 @@ const RecruitmentDetail = () => {
                   <div className='my-4 font-medium text-base'>
                     <a href="/#/forget-password" style={{ marginLeft: '19rem' }}>Quên mật khẩu</a>
                   </div>
-                  <div className='flex'>
+                  <GoogleButton onClick={() => handleGoogleSignIn()}/>
+                  <div className='flex mt-4'>
                     <button type='submit' className='btn-auth'>Đăng nhập</button>
                     {isLoadingAuth && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
                   </div>
@@ -425,9 +442,6 @@ const RecruitmentDetail = () => {
                     {formikRegister.errors.email && formikRegister.touched.email && (
                       <div className='text-[#ec5555]'>{formikRegister.errors.email}</div>
                     )}
-                    {/* {registerStatus !== responseStatus.SUCCESS && registerStatus.includes('email') && (
-                  <div className='text-[#ec5555]'>Email is alrealy exist</div>
-                )} */}
                   </div>
                   <div className='my-3'>
                     <label className='text-base'>Mật khẩu</label><br />

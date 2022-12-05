@@ -41,11 +41,6 @@ const Login = () => {
   })
 
   const handleGoogleSignIn = async () => {
-    // const provider = new GoogleAuthProvider()
-    // signInWithPopup(auth, provider).then(res => {
-    //   console.log(res);
-    // })
-    // console.log('asdfasdf');
     try {
       await googleSignIn()
       redirect('/')
