@@ -43,7 +43,6 @@ export const getCVByCandidateId = async (token, id, pageNo, pageSize) => {
 };
 
 export const uploadCV = async (token, candidateId, linkCV, title) => {
-  console.log(candidateId, linkCV, title);
   return await axiosConfig
     .post(
       "cv/create",

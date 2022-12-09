@@ -33,7 +33,7 @@ const PersonalInformation = () => {
           <span className="font-thin text-xl">{data.email}</span>
         </div>
         <div className="w-1/2">
-          <span className="font-normal text-xl">Name: </span>
+          <span className="font-normal text-xl">Họ tên: </span>
           <span className="font-thin text-xl">{data.name}</span>
         </div>
       </div>
@@ -43,11 +43,11 @@ const PersonalInformation = () => {
           <span className="font-thin text-xl">{data.dob}</span>
         </div>
         <div className="w-2/5">
-          <span className="font-normal text-xl">Phone: </span>
+          <span className="font-normal text-xl">Số điện thoại: </span>
           <span className="font-thin text-xl">{data.phone}</span>
         </div>
         <div className="w-1/5">
-          <span className="font-normal text-xl">Gender: </span>
+          <span className="font-normal text-xl">Giới tính: </span>
           <span className="font-thin text-xl">{data.gender}</span>
         </div>
       </div>

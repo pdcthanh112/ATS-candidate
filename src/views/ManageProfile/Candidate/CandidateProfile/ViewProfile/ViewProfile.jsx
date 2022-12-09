@@ -37,7 +37,6 @@ const ViewProfile = () => {
       if (response) {
         setListCV(response.data.responseList)
         setPagination({ ...pagination, totalPage: response.data.totalPage })
-        console.log(response.data.responseList);
       }
     }
     fetchData();
