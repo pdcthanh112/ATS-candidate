@@ -7,6 +7,7 @@ import { confirmInterview, getInterviewNotification, rejectInterview } from '../
 import { useSelector } from 'react-redux';
 import { Pagination, Stack } from '@mui/material';
 import ReactLoading from 'react-loading'
+import moment from 'moment'
 
 const InterviewNotificaton = () => {
 
@@ -88,7 +89,7 @@ const InterviewNotificaton = () => {
               </div>
               <div className='w-[50%]'>
                 <span className='font-medium'>Ngày </span>
-                <span>{item.date}</span>
+                <span>{moment(item.date).format('DD/MM/YYYY')}</span>
               </div>
             </div>
             {item.status === 'PENDING' && item.candidateConfirm == null && <div className='flex justify-evenly'>
