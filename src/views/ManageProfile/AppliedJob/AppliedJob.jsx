@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { getAppliedJobByCandidateId } from '../../../apis/jobApplyApi';
 import { Pagination, Stack } from '@mui/material';
 import ReactLoading from 'react-loading'
+import moment from 'moment'
 
 const AppliedJob = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser)
@@ -51,9 +52,9 @@ const AppliedJob = () => {
                 </div>
                 <div className='flex justify-between'>
                   <span><span className='font-semibold'>Lĩnh vực: </span> {item.recruitmentRequest.industry}</span>
-                  <span className='opacity-50 text-xs mt-2'>Ngày ứng tuyển: {item.date}</span>
+                  <span className='opacity-50 text-xs mt-2'>Ngày ứng tuyển: {moment(item.date).format('DD/MM/YYYY')}</span>
                 </div>
-                <div><span className='font-semibold opacity-60'>Ngày hết hạn: </span>{item.date}</div>
+                <div><span className='font-semibold opacity-60'>Ngày hết hạn: </span>{moment(item.date).format('DD/MM/YYYY')}</div>
               </div>
             </Link>
           ))}

@@ -1,6 +1,5 @@
 import React, { Component, Suspense } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { AuthContextProvider } from "./context/AuthContext";
 import "./scss/style.scss";
 
 const loading = (
@@ -21,7 +20,6 @@ const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 class App extends Component {
   render() {
     return (
-      <AuthContextProvider>
         <HashRouter>
           <Suspense fallback={loading}>
             <Routes>
@@ -33,7 +31,6 @@ class App extends Component {
             </Routes>
           </Suspense>
         </HashRouter>
-       </AuthContextProvider>
     );
   }
 }

@@ -3,16 +3,17 @@ import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 import './Login.scss'
 
+import { auth } from '../../../configs/firebaseConfig'
 import { useDispatch, useSelector } from 'react-redux'
 import { redirect, useNavigate } from 'react-router-dom'
-import { loginUser } from '../../../apis/authApi'
+import { loginByGoogle, loginUser } from '../../../apis/authApi'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import { GoogleButton } from 'react-google-button'
 import ReactLoading from 'react-loading'
-import { UserAuth } from '../../../context/AuthContext'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 
 const Login = () => {
 
@@ -20,7 +21,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const loginError = useSelector((state) => state.auth.login.error);
-  const { googleSignIn } = UserAuth()
+
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -41,12 +43,10 @@ const Login = () => {
   })
 
   const handleGoogleSignIn = async () => {
-    try {
-      await googleSignIn()
-      redirect('/')
-    } catch (error) {
-      console.log(error);
-    }
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider).then(response => {
+      loginByGoogle(response.user.accessToken, dispatch, navigate)
+    })
   }
 
   return (

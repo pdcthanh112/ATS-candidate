@@ -27,7 +27,6 @@ import ViewCV from '../../../assets/icon/viewCV.png'
 import { responseStatus } from '../../../utils/constants';
 import { getCVByCandidateId } from '../../../apis/candidateApi';
 import { useConfirm } from "material-ui-confirm";
-import { UserAuth } from '../../../context/AuthContext';
 
 const RecruitmentDetail = () => {
 
@@ -49,7 +48,7 @@ const RecruitmentDetail = () => {
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
   const loginError = useSelector((state) => state.auth.login.error);
-  const { googleSignIn } = UserAuth()
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -165,18 +164,11 @@ const RecruitmentDetail = () => {
       })
     }
   })
+  
   const handleGoogleSignIn = async () => {
-    // const provider = new GoogleAuthProvider()
-    // signInWithPopup(auth, provider).then(res => {
-    //   console.log(res);
-    // })
-    // console.log('asdfasdf');
-    try {
-      await googleSignIn()
-    } catch (error) {
-      console.log(error);
-    }
+   
   }
+
   const formikRegister = useFormik({
     initialValues: {
       fullname: "",

@@ -34,7 +34,7 @@ const Register = () => {
       dob: Yup.string().required('Vui lòng nhập ngày sinh của bạn'),
       name: Yup.string().required('Vui lòng nhập tên của bạn'),
       email: Yup.string().required('Vui lòng nhập địa chỉ email').matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
-      password: Yup.string().required('Vui lòng nhập mật khẩu').min(8, "Mật khẩu tối thiểu 8 kí tự"),
+      password: Yup.string().required('Vui lòng nhập mật khẩu').min(8, "Mật khẩu tối thiểu 8 kí tự").max(20, 'Mật khẩu tối đa 20 ký tự'),
       confirm: Yup.string().required('Vui lòng xác nhận mật khẩu').oneOf([Yup.ref("password"), null], 'Mật khẩu xác nhận không trùng khớp'),
       phone: Yup.string().required('Vui lòng nhập số điện thoại của bạn').matches(/^[0-9\-\\+]{10}$/, 'Số điện thoại không hợp lệ')
     }),

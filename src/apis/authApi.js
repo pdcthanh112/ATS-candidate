@@ -21,6 +21,19 @@ export const loginUser = async (user, dispatch, navigate) => {
   }
 };
 
+export const loginByGoogle = async (accessToken, dispatch, navigate) => {
+  dispatch(loginStart());
+  try {
+    const response = await axiosConfig.post("auth/loginGoogle", accessToken);
+    if (response) {
+      dispatch(loginSuccess(response.data.data));
+      navigate("/#/");
+    }
+  } catch (error) {
+    dispatch(loginFailed());
+  }
+};
+
 export const regiserUser = async (data) => {
   return await axiosConfig
     .post("/auth/register", {
