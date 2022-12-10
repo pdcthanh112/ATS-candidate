@@ -24,26 +24,16 @@ export const getCommonNotification = async (token, id, pageNo, pageSize) => {
     .catch((error) => error);
 };
 
-export const confirmInterview = async (token, candidateId, interviewId) => {
+export const confirmInterview = async (candidateId, interviewId) => {
   return await axiosConfig
-    .patch(
-      `interview/confirmByCandidate?idCandidate=${candidateId}&idInterview=${interviewId}`, {},
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    .patch(`interview/confirmByCandidate?idCandidate=${candidateId}&idInterview=${interviewId}`)
     .then((response) => response.data)
     .catch((error) => error.response.data);
 };
 
-export const rejectInterview = async (token, candidateId, interviewId) => {
+export const rejectInterview = async (candidateId, interviewId) => {
   return await axiosConfig
-    .patch(
-      `interview/rejectByCandidate?idCandidate=${candidateId}&idInterview=${interviewId}`, {},
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    .patch(`interview/rejectByCandidate?idCandidate=${candidateId}&idInterview=${interviewId}`)
     .then((response) => response.data)
     .catch((error) => error.response.data);
 };

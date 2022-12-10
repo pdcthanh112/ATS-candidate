@@ -1,52 +1,44 @@
-import React, { useState, useEffect } from 'react'
-import { useConfirm } from "material-ui-confirm";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { responseStatus } from '../../../../utils/constants'
-import { confirmInterview, getInterviewNotification, rejectInterview } from '../../../../apis/notificationApi';
-import { useSelector } from 'react-redux';
 import { Pagination, Stack } from '@mui/material';
-import ReactLoading from 'react-loading'
-import moment from 'moment'
+import { useConfirm } from "material-ui-confirm";
+import moment from 'moment';
+import React, { useState } from 'react';
+import ReactLoading from 'react-loading';
+import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getInterviewNotification } from '../../../../apis/notificationApi';
+import { useHandleApproveInterview, useHandleRejectInterview } from '../hooks/notificationHook';
 
 const InterviewNotificaton = () => {
 
   const currentUser = useSelector((state) => state.auth.login.currentUser)
   const confirm = useConfirm();
 
-  const [listInterviewNotification, setListInterviewNotification] = useState([])
-  const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ totalPage: 0, currentPage: 1 })
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-      const response = await getInterviewNotification(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 4);
-      if (response) {
-        setPagination({ ...pagination, totalPage: response.data.totalPage })
-        setListInterviewNotification(response.data.responseList)
-        setIsLoading(false)
-      }
-    }
-    fetchData();
-  }, [pagination.currentPage])
+  const { mutate: handleApproveInterview } = useHandleApproveInterview();
+  const { mutate: handleRejectInterview } = useHandleRejectInterview();
 
+  const { data: response, isLoading } = useQuery('listNoti', () => getInterviewNotification(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 4).then((response) => response.data.responseList))
 
-  const handleApproveInterview = async (interviewId) => {
+  const approveInterview = async (interviewId) => {
     await confirm({ description: "Bạn xác nhận sẽ tham gia cuộc phỏng vấn này?" }).then(() => {
-      confirmInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
-        response.status === responseStatus.SUCCESS ? toast.success('Xác nhận thành công') : toast.error('Có lỗi xảy ra')
+      handleApproveInterview(interviewId, {
+        onSuccess: () => toast.success('Xác nhận thành công'),
+        onError: () => toast.error('Có lỗi xảy ra')
+      })
+    })
+  }
+  const rejectInterview = async (interviewId) => {
+    await confirm({ description: "Bạn xác nhận từ chối cuộc phỏng vấn này?" }).then(() => {
+      handleRejectInterview(interviewId, {
+        onSuccess: () => toast.success('Xác nhận thành công'),
+        onError: () => toast.error('Có lỗi xảy ra')
       })
     })
   }
 
-  const handleRejectInterview = async (interviewId) => {
-    await confirm({ description: "Bạn xác nhận sẽ từ chối cuộc phỏng vấn này?" }).then(() => {
-      rejectInterview(currentUser.token, currentUser.candidate.id, interviewId).then((response) => {
-        response.status === responseStatus.SUCCESS ? toast.success('Xác nhận thành công') : toast.error('Có lỗi xảy ra')
-      })
-    })
-  }
 
   const showStatusLabel = (status) => {
     if (status === 'APPROVED') {
@@ -63,7 +55,7 @@ const InterviewNotificaton = () => {
   return (
     <React.Fragment>
       {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <React.Fragment>
-        {listInterviewNotification && listInterviewNotification.map((item) => (
+        {response?.map((item) => (
           <div key={item.id} className='notification-content_item'>
             <div className='flex justify-between'>
               <span>{showStatusLabel(item.status)}</span>
@@ -95,8 +87,8 @@ const InterviewNotificaton = () => {
             {item.status === 'PENDING' && item.candidateConfirm == null && <div className='flex justify-evenly'>
               <div className='flex items-center'>Vui lòng xác nhận lịch phỏng vấn với chúng tôi</div>
               <div className='flex'>
-                <button style={{ width: '6rem', height: '2.2rem' }} title='Từ chối phỏng vấn' className='hover:cursor-pointer bg-[#F64E60] text-[#FBFBFB] rounded-lg ml-4' onClick={() => handleRejectInterview(item.id)}>Từ chối</button>
-                <button style={{ width: '6rem', height: '2.2rem' }} title='Chấp nhận phỏng vấn' className='hover:cursor-pointer bg-[#20D489] text-[#FBFBFB] rounded-lg ml-4' onClick={() => handleApproveInterview(item.id)}>Chấp nhận</button>
+                <button style={{ width: '6rem', height: '2.2rem' }} title='Từ chối phỏng vấn' className='hover:cursor-pointer bg-[#F64E60] text-[#FBFBFB] rounded-lg ml-4' onClick={() => rejectInterview(item.id)}>Từ chối</button>
+                <button style={{ width: '6rem', height: '2.2rem' }} title='Chấp nhận phỏng vấn' className='hover:cursor-pointer bg-[#20D489] text-[#FBFBFB] rounded-lg ml-4' onClick={() => approveInterview(item.id)}>Chấp nhận</button>
               </div>
             </div>}
           </div>
