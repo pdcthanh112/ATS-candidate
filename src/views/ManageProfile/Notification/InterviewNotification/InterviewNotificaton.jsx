@@ -20,7 +20,7 @@ const InterviewNotificaton = () => {
   const { mutate: handleApproveInterview } = useHandleApproveInterview();
   const { mutate: handleRejectInterview } = useHandleRejectInterview();
 
-  const { data: listInterviewNotification, isLoading } = useQuery('listNoti', () => getInterviewNotification(currentUser.candidate.id, pagination.currentPage - 1, 4).then((response) => response.data.responseList))
+  const { data: listInterviewNotification, isLoading } = useQuery(['listNoti', pagination], () => getInterviewNotification(currentUser.candidate.id, pagination.currentPage - 1, 4).then((response) => response.data.responseList))
 
   const approveInterview = async (interviewId) => {
     await confirm({ description: "Bạn xác nhận sẽ tham gia cuộc phỏng vấn này?" }).then(() => {
