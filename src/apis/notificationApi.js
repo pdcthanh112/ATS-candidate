@@ -1,12 +1,9 @@
 import axiosConfig from "../configs/axiosConfig";
 
-export const getInterviewNotification = async (token, id, pageNo, pageSize) => {
+export const getInterviewNotification = async (id, pageNo, pageSize) => {
   return await axiosConfig
     .get(
-      `interview/getInterviewByCandidateID?candidateId=${id}&pageNo=${pageNo}&pageSize=${pageSize}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `interview/getInterviewByCandidateID?candidateId=${id}&pageNo=${pageNo}&pageSize=${pageSize}`
     )
     .then((response) => response.data)
     .catch((error) => error);

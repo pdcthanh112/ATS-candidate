@@ -20,7 +20,7 @@ const InterviewNotificaton = () => {
   const { mutate: handleApproveInterview } = useHandleApproveInterview();
   const { mutate: handleRejectInterview } = useHandleRejectInterview();
 
-  const { data: response, isLoading } = useQuery('listNoti', () => getInterviewNotification(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 4).then((response) => response.data.responseList))
+  const { data: listInterviewNotification, isLoading } = useQuery('listNoti', () => getInterviewNotification(currentUser.candidate.id, pagination.currentPage - 1, 4).then((response) => response.data.responseList))
 
   const approveInterview = async (interviewId) => {
     await confirm({ description: "Bạn xác nhận sẽ tham gia cuộc phỏng vấn này?" }).then(() => {
@@ -55,7 +55,7 @@ const InterviewNotificaton = () => {
   return (
     <React.Fragment>
       {isLoading ? <ReactLoading className='mx-auto my-5' type='spinningBubbles' color='#bfbfbf' /> : <React.Fragment>
-        {response?.map((item) => (
+        {listInterviewNotification?.map((item) => (
           <div key={item.id} className='notification-content_item'>
             <div className='flex justify-between'>
               <span>{showStatusLabel(item.status)}</span>
