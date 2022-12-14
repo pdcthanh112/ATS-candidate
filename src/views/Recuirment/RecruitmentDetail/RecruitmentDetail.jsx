@@ -7,13 +7,13 @@ import ReactLoading from 'react-loading'
 import { TextField, Autocomplete, Box, Modal, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 import { getRecruimentRequestById } from '../../../apis/recruimentRequestApi';
-import { loginUser, regiserUser } from '../../../apis/authApi';
+import { loginByGoogle, loginUser, regiserUser } from '../../../apis/authApi';
 import { educationLevelData, experienceData, foreignLanguageData } from '../../../utils/dropdownData'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { storage } from '../../../configs/firebaseConfig'
+import { auth, storage } from '../../../configs/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { applyJob, checkApplyByCandidateAndRequest } from '../../../apis/jobApplyApi';
 
@@ -27,6 +27,7 @@ import ViewCV from '../../../assets/icon/viewCV.png'
 import { responseStatus } from '../../../utils/constants';
 import { getCVByCandidateId } from '../../../apis/candidateApi';
 import { useConfirm } from "material-ui-confirm";
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 
 const RecruitmentDetail = () => {
 
@@ -164,9 +165,14 @@ const RecruitmentDetail = () => {
       })
     }
   })
-  
+
   const handleGoogleSignIn = async () => {
-   
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider).then(response => {
+      loginByGoogle(response.user.accessToken, dispatch, navigate).then(() => {
+        navigate(`#/recruitment-detail/${recruimentId}`)
+      })
+    })
   }
 
   const formikRegister = useFormik({
@@ -225,12 +231,12 @@ const RecruitmentDetail = () => {
               <span><strong className='ml-1'>Cấp bậc: </strong> {recruiment.jobLevel}</span>
             </div>
             <div>
-              <i className="fa-solid fa-calendar-days"></i>
-              <span><strong className='ml-1'>Ngày tạo: </strong> {recruiment.date}</span>
-            </div>
-            <div>
               <i className="fa-solid fa-building"></i>
               <span><strong className='ml-1'>Industry: </strong> {recruiment.industry}</span>
+            </div>
+            <div>
+              <i className="fa-sharp fa-solid fa-school"></i>
+              <span><strong className='ml-1'>Kinh nghiệm: </strong> {recruiment.experience}</span>
             </div>
             <div>
               <i className="fa-solid fa-money-bill-wave"></i>
@@ -241,8 +247,8 @@ const RecruitmentDetail = () => {
               <span><strong className='ml-1'>Ngày hết hạn: </strong> {recruiment.expiryDate}</span>
             </div>
             <div>
-              <i className="fa-sharp fa-solid fa-school"></i>
-              <span><strong className='ml-1'>Kinh nghiệm: </strong> {recruiment.experience}</span>
+              <i className="fa-sharp fa-solid fa-person-circle-plus"></i>
+              <span><strong className='ml-1'>Số lượng tuyển: </strong> {recruiment.amount}</span>
             </div>
             <div>
               <i className="fa-solid fa-earth-americas"></i>
@@ -398,7 +404,7 @@ const RecruitmentDetail = () => {
                   <div className='my-4 font-medium text-base'>
                     <a href="/#/forget-password" style={{ marginLeft: '19rem' }}>Quên mật khẩu</a>
                   </div>
-                  <GoogleButton onClick={() => handleGoogleSignIn()}/>
+                  <GoogleButton onClick={() => handleGoogleSignIn()} />
                   <div className='flex mt-4'>
                     <button type='submit' className='btn-auth'>Đăng nhập</button>
                     {isLoadingAuth && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}

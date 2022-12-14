@@ -5,7 +5,7 @@ import './Login.scss'
 
 import { auth } from '../../../configs/firebaseConfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { loginByGoogle, loginUser } from '../../../apis/authApi'
 
 import { useFormik } from 'formik'
