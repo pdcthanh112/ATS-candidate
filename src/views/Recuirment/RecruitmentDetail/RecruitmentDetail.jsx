@@ -171,6 +171,7 @@ const RecruitmentDetail = () => {
     await signInWithPopup(auth, provider).then(response => {
       loginByGoogle(response.user.accessToken, dispatch, navigate).then(() => {
         navigate(`#/recruitment-detail/${recruimentId}`)
+        setOpenModalLogin(false)
       })
     })
   }
