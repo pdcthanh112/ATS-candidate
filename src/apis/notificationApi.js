@@ -9,13 +9,10 @@ export const getInterviewNotification = async (id, pageNo, pageSize) => {
     .catch((error) => error);
 };
 
-export const getCommonNotification = async (token, id, pageNo, pageSize) => {
+export const getCommonNotification = async ( id, pageNo, pageSize) => {
   return await axiosConfig
     .get(
-      `notification/getByCandidate?candidateId=${id}&pageNo=${pageNo}&pageSize=${pageSize}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `notification/getByCandidate?candidateId=${id}&pageNo=${pageNo}&pageSize=${pageSize}`
     )
     .then((response) => response.data)
     .catch((error) => error);

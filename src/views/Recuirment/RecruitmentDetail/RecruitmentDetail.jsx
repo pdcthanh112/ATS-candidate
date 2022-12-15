@@ -67,7 +67,7 @@ const RecruitmentDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getCVByCandidateId(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
+      const response = await getCVByCandidateId(currentUser.candidate.id, pagination.currentPage - 1, 5);
       if (response) {
         setListCV(response.data.responseList)
       }
@@ -133,7 +133,7 @@ const RecruitmentDetail = () => {
             })
           })
         }
-        await applyJob(currentUser.token, values).then((response) => {
+        await applyJob(values).then((response) => {
           if (response.status === responseStatus.SUCCESS) {
             toast.success('Ứng tuyển thành công')
             setOpenModalApply(false)
@@ -199,7 +199,7 @@ const RecruitmentDetail = () => {
   })
 
   const handleCheckApplied = async () => {
-    await checkApplyByCandidateAndRequest(currentUser.token, currentUser.candidate.id, recruimentId).then((response) => {
+    await checkApplyByCandidateAndRequest(currentUser.candidate.id, recruimentId).then((response) => {
       if (response.data) {
         confirm({ description: "Bạn đã từng ứng tuyển công việc này trước đây.\n\nBạn có muốn ứng tuyển lại" }).then(() => {
           setOpenModalApply(true)

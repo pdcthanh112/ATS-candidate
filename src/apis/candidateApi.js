@@ -30,13 +30,10 @@ export const updateProfileCandidate = async (id, token, data, dispatch) => {
     .catch((error) => dispatch(editFailed()));
 };
 
-export const getCVByCandidateId = async (token, id, pageNo, pageSize) => {
+export const getCVByCandidateId = async (id, pageNo, pageSize) => {
   return await axiosConfig
     .get(
-      `cv/getAllCvByCandidate?id=${id}&pageNo=${pageNo}&pageSize=${pageSize}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `cv/getAllCvByCandidate?id=${id}&pageNo=${pageNo}&pageSize=${pageSize}`
     )
     .then((response) => response.data)
     .catch((error) => error);

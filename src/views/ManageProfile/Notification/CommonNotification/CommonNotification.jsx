@@ -16,7 +16,7 @@ const CommonNotification = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const response = await getCommonNotification(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
+      const response = await getCommonNotification(currentUser.candidate.id, pagination.currentPage - 1, 5);
       if (response) {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListNotification(response.data.responseList)       

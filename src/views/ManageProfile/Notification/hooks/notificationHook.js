@@ -8,7 +8,7 @@ export const useHandleApproveInterview = () => {
   return useMutation(
     "approveInterview",
     async (interviewId) => {
-      return confirmInterview(currentUser.candidate.id, interviewId);
+      await confirmInterview(currentUser.candidate.id, interviewId);
     },
     {
       onSuccess: () => {
@@ -24,7 +24,7 @@ export const useHandleRejectInterview = () => {
   return useMutation(
     "rejectInterview",
     async (interviewId) => {
-      return rejectInterview(currentUser.candidate.id, interviewId);
+      await rejectInterview(currentUser.candidate.id, interviewId);
     },
     {
       onSuccess: () => {

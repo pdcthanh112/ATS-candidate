@@ -17,7 +17,7 @@ const AppliedJob = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const response = await getAppliedJobByCandidateId(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 4);
+      const response = await getAppliedJobByCandidateId(currentUser.candidate.id, pagination.currentPage - 1, 4);
       if (response) {
         setPagination({ ...pagination, totalPage: response.data.totalPage })
         setListAppliedJob(response.data.responseList)
