@@ -1,7 +1,7 @@
+import React, { useState } from 'react';
 import { Pagination, Stack } from '@mui/material';
 import { useConfirm } from "material-ui-confirm";
 import moment from 'moment';
-import React, { useState } from 'react';
 import ReactLoading from 'react-loading';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
@@ -20,7 +20,10 @@ const InterviewNotificaton = () => {
   const { mutate: handleApproveInterview } = useHandleApproveInterview();
   const { mutate: handleRejectInterview } = useHandleRejectInterview();
 
-  const { data: listInterviewNotification, isLoading } = useQuery(['listNoti', pagination], () => getInterviewNotification(currentUser.candidate.id, pagination.currentPage - 1, 4).then((response) => response.data.responseList))
+  const { data: listInterviewNotification, isLoading } = useQuery(['listNoti', pagination], () => getInterviewNotification(currentUser.candidate.id, pagination.currentPage - 1, 4).then((response) => {
+    setPagination({ ...pagination, totalPage: response.data.totalPage })
+    return response.data.responseList
+  }))
 
   const approveInterview = async (interviewId) => {
     await confirm({ description: "Bạn xác nhận sẽ tham gia cuộc phỏng vấn này?" }).then(() => {
@@ -30,6 +33,7 @@ const InterviewNotificaton = () => {
       })
     })
   }
+
   const rejectInterview = async (interviewId) => {
     await confirm({ description: "Bạn xác nhận từ chối cuộc phỏng vấn này?" }).then(() => {
       handleRejectInterview(interviewId, {
@@ -58,7 +62,7 @@ const InterviewNotificaton = () => {
         {listInterviewNotification?.map((item) => (
           <div key={item.id} className='notification-content_item'>
             <div className='flex justify-between'>
-              <span>{showStatusLabel(item.status)}</span>
+              <span>{ item.candidateConfirm == null ? showStatusLabel(null) : showStatusLabel(item.status)}</span>
             </div>
             {item.type === 'OFFLINE' ? <React.Fragment>
               <div>

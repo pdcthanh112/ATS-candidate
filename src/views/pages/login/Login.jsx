@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import headerLogo from '../../../assets/image/big-logo.png'
 import loginpageImage from '../../../assets/image/loginpage-image.png'
 import './Login.scss'
@@ -7,10 +7,11 @@ import { auth } from '../../../configs/firebaseConfig'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { loginByGoogle, loginUser } from '../../../apis/authApi'
-
+import { initializeApp } from "firebase/app";
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-
+import { firebaseNotificationConfig } from '../../../configs/firebaseConfig'
+import { getMessaging, getToken } from "firebase/messaging";
 import { GoogleButton } from 'react-google-button'
 import ReactLoading from 'react-loading'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
@@ -25,6 +26,30 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const requestPermission = () => {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          // const notification = new Notification('Example notification', {
+          //   body: 'this is body',
+          //   data: {hello: 'world'},
+          //   icon: headerLogo
+          // })
+          const app = initializeApp(firebaseNotificationConfig);
+          const messaging = getMessaging(app);
+          getToken(messaging, {
+            vapidKey: process.env.REACT_APP_FIREBASE_KEY_COMPARE,
+          }).then((currentToken) => {
+            if (currentToken) {
+              formik.values.notificationToken = currentToken;
+            }
+          });
+        }
+      });
+    }
+    requestPermission()
+  }, [])
 
   const formik = useFormik({
     initialValues: {
