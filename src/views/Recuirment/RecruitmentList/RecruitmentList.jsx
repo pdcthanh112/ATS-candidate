@@ -1,6 +1,7 @@
 import React from 'react'
 import './RecruitmentList.scss'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 
 const RecruitmentList = ({ listRecruitment }) => {
 
@@ -12,7 +13,7 @@ const RecruitmentList = ({ listRecruitment }) => {
             <div className='recruiment-item'>
               <div className='font-medium text-lg text-[#20D489]'>{item.position.name}</div>
               <div className='text-xs'><span className='font-medium'>Chuyên môn: </span>{item.industry}</div>
-              <div className='text-xs'><span className='font-medium'>Ngày hết hạn: </span>{item.expiryDate}</div>
+              <div className='text-xs'><span className='font-medium'>Ngày hết hạn: </span>{moment(item.expiryDate).format('DD/MM/YYYY')}</div>
             </div>
           </Link>
         ))}
