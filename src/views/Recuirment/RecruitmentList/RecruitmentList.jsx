@@ -8,7 +8,7 @@ const RecruitmentList = ({ listRecruitment }) => {
   return (
     <div className='recruitment-container'>
       <div className='grid grid-cols-3 gap-3'>
-        {listRecruitment.map((item, id) => (
+        {listRecruitment?.map((item, id) => (
           <Link to={`/recruitment-detail/${item.id}`} target={'_blank'} key={id} >
             <div className='recruiment-item'>
               <div className='font-medium text-lg text-[#20D489]'>{item.position.name}</div>

@@ -106,7 +106,7 @@ const RecruitmentDetail = () => {
       candidateId: currentUser?.candidate?.id,
       cityName: '',
       educationLevel: '',
-      foreignLanguage: '',
+      foreignLanguage: [],
       titleCV: '',
       linkCV: '',
       cvId: 0,

@@ -134,7 +134,7 @@ const EditInformation = () => {
             )}
           </div>
           <div className='flex'>
-            <button type='submit' className='btn-save-edit'>Save</button>
+            <button type='submit' className='btn-save-edit'>Lưu</button>
             {isEditing && <ReactLoading className='ml-2' type='spin' color='#FF4444' width={37} />}
           </div>
         </form>
