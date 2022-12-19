@@ -46,13 +46,13 @@ const InterviewNotificaton = () => {
 
   const showStatusLabel = (status) => {
     if (status === 'APPROVED') {
-      return <span className='bg-[#D0FFC8] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>APPROVED</span>
+      return <span className='bg-[#D0FFC8] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>Chấp nhận</span>
     } else if (status === 'CANCELED') {
-      return <span className='bg-[#FFE2E5] text-[#F64E60] text-sm px-2 py-1 rounded-md'>Rejected</span>
+      return <span className='bg-[#FFE2E5] text-[#F64E60] text-sm px-2 py-1 rounded-md'>Từ chối</span>
     } else if (status === 'DONE') {
-      return <span className='bg-[#C9F7F5] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>DONE</span>
+      return <span className='bg-[#C9F7F5] text-[#1BC5BD] text-sm px-2 py-1 rounded-md'>Hoàn thành</span>
     } else {
-      return <span className='bg-[#FFF4DE] text-[#FFA800] text-sm px-2 py-1 rounded-md'>Pending</span>
+      return <span className='bg-[#FFF4DE] text-[#FFA800] text-sm px-2 py-1 rounded-md'>Đang xử lý</span>
     }
   }
 
@@ -64,7 +64,7 @@ const InterviewNotificaton = () => {
             <div className='flex justify-between'>
               <span>{ item.candidateConfirm == null ? showStatusLabel(null) : showStatusLabel(item.status)}</span>
             </div>
-            {item.type === 'OFFLINE' ? <React.Fragment>
+            {item.type === 'OFFLINE' ? <>
               <div>
                 <span className='font-medium'>Tại địa chỉ: </span>
                 <span>{item.address}</span>
@@ -73,7 +73,7 @@ const InterviewNotificaton = () => {
                 <span className='font-medium'>Phòng: </span>
                 <span>{item.room}</span>
               </div>
-            </React.Fragment> : <div>
+            </> : <div>
               <span className='font-medium'>Tại đường dẫn: </span>
               <span>{item.linkMeeting}</span>
             </div>
@@ -98,6 +98,7 @@ const InterviewNotificaton = () => {
           </div>
         ))}
       </React.Fragment>}
+      
       <div className='flex justify-center'>
         <Stack spacing={2}>
           <Pagination count={pagination.totalPage} onChange={(event, page) => { setPagination({ ...pagination, currentPage: page }) }} />

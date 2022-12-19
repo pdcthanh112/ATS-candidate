@@ -28,6 +28,7 @@ import { responseStatus } from '../../../utils/constants';
 import { getCVByCandidateId } from '../../../apis/candidateApi';
 import { useConfirm } from "material-ui-confirm";
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import moment from 'moment'
 
 const RecruitmentDetail = () => {
 
@@ -217,7 +218,7 @@ const RecruitmentDetail = () => {
           <div className='flex justify-between bg-[#FFF] px-60 py-3'>
             <div>
               <div className='font-bold text-xl text-[#0f6b14]'>{recruiment.position.name}</div>
-              <div><span>Ngày đăng tuyển: </span>{recruiment.date}</div>
+              <div><span>Ngày đăng tuyển: </span>{moment(recruiment.date).format('DD-MM-YYYY')}</div>
             </div>
             <div className='font-semibold text-xl max-w-[30rem]'>{recruiment.name}</div>
             <button className='bg-[#0f6b14] w-56 h-10 rounded text-[#FFF]' onClick={() => { currentUser && currentUser.candidate ? handleCheckApplied() : setOpenModalLogin(true) }}>Ứng tuyển</button>
@@ -245,7 +246,7 @@ const RecruitmentDetail = () => {
             </div>
             <div>
               <i className="fa-solid fa-calendar-days"></i>
-              <span><strong className='ml-1'>Ngày hết hạn: </strong> {recruiment.expiryDate}</span>
+              <span><strong className='ml-1'>Ngày hết hạn: </strong> {moment(recruiment.expiryDate).format('DD/MM/YYYY')}</span>
             </div>
             <div>
               <i className="fa-sharp fa-solid fa-person-circle-plus"></i>
