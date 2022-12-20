@@ -69,7 +69,7 @@ const RecruitmentDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getCVByCandidateId(currentUser.candidate.id, pagination.currentPage - 1, 5);
-      if (response) {
+      if (response && response.data) {
         setListCV(response.data.responseList)
       }
     }
@@ -127,14 +127,11 @@ const RecruitmentDetail = () => {
       } else {
         if (fileCV != null) {
           formikApply.values.titleCV = fileCV.name
-          console.log('truoc');
           const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuid()}`)
           await uploadBytes(cvRef, fileCV).then(async (snapshot) => {
             await getDownloadURL(snapshot.ref).then((url) => {
               formikApply.values.linkCV = url
-              console.log('trong');
             })
-            console.log('xong');
           })
         }
 
@@ -263,6 +260,10 @@ const RecruitmentDetail = () => {
             <div>
               <i className="fa-solid fa-chalkboard-user"></i>
               <span><strong className='ml-1'>Trạng thái: </strong> {recruiment.status}</span>
+            </div>
+            <div>
+              <i className="fa-solid fa-city"></i>
+              <span><strong className='ml-1'>Nơi làm việc: </strong> {recruiment?.cities?.name}</span>
             </div>
           </div>
           <div className='recruitment-detail__description'>
