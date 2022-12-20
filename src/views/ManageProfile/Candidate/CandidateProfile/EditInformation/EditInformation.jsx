@@ -46,8 +46,8 @@ const EditInformation = () => {
       setIsEditting(true)
       if (fileImage != null) {
         const imageRef = ref(storage, `candidate-avatar/${fileImage.name + uuid()}`)
-        await uploadBytes(imageRef, fileImage).then((snapshot) => {
-          getDownloadURL(snapshot.ref).then(url => {
+        await uploadBytes(imageRef, fileImage).then( async (snapshot) => {
+          await getDownloadURL(snapshot.ref).then(url => {
             formik.values.image = url
           })
         })
