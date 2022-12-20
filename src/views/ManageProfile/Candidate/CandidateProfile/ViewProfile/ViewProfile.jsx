@@ -48,8 +48,8 @@ const ViewProfile = () => {
     } else {
       setIsUploading(true)
       const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuid()}`)
-      await uploadBytes(cvRef, fileCV).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then(url => {
+      await uploadBytes(cvRef, fileCV).then(async (snapshot) => {
+        await getDownloadURL(snapshot.ref).then(url => {
           uploadCV(currentUser.candidate.id, url, fileCV.name).then((response) => {
             if (response.status === responseStatus.SUCCESS) {
               setPagination({ ...pagination, currentPage: 1 })
@@ -119,7 +119,7 @@ const ViewProfile = () => {
                       <span className="ml-3 my-auto">{item.title}</span>
                     </div>
                     <div className="flex">
-                      <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewIcon} alt="" width={'30rem'} className='mr-2'/></a>
+                      <a href={item.linkCV} target='_blank' rel="noreferrer" title='View CV'><img src={ViewIcon} alt="" width={'30rem'} className='mr-2' /></a>
                       <div onClick={() => { handleDeleteCV(item.id) }}><img src={DeleteIcon} alt="" width={'25rem'} title='Delete' /></div>
                     </div>
                   </div>
