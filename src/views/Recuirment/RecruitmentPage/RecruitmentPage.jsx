@@ -67,8 +67,8 @@ const RecruitmentPage = () => {
           <Autocomplete
             options={dataCategory.industry}
             size={'small'}
-            sx={{ width: 190, marginRight: 2}}           
-            renderInput={(params) => <TextField {...params} label="Chuyên môn"/>}
+            sx={{ width: 190, marginRight: 2 }}
+            renderInput={(params) => <TextField {...params} label="Chuyên môn" />}
             onChange={(event, value) => { formikSearch.setFieldValue('industry', value) }}
           />
 
@@ -76,7 +76,7 @@ const RecruitmentPage = () => {
             options={dataCategory.jobTitle}
             size={'small'}
             sx={{ width: 240, marginRight: 2 }}
-            renderInput={(params) => <TextField {...params} label="Tên công việc"/>}
+            renderInput={(params) => <TextField {...params} label="Tên công việc" />}
             onChange={(event, value) => { formikSearch.setFieldValue('jobName', value) }}
           />
 
@@ -85,7 +85,8 @@ const RecruitmentPage = () => {
             size={'small'}
             sx={{ width: 250, height: 10, marginRight: 2 }}
             renderInput={(params) => <TextField {...params} label="Hình thức làm việc" />}
-            onChange={(event, value) => { formikSearch.setFieldValue('typeOfWork', value) }} />
+            onChange={(event, value) => { formikSearch.setFieldValue('typeOfWork', value) }}
+          />
 
           <Autocomplete
             options={jobLevelData()}
