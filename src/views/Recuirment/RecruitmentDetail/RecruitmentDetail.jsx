@@ -127,13 +127,17 @@ const RecruitmentDetail = () => {
       } else {
         if (fileCV != null) {
           formikApply.values.titleCV = fileCV.name
+          console.log('truoc');
           const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuid()}`)
-          await uploadBytes(cvRef, fileCV).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then(url => {
+          await uploadBytes(cvRef, fileCV).then(async (snapshot) => {
+            await getDownloadURL(snapshot.ref).then((url) => {
               formikApply.values.linkCV = url
+              console.log('trong');
             })
+            console.log('xong');
           })
         }
+
         await applyJob(values).then((response) => {
           if (response.status === responseStatus.SUCCESS) {
             toast.success('Ứng tuyển thành công')
