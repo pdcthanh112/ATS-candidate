@@ -39,7 +39,7 @@ export const getCVByCandidateId = async (id, pageNo, pageSize) => {
     .catch((error) => error);
 };
 
-export const uploadCV = async (token, candidateId, linkCV, title) => {
+export const uploadCV = async (candidateId, linkCV, title) => {
   return await axiosConfig
     .post(
       "cv/create",
@@ -48,13 +48,10 @@ export const uploadCV = async (token, candidateId, linkCV, title) => {
         linkCV: linkCV,
         positionName: [],
         title: title,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
       }
     )
     .then((response) => response.data)
-    .catch((error) => error);
+    .catch((error) => {throw error.response.data});
 };
 
 export const deleteCV = async (token, id) => {

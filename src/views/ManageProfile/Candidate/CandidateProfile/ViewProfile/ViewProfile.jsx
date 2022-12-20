@@ -33,7 +33,7 @@ const ViewProfile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getCVByCandidateId(currentUser.token, currentUser.candidate.id, pagination.currentPage - 1, 5);
+      const response = await getCVByCandidateId(currentUser.candidate.id, pagination.currentPage - 1, 5);
       if (response) {
         setListCV(response.data.responseList)
         setPagination({ ...pagination, totalPage: response.data.totalPage })
@@ -50,7 +50,7 @@ const ViewProfile = () => {
       const cvRef = ref(storage, `candidate-CV/${fileCV.name + uuid()}`)
       await uploadBytes(cvRef, fileCV).then((snapshot) => {
         getDownloadURL(snapshot.ref).then(url => {
-          uploadCV(currentUser.token, currentUser.candidate.id, url, fileCV.name).then((response) => {
+          uploadCV(currentUser.candidate.id, url, fileCV.name).then((response) => {
             if (response.status === responseStatus.SUCCESS) {
               setPagination({ ...pagination, currentPage: 1 })
               toast.success('Tạo hồ sơ thành công')
